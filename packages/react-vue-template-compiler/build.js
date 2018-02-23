@@ -1814,6 +1814,19 @@ function processAttrs (el) {
         if (isProp || platformMustUseProp(el.tag, el.attrsMap.type, name)) {
           addProp(el, name, value);
         } else {
+          let detectOnChange = -1;
+          if (el.attrs) {
+            // Remove previous onChange handler added through v-model if user has provides onchange
+            //
+            el.attrs.forEach((attr, index) => {
+              if (attr.name === 'on-change') {
+                detectOnChange = index; 
+              }
+            });
+            if (detectOnChange > -1) {
+              el.attrs.splice(detectOnChange, 1);
+            }
+          }
           addAttr(el, name, value);
         }
       } else if (onRE.test(name)) { // v-on
@@ -1827,7 +1840,23 @@ function processAttrs (el) {
         if (arg) {
           name = name.slice(0, -(arg.length + 1));
         }
-        addDirective(el, name, rawName, value, arg, modifiers);
+        if (isNative) {
+          addHandler(el, name, value, modifiers, false, warn);
+          if (name === 'model') {
+            addAttr(el, 'value', value);
+            let detectOnChange = false;
+            el.attrs.forEach((attr) => {
+              if (attr.name === 'on-change') {
+                detectOnChange = true; 
+              }
+            });
+            if (!detectOnChange) {
+              addAttr(el, 'on-change', `(value) => ${value}=value.nativeEvent.text`)
+            }
+          }
+        } else {
+          addDirective(el, name, rawName, value, arg, modifiers);
+        }
         if (process.env.NODE_ENV !== 'production' && name === 'model') {
           checkForAliasModel(el, value);
         }
@@ -1845,7 +1874,12 @@ function processAttrs (el) {
           );
         }
       }
-      addAttr(el, name, JSON.stringify(value));
+      if (name === 'to') {
+        value = value.replace(/\//, '');
+        addAttr(el, 'on-press', `() => ${'navigation'}.navigate('${value}')`)
+      } else {
+        addAttr(el, name, JSON.stringify(value));
+      }
     }
   }
 }
@@ -4102,6 +4136,11 @@ var ReactWebRenderGenerator = (function (RenderGenerator$$1) {
     } else if (isBuildInTag(tag)) {
       tag = "" + tag;
     } else {
+      // Add support for react-router
+      //
+      if (tag === 'router-link') {
+        tag = 'touchable-opacity';
+      }
       tag = "vm.$options.components['" + (capitalize(camelize(tag))) + "']";
     }
 
