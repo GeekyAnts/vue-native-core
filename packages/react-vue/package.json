@@ -1,0 +1,23 @@
+{
+  "name": "react-vue",
+  "version": "0.0.5",
+  "description": "react vue",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SmallComfort/react-vue"
+  },
+  "keywords": [
+    "react",
+    "vue"
+  ],
+  "author": "ZC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SmallComfort/react-vue/issues"
+  },
+  "homepage": "https://github.com/SmallComfort/react-vue/tree/dev/packages/react-vue-helper",
+  "peerDependencies": {
+    "react": "*"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "react-vue-template-compiler",
+  "version": "0.0.6",
+  "description": "react vue template compiler",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SmallComfort/react-vue"
+  },
+  "keywords": [
+    "react",
+    "vue",
+    "template",
+    "compiler"
+  ],
+  "author": "ZC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SmallComfort/react-vue/issues"
+  },
+  "homepage": "https://github.com/SmallComfort/react-vue/tree/dev/packages/react-vue-template-compiler",
+  "dependencies": {
+    "he": "^1.1.0",
+    "de-indent": "^1.0.2",
+    "change-case":  "^3.0.1"
+  }
+}
