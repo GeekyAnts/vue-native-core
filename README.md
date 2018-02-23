@@ -1,2 +1,2 @@
-# vui-native-router
+# vue-native-core
 # Still in development
