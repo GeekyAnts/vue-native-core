@@ -1,0 +1,33 @@
+{
+    "name": "vue-native-core",
+    "version": "0.0.1-alpha.0",
+    "description": "Create mobile apps using vuejs",
+    "main": "index.js",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/GeekyAnts/vue-native-core.git"
+    },
+    "keywords": [
+      "vue",
+      "native",
+      "mobile"
+    ],
+    "engines": {
+      "node": "^4.5 || >=5.10"
+    },
+    "engineStrict": true,
+    "author": "Geekyants (https://geekyants.io/)",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/GeekyAnts/vue-native-core/issues"
+    },
+    "files": [
+      "bin/**",
+      "index.js"
+    ],
+    "homepage": "https://github.com/GeekyAnts/vue-native-core",
+    "dependencies": {
+        "react": "16.2.0",
+        "react-native": "0.53.2"
+    }
+  }
