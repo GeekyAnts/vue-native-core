@@ -1,6 +1,6 @@
 {
     "name": "vue-native-core",
-    "version": "0.0.1-alpha.0",
+    "version": "0.0.1-alpha.1",
     "description": "Create mobile apps using vuejs",
     "main": "index.js",
     "repository": {
