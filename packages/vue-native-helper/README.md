@@ -1,3 +1,3 @@
-# react-vue-helper
+# vue-native-helper
 
-> This package is auto-generated. For pull requests please see [--todo] [src/platforms/react/runtime]().
+> This package is auto-generated. For pull requests please see [--todo][src/platforms/react/runtime]().
