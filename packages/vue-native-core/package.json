@@ -1,22 +1,20 @@
 {
-  "name": "react-vue",
+  "name": "vue-native-core",
   "version": "0.0.5",
-  "description": "react vue",
+  "description": "vue native core",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SmallComfort/react-vue"
+    "url": "git+https://github.com/GeekyAnts/vue-native-core"
   },
-  "keywords": [
-    "react",
-    "vue"
-  ],
-  "author": "ZC",
+  "keywords": ["react", "vue"],
+  "author": "Geekyants (https://geekyants.io/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SmallComfort/react-vue/issues"
+    "url": "https://github.com/GeekyAnts/vue-native-core/issues"
   },
-  "homepage": "https://github.com/SmallComfort/react-vue/tree/dev/packages/react-vue-helper",
+  "homepage":
+    "https://github.com/GeekyAnts/vue-native-core/tree/master/packages/vue-native-core",
   "peerDependencies": {
     "react": "*"
   }
