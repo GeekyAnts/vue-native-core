@@ -1,1 +1,1 @@
-module.exports = require('./src/bin/react-native-vue-script.js');
+module.exports = require('./src/bin/vue-native-script.js');
