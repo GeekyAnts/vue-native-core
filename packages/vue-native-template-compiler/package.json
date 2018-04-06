@@ -1,27 +1,23 @@
 {
-  "name": "react-vue-template-compiler",
+  "name": "vue-native-template-compiler",
   "version": "0.0.6",
   "description": "react vue template compiler",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SmallComfort/react-vue"
+    "url": "git+https://github.com/GeekyAnts/vue-native-core"
   },
-  "keywords": [
-    "react",
-    "vue",
-    "template",
-    "compiler"
-  ],
-  "author": "ZC",
+  "keywords": ["react", "vue", "template", "compiler"],
+  "author": "Geekyants (https://geekyants.io/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SmallComfort/react-vue/issues"
+    "url": "https://github.com/GeekyAnts/vue-native-core/issues"
   },
-  "homepage": "https://github.com/SmallComfort/react-vue/tree/dev/packages/react-vue-template-compiler",
+  "homepage":
+    "https://github.com/GeekyAnts/vue-native-core/tree/master/packages/vue-native-template-compiler",
   "dependencies": {
     "he": "^1.1.0",
     "de-indent": "^1.0.2",
-    "change-case":  "^3.0.1"
+    "change-case": "^3.0.1"
   }
 }
