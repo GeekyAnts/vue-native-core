@@ -1,37 +1,40 @@
-# react-vue.js
+# vue-native-core.js
 
 A fork of Vue, only modifies very litter code, extracts its reactivity core, and adds an observer function.
 
 ## Install
+
 ```
-npm install --save react-vue
+npm install --save vue-native-core
 ```
 
 ## Usage
+
 ```javascript
-import React, { Component } from 'react';
-import Vue, { observer } from 'react-vue';
+import React, { Component } from "react";
+import Vue, { observer } from "vue-native-core";
 
 const store = new Vue({
-  data () {
+  data() {
     return {
       count: 0
-    }
+    };
   },
   methods: {
-    increase () {
-      this.count ++;
+    increase() {
+      this.count++;
     }
   }
 });
 
 @observer
 export default class Demo extends Component {
-  render () {
+  render() {
     return <h1 onClick={store.increase}>{store.count}</h1>;
   }
 }
 ```
+
 As shown above, the data changes, the view updates. Most of your vue magic is still available in react, even if [Vuex](https://vuex.vuejs.org/).
 
 [demo](https://github.com/SmallComfort/react-vue-demo)
@@ -41,61 +44,64 @@ As shown above, the data changes, the view updates. Most of your vue magic is st
 > Almost all api points to the vue's official document. If you are familiar with vue, there is no unknown usage.
 
 ### Global
-- [Vue.extend](https://vuejs.org/v2/api/#Vue-extend)
 
-- [Vue.nextTick](https://vuejs.org/v2/api/#Vue-nextTick)
+* [Vue.extend](https://vuejs.org/v2/api/#Vue-extend)
 
-- [Vue.set](https://vuejs.org/v2/api/#Vue-set)
+* [Vue.nextTick](https://vuejs.org/v2/api/#Vue-nextTick)
 
-- [Vue.delete](https://vuejs.org/v2/api/#Vue-delete)
+* [Vue.set](https://vuejs.org/v2/api/#Vue-set)
 
-- [Vue.use](https://vuejs.org/v2/api/#Vue-use)
+* [Vue.delete](https://vuejs.org/v2/api/#Vue-delete)
 
-- [Vue.mixin](https://vuejs.org/v2/api/#Vue-mixin)
+* [Vue.use](https://vuejs.org/v2/api/#Vue-use)
+
+* [Vue.mixin](https://vuejs.org/v2/api/#Vue-mixin)
 
 ### Options
 
-- [data](https://vuejs.org/v2/api/#data)
+* [data](https://vuejs.org/v2/api/#data)
 
-- [methods](https://vuejs.org/v2/api/#methods)
+* [methods](https://vuejs.org/v2/api/#methods)
 
-- [computed](https://vuejs.org/v2/api/#computed)
+* [computed](https://vuejs.org/v2/api/#computed)
 
-- [watch](https://vuejs.org/v2/api/#watch)
+* [watch](https://vuejs.org/v2/api/#watch)
 
-- [mixins](https://vuejs.org/v2/api/#mixins)
+* [mixins](https://vuejs.org/v2/api/#mixins)
 
-- [extends](https://vuejs.org/v2/api/#extends)
+* [extends](https://vuejs.org/v2/api/#extends)
 
   > Only options object is allowed
 
 ### Instance
 
-- [vm.$watch](https://vuejs.org/v2/api/#vm-watch)
+* [vm.$watch](https://vuejs.org/v2/api/#vm-watch)
 
-- [vm.$set](https://vuejs.org/v2/api/#vm-set)
+* [vm.$set](https://vuejs.org/v2/api/#vm-set)
 
-- [vm.$delete](https://vuejs.org/v2/api/#vm-delete)
+* [vm.$delete](https://vuejs.org/v2/api/#vm-delete)
 
-- [vm.$on](https://vuejs.org/v2/api/#vm-on)
+* [vm.$on](https://vuejs.org/v2/api/#vm-on)
 
-- [vm.$once](https://vuejs.org/v2/api/#vm-once)
+* [vm.$once](https://vuejs.org/v2/api/#vm-once)
 
-- [vm.$off](https://vuejs.org/v2/api/#vm-off)
+* [vm.$off](https://vuejs.org/v2/api/#vm-off)
 
-- [vm.$emit](https://vuejs.org/v2/api/#vm-emit)
+* [vm.$emit](https://vuejs.org/v2/api/#vm-emit)
 
-- [vm.$nextTick](https://vuejs.org/v2/api/#vm-nextTick)
+* [vm.$nextTick](https://vuejs.org/v2/api/#vm-nextTick)
 
-### ```observer``` 
-  Inspiration from [mobx](https://github.com/mobxjs/mobx), used to convert React components into reactive components. 
+### `observer`
 
-  ```@observer``` ([decorator](https://babeljs.io/docs/plugins/transform-decorators/)) is optional, ```observer(class Timer ... { })``` achieves exactly the same.
+Inspiration from [mobx](https://github.com/mobxjs/mobx), used to convert React components into reactive components.
+
+`@observer` ([decorator](https://babeljs.io/docs/plugins/transform-decorators/)) is optional, `observer(class Timer ... { })` achieves exactly the same.
 
 ## Single File Components
+
 Since react-vue only contains vue's reactivity system, there is no lifecycle, no template. For the full support of SFC, try [react-vue-loader](https://github.com/SmallComfort/react-vue-loader).
 
-[document](https://github.com/SmallComfort/react-vue/blob/dev/packages/react-vue/COMPONENT.md)
+[document](https://github.com/GeekyAnts/vue-native-core/blob/master/packages/vue-native-core/COMPONENT.md)
 
 ## License
 
