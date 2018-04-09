@@ -51,7 +51,7 @@ function action (name) {
       let output = '';
 
       // add react-vue import
-      output += `import ${constants.VUE}, { observer as ${constants.OBSERVER} } from 'react-vue'`;
+      output += `import ${constants.VUE}, { observer as ${constants.OBSERVER} } from 'vue-native-core'`;
       output += '\n';
 
       // // add react import
@@ -67,7 +67,7 @@ function action (name) {
       output += '\n';
 
       // add component builder import
-      output += `import { buildNativeComponent as ${constants.BUILD_COMPONENT} } from 'react-vue-helper'`;
+      output += `import { buildNativeComponent as ${constants.BUILD_COMPONENT} } from 'vue-native-helper'`;
       output += '\n';
 
       // parse template
