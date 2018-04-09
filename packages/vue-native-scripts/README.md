@@ -1,11 +1,12 @@
-# react-vue-native-scripts
+# vue-native-scripts
 
 Compile Vue component to React Native.
 
 ## Install
+
 ```
-npm install --save react-vue react-vue-helper
-npm install --save-dev react-vue-native-scripts
+npm install --save vue-native-core vue-native-helper
+npm install --save-dev vue-native-scripts
 ```
 
 ## Usage
@@ -18,13 +19,14 @@ Add scripts commands in your `package.json`.
 ...
 
 "scripts": {
-  "compiler": "react-vue-native-scripts compiler",
+  "compiler": "vue-native-scripts compiler",
 },
 
 ...
 ```
 
 #### cli
+
 ```
 npm run compiler
 ```
@@ -37,7 +39,7 @@ In the react native application, you can simply `import` your Vue components as 
 
 ```
 import VueComponent from './VueComponent'
-``` 
+```
 
 There should be a file named `VueComponent.vue` in the corresponding folder, and the compiler would be generate a file named `VueComponent.js` in the same directory.
 
