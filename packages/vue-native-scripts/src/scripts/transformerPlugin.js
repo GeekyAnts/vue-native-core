@@ -22,7 +22,7 @@ if (reactNativeMinorVersion >= 52) {
   };
 }
 
-function transform(src, filename, options) {
+function transform({ src, filename, options }) {
   if (typeof src === 'object') {
     // handle RN >= 0.46
     ({ src, filename, options } = src);
