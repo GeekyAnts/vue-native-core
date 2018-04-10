@@ -21,7 +21,7 @@ module.exports = {
     return require.resolve("./vueTransformerPlugin.js");
   },
   getSourceExts() {
-    return ["css", "pcss"]; // <-- Add other extensions if needed.
+    return ["vue"];
   }
 };
 ```
