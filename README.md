@@ -1,59 +1,62 @@
-# React-Vue
-##This is fork of react-vue
-#https://github.com/SmallComfort/react-vue
-React-Vue is designed to connect React and Vue. Which help you run Vue in React.
+# Vue-Native-Core
+
+##This is fork of react-vue #https://github.com/GeekyAnts/vue-native-core
+Vue-native-core is designed to connect React and Vue. Which help you run Vue in React.
 
 There are three uses.
 
 * Use the [reactivity system](#reactivity-system) of Vue to observer React component
 * Use the [react-vue-loader](#vue-component) to run Vue component in React application
-* Use the [react-vue-native-scripts](#native) to run Vue component in React Native
+* Use the [vue-native-scripts](#native) to run Vue component in React Native
 
 ### Reactivity System
-Thanks to Vue's clear hierarchical design, we can easily pull out the reactivity system (9 KB gzipped), and drive React component rendering. 
+
+Thanks to Vue's clear hierarchical design, we can easily pull out the reactivity system (9 KB gzipped), and drive React component rendering.
 
 ```
-npm install --save react-vue
+npm install --save vue-native-core
 ```
 
 ```javascript
-import React, { Component } from 'react';
-import Vue, { observer } from 'react-vue';
+import React, { Component } from "react";
+import Vue, { observer } from "vue-native-core";
 
 const store = new Vue({
-  data () {
+  data() {
     return {
       count: 0
-    }
+    };
   },
   methods: {
-    increase () {
-      this.count ++;
+    increase() {
+      this.count++;
     }
   }
 });
 
 @observer
 export default class Demo extends Component {
-  render () {
+  render() {
     return <h1 onClick={store.increase}>{store.count}</h1>;
   }
 }
 ```
-[document](https://github.com/SmallComfort/react-vue/blob/dev/packages/react-vue/README.md) 
+
+[document](https://github.com/GeekyAnts/vue-native-core/blob/master/packages/vue-native-core/README.md)
 
 ### Vue Component
+
 Introduce [react-vue-loader](https://github.com/SmallComfort/react-vue-loader), which compile the Vue component into a React component. As you might think, your previously written Vue components can run inside the React component, and your React components can also run inside the Vue component.
 
 ```
-npm install --save react-vue react-vue-helper
+npm install --save vue-native-core vue-native-helper
 npm install --save-dev react-vue-loader
 ```
 
 ```javascript
 // One.js
-import React, { Component } from 'react';
-import Two from './Two';
+import React, { Component } from "react";
+import Two from "./Two";
 
 export default class One extends Component {
   render() {
@@ -86,26 +89,28 @@ export default class One extends Component {
 
 ```javascript
 // Three.js
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 export default class Three extends Component {
-  render () {
-    return <span>{this.props.children}</span>
+  render() {
+    return <span>{this.props.children}</span>;
   }
 }
 ```
 
-[document](https://github.com/SmallComfort/react-vue/blob/dev/packages/react-vue/COMPONENT.md)
+[document](https://github.com/GeekyAnts/vue-native-core/blob/master/packages/vue-native-core/COMPONENT.md)
 
 ### Native
-Introduce [react-vue-native-scripts](https://github.com/SmallComfort/react-vue-native-scripts), which start a server to compile the vue component into a react component.
+
+Introduce [vue-native-scripts](https://github.com/GeekyAnts/vue-native-core/tree/master/packages/vue-native-scripts), which start a server to compile the vue component into a react component.
 
 ```
-npm install --save react-vue react-vue-helper
-npm install --save-dev react-vue-native-scripts
+npm install --save vue-native-core vue-native-helper
+npm install --save-dev vue-native-scripts
 ```
 
 All [React Native Components](https://facebook.github.io/react-native/docs/view.html) exists as built-in components in Vue, you can use react native components as following
+
 ```html
 <template>
   <view>
@@ -118,10 +123,12 @@ All [React Native Components](https://facebook.github.io/react-native/docs/view.
   </view>
 </template>
 ```
+
 The similar JSX code is as follows
+
 ```javascript
-import React, { Component } from 'react';
-import { View, Text, Animated } from 'react-native';
+import React, { Component } from "react";
+import { View, Text, Animated } from "react-native";
 
 export default class Demo extends Component {
   render() {
@@ -138,9 +145,10 @@ export default class Demo extends Component {
   }
 }
 ```
-> You can use all the [React Native API](https://facebook.github.io/react-native/) in Vue component.  The camelCased prop names need to use their kebab-case (hyphen-delimited) equivalents
 
-[document](https://github.com/SmallComfort/react-vue/blob/dev/packages/react-vue/COMPONENT.md) 
+> You can use all the [React Native API](https://facebook.github.io/react-native/) in Vue component. The camelCased prop names need to use their kebab-case (hyphen-delimited) equivalents
+
+[document](https://github.com/GeekyAnts/vue-native-core/blob/master/packages/vue-native-core/COMPONENT.md)
 
 ## License
 

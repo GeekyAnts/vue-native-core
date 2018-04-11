@@ -1,0 +1,15 @@
+{
+  "extends": ["eslint:recommended"],
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "semi": 1,
+    "no-extra-semi": 1,
+    "no-console": 0,
+    "no-undef-init": 1,
+    "quotes": [2, "single"],
+    "strict": [2, "never"]
+  }
+}

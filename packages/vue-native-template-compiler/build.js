@@ -1970,7 +1970,7 @@ function checkForAliasModel (el, value) {
 var CREATE_ELEMENT = 'createElement';
 var COMPONENT = 'Component';
 var HELPER_HEADER = '__react__vue__';
-var RENDER_HELPER_MODULE_NAME = 'react-vue-helper';
+var RENDER_HELPER_MODULE_NAME = 'vue-native-helper';
 
 var COMMON = {
   'createElement': {
