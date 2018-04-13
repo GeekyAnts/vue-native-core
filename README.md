@@ -1,13 +1,14 @@
 # Vue-Native-Core
 
-##This is fork of react-vue #https://github.com/GeekyAnts/vue-native-core
-Vue-native-core is designed to connect React and Vue. Which help you run Vue in React.
+## This is fork of [react-vue](https://github.com/GeekyAnts/vue-native-core)
+
+Vue-native-core is designed to connect React and Vue, which help you run Vue in React.
 
 There are three uses.
 
 * Use the [reactivity system](#reactivity-system) of Vue to observer React component
-* Use the [react-vue-loader](#vue-component) to run Vue component in React application
-* Use the [vue-native-scripts](#native) to run Vue component in React Native
+* Use the [vue-native-scripts](#vue-native-scripts) to run Vue component in React Native
+* Use the [vue-native-cli](#vue-native-cli) to generate a Vue Native App
 
 ### Reactivity System
 
@@ -44,70 +45,58 @@ export default class Demo extends Component {
 
 [document](https://github.com/GeekyAnts/vue-native-core/blob/master/packages/vue-native-core/README.md)
 
-### Vue Component
+### Vue Native Scripts
 
-Introduce [react-vue-loader](https://github.com/SmallComfort/react-vue-loader), which compile the Vue component into a React component. As you might think, your previously written Vue components can run inside the React component, and your React components can also run inside the Vue component.
+Introduce [vue-native-scripts](https://github.com/GeekyAnts/vue-native-core/tree/master/packages/vue-native-scripts), which compile and transform the vue component into a react component.
 
-```
-npm install --save vue-native-core vue-native-helper
-npm install --save-dev react-vue-loader
-```
+## Installation Steps
 
-```javascript
-// One.js
-import React, { Component } from "react";
-import Two from "./Two";
-
-export default class One extends Component {
-  render() {
-    return <Two>Hello Vue</Two>;
-  }
-}
-```
-
-```html
-<!-- Two.vue -->
-<template>
-  <div @click="count++">
-    <three>{{count}}</three>
-    <slot></slot>
-  </div>
-</template>
-
-<script>
-  import Three from './Three'
-  export default {
-    components: { Three },
-    data () {
-      return {
-        count: 0
-      }
-    }
-  }
-</script>
-```
-
-```javascript
-// Three.js
-import React, { Component } from "react";
-
-export default class Three extends Component {
-  render() {
-    return <span>{this.props.children}</span>;
-  }
-}
-```
-
-[document](https://github.com/GeekyAnts/vue-native-core/blob/master/packages/vue-native-core/COMPONENT.md)
-
-### Native
-
-Introduce [vue-native-scripts](https://github.com/GeekyAnts/vue-native-core/tree/master/packages/vue-native-scripts), which start a server to compile the vue component into a react component.
+### Step 1: Install
 
 ```
 npm install --save vue-native-core vue-native-helper
 npm install --save-dev vue-native-scripts
 ```
+
+### Step 2: Configure the React Native Packager
+
+Create `vueTransformerPlugin.js` file to your project's root and specify supported extensions:
+
+```js
+// For React Native version 0.52 or later
+var upstreamTransformer = require("metro/src/transformer");
+
+// For React Native version 0.47-0.51
+// var upstreamTransformer = require("metro-bundler/src/transformer");
+
+// For React Native version 0.46
+// var upstreamTransformer = require("metro-bundler/build/transformer");
+
+var vueNaiveScripts = require("vue-native-scripts");
+var vueExtensions = ["vue"]; // <-- Add other extensions if needed.
+
+module.exports.transform = function({ src, filename, options }) {
+  if (vueExtensions.some(ext => filename.endsWith("." + ext))) {
+    return vueNaiveScripts.transform({ src, filename, options });
+  }
+  return upstreamTransformer.transform({ src, filename, options });
+};
+```
+
+Add this to your `rn-cli.config.js` (make one to your project's root if you don't have one already):
+
+```js
+module.exports = {
+  getTransformModulePath() {
+    return require.resolve("./vueTransformerPlugin.js");
+  },
+  getSourceExts() {
+    return ["vue"];
+  }
+};
+```
+
+### Note
 
 All [React Native Components](https://facebook.github.io/react-native/docs/view.html) exists as built-in components in Vue, you can use react native components as following
 
