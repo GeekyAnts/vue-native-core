@@ -60,7 +60,7 @@ npm install --save-dev vue-native-scripts
 
 ### Step 2: Configure the React Native Packager
 
-Create `vueTransformerPlugin.js` file to your project's root and specify supported extensions:
+Create `vueTransformerPlugin.js` file to your project's root and specify supported extensions(vue):
 
 ```js
 // For React Native version 0.52 or later
@@ -73,7 +73,7 @@ var upstreamTransformer = require("metro/src/transformer");
 // var upstreamTransformer = require("metro-bundler/build/transformer");
 
 var vueNaiveScripts = require("vue-native-scripts");
-var vueExtensions = ["vue"]; // <-- Add other extensions if needed.
+var vueExtensions = ["vue"];
 
 module.exports.transform = function({ src, filename, options }) {
   if (vueExtensions.some(ext => filename.endsWith("." + ext))) {
@@ -138,6 +138,25 @@ export default class Demo extends Component {
 > You can use all the [React Native API](https://facebook.github.io/react-native/) in Vue component. The camelCased prop names need to use their kebab-case (hyphen-delimited) equivalents
 
 [document](https://github.com/GeekyAnts/vue-native-core/blob/master/packages/vue-native-core/COMPONENT.md)
+
+### Vue Native Cli
+
+> Vue Native Cli is use to generate a `Vue Native` app, which is a wrapper around the APIs of React Native. So, with Vue Native, you can do everything what you can do with React Native.
+
+> Vue Native cli that generates a simple 1 page application with [create-react-native-app](https://github.com/react-community/create-react-native-app),
+> [vue-native-core](https://github.com/GeekyAnts/vue-native-core)
+
+## Installation:
+
+```
+$ npm install -g vue-native-cli
+```
+
+Generate [CRNA + Vue App](https://github.com/GeekyAnts/vue-native-core) App
+
+```
+$ vue-native init <projectName>
+```
 
 ## License
 
