@@ -1832,6 +1832,13 @@ function processAttrs (el) {
       } else if (onRE.test(name)) { // v-on
         name = name.replace(onRE, '');
         addHandler(el, name, value, modifiers, false, warn);
+         //Check if its expression or function
+        //
+        if (isNative) {
+          let camelCaseName = 'on-' + name ;
+          camelCaseName = camelCaseName.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })
+          addAttr(el, camelCaseName, `() => ${value}`);
+        }
       } else { // normal directives
         name = name.replace(dirRE, '');
         // parse arg
