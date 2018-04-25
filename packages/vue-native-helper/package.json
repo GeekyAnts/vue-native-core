@@ -1,6 +1,6 @@
 {
   "name": "vue-native-helper",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "react vue render helper",
   "main": "index.js",
   "repository": {
