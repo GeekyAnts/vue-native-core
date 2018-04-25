@@ -1589,6 +1589,29 @@ function bindNativeStyle (styleBinding, staticStyle, showStyle) {
   }
 }
 
+function mergeNativeStyleAndNativeClass(nativeClass, nativeStyle) {
+  let resultant = [];
+  if (nativeClass) {
+    if (Object.prototype.toString.call( nativeClass ) === '[object Array]') {
+      nativeClass.forEach(function(classObj) {
+        resultant.push(classObj);
+      });
+    } else if (Object.prototype.toString.call( nativeClass ) === '[object Object]') {
+      resultant.push(nativeClass);
+    }
+  }if (nativeStyle) {
+    if (Object.prototype.toString.call( nativeStyle ) === '[object Array]') {
+      nativeStyle.forEach(function(classObj) {
+        resultant.push(classObj);
+      });
+    } else if (Object.prototype.toString.call( nativeStyle ) === '[object Object]') {
+      resultant.push(nativeStyle);
+    }
+  }
+  console.log('resultant merged style props', resultant);
+  return resultant;
+}
+
 /*  */
 function checkKeyCodes (
   vm,
@@ -4077,6 +4100,7 @@ exports.bindWebClass = bindWebClass;
 exports.bindNativeClass = bindNativeClass;
 exports.bindWebStyle = bindWebStyle;
 exports.bindNativeStyle = bindNativeStyle;
+exports.mergeNativeStyleAndNativeClass = mergeNativeStyleAndNativeClass;
 exports.checkKeyCodes = checkKeyCodes;
 exports.template = template;
 exports.event = event;
