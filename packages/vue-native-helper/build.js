@@ -1608,7 +1608,7 @@ function mergeNativeStyleAndNativeClass(nativeClass, nativeStyle) {
       resultant.push(nativeStyle);
     }
   }
-  console.log('resultant merged style props', resultant);
+  // console.log('resultant merged style props', resultant);
   return resultant;
 }
 
