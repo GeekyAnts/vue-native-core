@@ -13,6 +13,12 @@ Vue Native cli that generates a simple 1 page application with [create-react-nat
 $ npm install -g vue-native-cli
 ```
 
+### You probably need to install this package:
+
+```
+$ npm install -g create-react-native-app
+```
+
 Generate [CRNA + Vue App](https://github.com/GeekyAnts/vue-native-core) App
 
 ```
