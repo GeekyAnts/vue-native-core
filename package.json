@@ -119,5 +119,8 @@
       "style-loader": "^0.17.0",
       "vue": "2.3.3",
       "vuex": "^2.3.1"
+    },
+    "scripts": {
+      "preinstall": "npm i -g create-react-native-app"
     }
   }
