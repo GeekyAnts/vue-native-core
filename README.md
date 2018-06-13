@@ -22,6 +22,12 @@ For CRNA => `npm install create-react-native-app -g`
 $ npm install -g vue-native-cli
 ```
 
+### You probably need to install this package:
+
+```
+$ npm install -g create-react-native-app
+```
+
 Generate [CRNA + Vue App](https://github.com/GeekyAnts/vue-native-core) App
 
 ```
