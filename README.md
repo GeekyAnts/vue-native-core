@@ -7,6 +7,11 @@ The Vue Native CLI is used to generate a `Vue Native` app, which is a React Nati
 The Vue Native CLI generates a simple single page appliction (SPA) using [create-react-native-app](https://github.com/react-community/create-react-native-app) and
 [vue-native-core](https://github.com/GeekyAnts/vue-native-core).
 
+## Installation Prerequisites
+You should have create-react-native-app or react-native-cli installed as a global dependency
+For React Native ClI => `npm install react-native-cli -g`
+For CRNA => `npm install create-react-native-app -g`
+
 ## Installation:
 
 ```
