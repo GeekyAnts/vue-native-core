@@ -1,11 +1,11 @@
 # Vue Native: Read more at https://vue-native.io
 
-### Start with Vue Native Cli
+### Start with the Vue Native CLI
 
-Vue Native Cli is use to generate a `Vue Native` app, which is a wrapper around the APIs of React Native. So, with Vue Native, you can do everything what you can do with React Native.
+The Vue Native CLI is used to generate a `Vue Native` app, which is a React Native API wrapper. This means that with Vue Native, you can do anything that could be done with React Native.
 
-Vue Native cli that generates a simple 1 page application with [create-react-native-app](https://github.com/react-community/create-react-native-app),
-[vue-native-core](https://github.com/GeekyAnts/vue-native-core)
+The Vue Native CLI generates a simple single page appliction (SPA) using [create-react-native-app](https://github.com/react-community/create-react-native-app) and
+[vue-native-core](https://github.com/GeekyAnts/vue-native-core).
 
 ## Installation:
 
