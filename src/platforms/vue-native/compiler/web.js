@@ -1,10 +1,6 @@
-import {
-	parse
-} from 'compiler/parser/index'
+import { parse } from "compiler/parser/index";
 
-import {
-	WebRenderGenerator
-} from 'react-vue/compiler/codegen/index'
+import { WebRenderGenerator } from "react-vue/compiler/codegen/index";
 
 import {
   isPreTag,
@@ -12,7 +8,7 @@ import {
   canBeLeftOpenTag,
   isReservedTag,
   getTagNamespace
-} from './util/index'
+} from "./util/index";
 
 const baseOptions = {
   expectHTML: true,
@@ -21,21 +17,21 @@ const baseOptions = {
   canBeLeftOpenTag,
   isReservedTag,
   getTagNamespace
-}
+};
 
-export function compile (template, options) {
-  let ast
-  let code
-  template = template.trim()
+export function compile(template, options) {
+  let ast;
+  let code;
+  template = template.trim();
   if (template) {
-    ast = parse(template, Object.assign({}, baseOptions, options))
-    const renderer = new WebRenderGenerator(ast, options)
-    code = renderer.generate()
+    ast = parse(template, Object.assign({}, baseOptions, options));
+    const renderer = new WebRenderGenerator(ast, options);
+    code = renderer.generate();
   } else {
-    code = 'export default () => null'
+    code = "export default () => null";
   }
   return {
     ast,
     code
-  }
+  };
 }
