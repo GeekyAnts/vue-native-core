@@ -2,7 +2,7 @@
 
 import { inBrowser } from "core/util/env";
 import { makeMap } from "shared/util";
-import { COMMON, WEB } from "react-vue/compiler/config";
+import { COMMON, WEB } from "vue-native/compiler/config";
 
 export const namespaceMap = {
   svg: "http://www.w3.org/2000/svg",
