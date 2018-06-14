@@ -127,11 +127,19 @@ export const nextTick = (function() {
       textNode.data = String(counter);
     };
   } else {
-    // fallback to setTimeout
-    /* istanbul ignore next */
-    timerFunc = () => {
-      setTimeout(nextTickHandler, 0);
-    };
+    if (Promise !== undefined) {
+      // If Promise is supported for android
+      timerFunc = function() {
+        var p = Promise.resolve();
+        p.then(nextTickHandler).catch(logError);
+      };
+    } else {
+      // fallback to setTimeout
+      /* istanbul ignore next */
+      timerFunc = function() {
+        setTimeout(nextTickHandler, 0);
+      };
+    }
   }
 
   return function queueNextTick(cb?: Function, ctx?: Object) {
