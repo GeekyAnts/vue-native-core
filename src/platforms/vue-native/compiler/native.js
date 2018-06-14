@@ -1,6 +1,6 @@
 import { parse } from "compiler/parser/index";
 
-import { NativeRenderGenerator } from "react-vue/compiler/codegen/index";
+import { NativeRenderGenerator } from "vue-native/compiler/codegen/index";
 
 export function nativeCompiler(template, options) {
   let ast;
