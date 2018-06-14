@@ -1,5 +1,5 @@
 /* @flow */
-import { COMMON } from "react-vue/compiler/config";
+import { COMMON } from "vue-native/compiler/config";
 
 const validDivisionCharRE = /[\w).+\-_$\]]/;
 
