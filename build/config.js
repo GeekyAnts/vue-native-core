@@ -1,55 +1,61 @@
-const path = require('path')
-const buble = require('rollup-plugin-buble')
-const alias = require('rollup-plugin-alias')
-const replace = require('rollup-plugin-replace')
-const flow = require('rollup-plugin-flow-no-whitespace')
-const version = process.env.VERSION || require('../package.json').version
-const weexVersion = process.env.WEEX_VERSION || require('../packages/weex-vue-framework/package.json').version
+const path = require("path");
+const buble = require("rollup-plugin-buble");
+const alias = require("rollup-plugin-alias");
+const replace = require("rollup-plugin-replace");
+const flow = require("rollup-plugin-flow-no-whitespace");
+const version = process.env.VERSION || require("../package.json").version;
+const weexVersion =
+  process.env.WEEX_VERSION ||
+  require("../packages/weex-vue-framework/package.json").version;
 
 const banner =
-  '/*!\n' +
-  ' * Vue.js v' + version + '\n' +
-  ' * (c) 2014-' + new Date().getFullYear() + ' Evan You\n' +
-  ' * Released under the MIT License.\n' +
-  ' */'
+  "/*!\n" +
+  " * Vue.js v" +
+  version +
+  "\n" +
+  " * (c) 2014-" +
+  new Date().getFullYear() +
+  " Evan You\n" +
+  " * Released under the MIT License.\n" +
+  " */";
 
 const weexFactoryPlugin = {
-  intro () {
-    return 'module.exports = function weexFactory (exports, renderer) {'
+  intro() {
+    return "module.exports = function weexFactory (exports, renderer) {";
   },
-  outro () {
-    return '}'
+  outro() {
+    return "}";
   }
-}
+};
 
-const aliases = require('./alias')
+const aliases = require("./alias");
 const resolve = p => {
-  const base = p.split('/')[0]
+  const base = p.split("/")[0];
   if (aliases[base]) {
-    return path.resolve(aliases[base], p.slice(base.length + 1))
+    return path.resolve(aliases[base], p.slice(base.length + 1));
   } else {
-    return path.resolve(__dirname, '../', p)
+    return path.resolve(__dirname, "../", p);
   }
-}
+};
 
 const builds = {
-  'react-vue': {
-    entry: resolve('react-vue/index.js'),
-    dest: resolve('packages/react-vue/build.js'),
-    format: 'cjs',
-    external: ['react']
+  "vue-native-core": {
+    entry: resolve("vue-native/index.js"),
+    dest: resolve("packages/vue-native-core/build.js"),
+    format: "cjs",
+    external: ["react"]
   },
-  'react-vue-helper': {
-    entry: resolve('react-vue/runtime/helpers.js'),
-    dest: resolve('packages/react-vue-helper/build.js'),
-    format: 'cjs',
-    external: ['react', 'change-case', 'he', 'de-indent']
+  "vue-native-helper": {
+    entry: resolve("vue-native/runtime/helpers.js"),
+    dest: resolve("packages/vue-native-helper/build.js"),
+    format: "cjs",
+    external: ["react", "change-case", "he", "de-indent"]
   },
-  'react-vue-template-compiler': {
-    entry: resolve('react-vue/compiler.js'),
-    dest: resolve('packages/react-vue-template-compiler/build.js'),
-    format: 'cjs',
-    external: ['change-case', 'he', 'de-indent']
+  "vue-native-template-compiler": {
+    entry: resolve("vue-native/compiler.js"),
+    dest: resolve("packages/vue-native-template-compiler/build.js"),
+    format: "cjs",
+    external: ["change-case", "he", "de-indent"]
   }
   // Runtime only (CommonJS). Used by bundlers e.g. Webpack & Browserify
   // 'web-runtime-cjs': {
@@ -165,16 +171,16 @@ const builds = {
   //   format: 'cjs',
   //   external: Object.keys(require('../packages/weex-template-compiler/package.json').dependencies)
   // }
-}
+};
 
-function genConfig (opts) {
+function genConfig(opts) {
   const config = {
     entry: opts.entry,
     dest: opts.dest,
     external: opts.external,
     format: opts.format,
     banner: opts.banner,
-    moduleName: 'Vue',
+    moduleName: "Vue",
     plugins: [
       replace({
         __WEEX__: !!opts.weex,
@@ -185,20 +191,23 @@ function genConfig (opts) {
       buble(),
       alias(Object.assign({}, aliases, opts.alias))
     ].concat(opts.plugins || [])
-  }
+  };
 
   if (opts.env) {
-    config.plugins.push(replace({
-      'process.env.NODE_ENV': JSON.stringify(opts.env)
-    }))
+    config.plugins.push(
+      replace({
+        "process.env.NODE_ENV": JSON.stringify(opts.env)
+      })
+    );
   }
 
-  return config
+  return config;
 }
 
 if (process.env.TARGET) {
-  module.exports = genConfig(builds[process.env.TARGET])
+  module.exports = genConfig(builds[process.env.TARGET]);
 } else {
-  exports.getBuild = name => genConfig(builds[name])
-  exports.getAllBuilds = () => Object.keys(builds).map(name => genConfig(builds[name]))
+  exports.getBuild = name => genConfig(builds[name]);
+  exports.getAllBuilds = () =>
+    Object.keys(builds).map(name => genConfig(builds[name]));
 }

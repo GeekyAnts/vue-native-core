@@ -7,7 +7,7 @@ module.exports = {
   shared: path.resolve(__dirname, '../src/shared'),
   web: path.resolve(__dirname, '../src/platforms/web'),
   weex: path.resolve(__dirname, '../src/platforms/weex'),
-  'react-vue': path.resolve(__dirname, '../src/platforms/react-vue'),
+  'vue-native': path.resolve(__dirname, '../src/platforms/react-vue'),
   server: path.resolve(__dirname, '../src/server'),
   entries: path.resolve(__dirname, '../src/entries'),
   sfc: path.resolve(__dirname, '../src/sfc')
