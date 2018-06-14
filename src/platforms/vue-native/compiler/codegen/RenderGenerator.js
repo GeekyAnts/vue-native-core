@@ -8,9 +8,9 @@ import {
   filterDirective,
   filterDirectiveBindProps,
   transformSpecialNewlines
-} from "react-vue/compiler/helpers";
-import { parseText } from "react-vue/compiler/parser/text-parser";
-import propertyMap from "react-vue/compiler/property/index";
+} from "vue-native/compiler/helpers";
+import { parseText } from "vue-native/compiler/parser/text-parser";
+import propertyMap from "vue-native/compiler/property/index";
 
 class RenderGenerator extends BaseGenerator {
   genElement(ast) {
