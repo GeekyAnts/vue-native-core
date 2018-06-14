@@ -1,6 +1,6 @@
 import { cached } from "shared/util";
 import { parseFilters } from "./filter-parser";
-import { COMMON } from "react-vue/compiler/config";
+import { COMMON } from "vue-native/compiler/config";
 
 const defaultTagRE = /\{\{((?:.|\n)+?)\}\}/g;
 const regexEscapeRE = /[-.*+?^${}()|[\]\/\\]/g;
