@@ -10,10 +10,10 @@ The Vue Native CLI generates a simple single page appliction (SPA) using [create
 ## Installation Prerequisites
 You should have create-react-native-app or react-native-cli installed as a global dependency
 ```
-For React Native ClI => `npm install react-native-cli -g`
+For React Native ClI => npm install react-native-cli -g
 ```
 ```
-For CRNA => `npm install create-react-native-app -g`
+For CRNA => npm install create-react-native-app -g
 ```
 
 ## Installation:
