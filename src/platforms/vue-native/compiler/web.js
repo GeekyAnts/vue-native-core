@@ -1,6 +1,6 @@
 import { parse } from "compiler/parser/index";
 
-import { WebRenderGenerator } from "react-vue/compiler/codegen/index";
+import { WebRenderGenerator } from "vue-native/compiler/codegen/index";
 
 import {
   isPreTag,
