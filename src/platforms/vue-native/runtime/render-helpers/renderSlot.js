@@ -1,4 +1,4 @@
-import { COMMON } from "react-vue/compiler/config";
+import { COMMON } from "vue-native/compiler/config";
 
 export function renderSlot(names, children) {
   const hitSlot = {};
