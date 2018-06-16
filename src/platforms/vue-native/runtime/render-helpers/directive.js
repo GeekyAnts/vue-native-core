@@ -1,4 +1,4 @@
-import { COMMON } from "react-vue/compiler/config";
+import { COMMON } from "vue-native/compiler/config";
 
 function triggerDirective(newData, oldData, vm, ref) {
   let directive;
