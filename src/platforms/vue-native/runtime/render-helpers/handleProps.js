@@ -1,6 +1,6 @@
-import { HELPER_HEADER } from "react-vue/compiler/constants";
-import propertyMap from "react-vue/compiler/property/index";
-import { isReservedTag, isUnaryTag } from "react-vue/compiler/util/index";
+import { HELPER_HEADER } from "vue-native/compiler/constants";
+import propertyMap from "vue-native/compiler/property/index";
+import { isReservedTag, isUnaryTag } from "vue-native/compiler/util/index";
 
 export function handleProps(props, tag) {
   let handledProps = {};
