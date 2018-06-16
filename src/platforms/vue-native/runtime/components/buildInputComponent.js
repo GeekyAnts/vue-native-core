@@ -1,4 +1,4 @@
-import { WEB } from "react-vue/compiler/config";
+import { WEB } from "vue-native/compiler/config";
 
 import { buildMixin } from "./buildMixin";
 
