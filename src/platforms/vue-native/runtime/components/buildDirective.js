@@ -1,4 +1,4 @@
-import { COMMON } from "react-vue/compiler/config";
+import { COMMON } from "vue-native/compiler/config";
 
 import { handleProps } from "../render-helpers/handleProps";
 
