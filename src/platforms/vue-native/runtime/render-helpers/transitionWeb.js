@@ -7,7 +7,7 @@ import {
 } from "web/runtime/transition-util";
 import { isIE9, warn } from "core/util/index";
 import { once, isDef, isUndef, isObject, toNumber } from "shared/util";
-import { WEB, COMMON } from "react-vue/compiler/config";
+import { WEB, COMMON } from "vue-native/compiler/config";
 
 function filterCollection(collection) {
   const result = [];
