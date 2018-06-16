@@ -1,4 +1,4 @@
-import { COMMON } from "react-vue/compiler/config";
+import { COMMON } from "vue-native/compiler/config";
 
 export function isObjectShallowModified(prev, next) {
   // if (prev == null || next == null || typeof prev !== 'object' || typeof next !== 'object') {
