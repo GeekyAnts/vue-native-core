@@ -1,4 +1,4 @@
-# Vue Native: Read more at https://vue-native.io
+# Vue Native: Read more at [vue-native.io](https://vue-native.io)
 
 ### Start with the Vue Native CLI
 
@@ -8,10 +8,13 @@ The Vue Native CLI generates a simple single page appliction (SPA) using [create
 [vue-native-core](https://github.com/GeekyAnts/vue-native-core).
 
 ## Installation Prerequisites
+
 You should have create-react-native-app or react-native-cli installed as a global dependency
+
 ```
 For React Native ClI => npm install react-native-cli -g
 ```
+
 ```
 For CRNA => npm install create-react-native-app -g
 ```
