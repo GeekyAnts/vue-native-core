@@ -16,7 +16,7 @@ module.exports = function (ast) {
           let value = declaration.value;
           if (/px$/.test(value)) {
             value = parseFloat(value.replace(/px$/, ''));
-          } else if (isNaN(value) === false){
+          } else if (declaration.property !== 'font-weight' &&  isNaN(value) === false){
             value = parseFloat(value);
           }
           if (declaration.property === 'transform') {
