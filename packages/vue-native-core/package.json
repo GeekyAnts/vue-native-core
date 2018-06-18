@@ -1,20 +1,22 @@
 {
   "name": "vue-native-core",
-  "version": "0.0.6",
+  "version": "0.0.8-0",
   "description": "vue native core",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GeekyAnts/vue-native-core"
   },
-  "keywords": ["react", "vue"],
+  "keywords": [
+    "react",
+    "vue"
+  ],
   "author": "Geekyants (https://geekyants.io/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/GeekyAnts/vue-native-core/issues"
   },
-  "homepage":
-    "https://github.com/GeekyAnts/vue-native-core/tree/master/packages/vue-native-core",
+  "homepage": "https://github.com/GeekyAnts/vue-native-core/tree/master/packages/vue-native-core",
   "peerDependencies": {
     "react": "*"
   }
