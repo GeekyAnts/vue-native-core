@@ -1,4 +1,4 @@
-# Vue Native: Read more at https://vue-native.io
+# Vue Native: Read more at [vue-native.io](https://vue-native.io)
 
 ### Start with the Vue Native CLI
 
