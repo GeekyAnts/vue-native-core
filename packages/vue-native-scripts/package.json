@@ -1,6 +1,6 @@
 {
   "name": "vue-native-scripts",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Compile Vue component to React Native",
   "main": "index.js",
   "scripts": {},
@@ -27,7 +27,6 @@
   },
   "repository": {
     "type": "git",
-    "url":
-      "git+https://github.com/GeekyAnts/vue-native-core/tree/master/packages/vue-native-scripts"
+    "url": "git+https://github.com/GeekyAnts/vue-native-core/tree/master/packages/vue-native-scripts"
   }
 }
