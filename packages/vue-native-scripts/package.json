@@ -1,6 +1,6 @@
 {
   "name": "vue-native-scripts",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Compile Vue component to React Native",
   "main": "index.js",
   "scripts": {},
@@ -17,7 +17,7 @@
     "js-beautify": "^1.6.14",
     "node-watch": "^0.5.4",
     "walk": "^2.3.9",
-    "vue-native-template-compiler": "0.0.8"
+    "vue-native-template-compiler": "^0.0.9"
   },
   "devDependencies": {
     "eslint": "^4.0.0"
