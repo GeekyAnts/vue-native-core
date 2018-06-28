@@ -1919,19 +1919,6 @@ function processAttrs(el) {
         if (isProp || platformMustUseProp(el.tag, el.attrsMap.type, name)) {
           addProp(el, name, value);
         } else {
-          let detectOnChange = -1;
-          if (el.attrs) {
-            // Remove previous onChange handler added through v-model if user has provides onchange
-            //
-            el.attrs.forEach((attr, index) => {
-              if (attr.name === "on-change") {
-                detectOnChange = index;
-              }
-            });
-            if (detectOnChange > -1) {
-              el.attrs.splice(detectOnChange, 1);
-            }
-          }
           addAttr(el, name, value);
         }
       } else if (onRE.test(name)) {

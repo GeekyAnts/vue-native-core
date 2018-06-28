@@ -1,6 +1,6 @@
 {
   "name": "vue-native-template-compiler",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "react vue template compiler",
   "main": "index.js",
   "repository": {
