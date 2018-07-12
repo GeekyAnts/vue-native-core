@@ -19,6 +19,7 @@
     "walk": "^2.3.9",
     "line-number": "^0.1.0",
     "parse5": "^5.0.0",
+    "babel-traverse": "^6.26.0",
     "vue-native-template-compiler": "^0.0.9"
   },
   "devDependencies": {
