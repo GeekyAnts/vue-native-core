@@ -7,7 +7,7 @@ var reactNativeMinorVersion = semver(reactNativeVersionString).minor;
 var reactVueTemplateParser = require('./compiler');
 
 if (reactNativeMinorVersion >= 56) {
-  upstreamTransformer = require('metro/src/reactNativeTransformer')
+  upstreamTransformer = require('metro/src/reactNativeTransformer');
 } else if (reactNativeMinorVersion >= 52) {
   upstreamTransformer = require('metro/src/transformer');
 } else if (reactNativeMinorVersion >= 47) {
