@@ -1954,11 +1954,19 @@ function processAttrs(el) {
               }
             });
             if (!detectOnChange) {
-              addAttr(
-                el,
-                "on-change",
-                `(value) => ${value}=value.nativeEvent.text`
-              );
+              if (el.tag !== 'switch') {
+                addAttr(
+                  el,
+                  "on-change",
+                  `(value) => ${value}=value.nativeEvent.text`
+                );
+              } else {
+                addAttr(
+                  el,
+                  "on-value-change",
+                  `(value) => ${value}=value`
+                );
+              }
             }
           }
         } else {
