@@ -9,6 +9,7 @@ function _interopDefault(ex) {
 var deindent = _interopDefault(require("de-indent"));
 var he = require("he");
 var changeCase = _interopDefault(require("change-case"));
+var _ = require('lodash');
 
 /*  */
 
@@ -2001,6 +2002,7 @@ function processAttrs(el, options, customSlot = false) {
           //
           var renderer = new ReactNativeRenderGenerator(el, options);
           let customRenderer = renderer.generateRender();
+          let customImport = renderer.generateImport();
           customRenderer = customRenderer.replace(/render \(vm\)/, 'render (slotProps)')
 
           if (name === 'render-prop') {
@@ -2022,6 +2024,15 @@ function processAttrs(el, options, customSlot = false) {
             }
           }
           addAttr(el.parent, value, `${customRenderer}`);
+          let vueNativeCoreImport = customImport.split(splitRE);
+          if (vueNativeCoreImport && vueNativeCoreImport[0]) {
+            let imports = vueNativeCoreImport[0];
+            imports = imports.replace(/import \{/g, '')
+            imports = imports.replace(/\} from 'vue-native-helper'/g, '');
+            return imports.split(',').map(function (item) {
+              return item.trim();
+            });
+          }
         } else {
           addAttr(el, name, JSON.stringify(value));
         }
@@ -5320,12 +5331,25 @@ function nativeCompiler(template, options) {
   template = template.trim();
   if (template) {
     ast = parse(template, options);
-    traverse(ast, options);
+    let importObj = { imports: [] };
+    traverse(ast, options, importObj);
+    let imports = importObj.imports;
     var renderer = new ReactNativeRenderGenerator(ast, options);
     importCode = renderer.generateImport();
     renderCode = renderer.generateRender();
     // Remove extra commas
     renderCode = renderCode.replace(/\},{2,}/g, "}");
+    // Add imports of the render props missing from main import
+    let requiredImports = [];
+    imports.forEach((customImport) => {
+      if (importCode.indexOf(customImport) === -1) {
+        requiredImports.push(customImport)
+      }
+    })
+    let requiredImportsString = requiredImports.join(',')
+    if (requiredImportsString) {
+      importCode = importCode.replace(/\} from 'vue-native-helper'/g, `, ${requiredImportsString} } from 'vue-native-helper'`)
+    }
   }
   return {
     ast: ast,
@@ -5334,7 +5358,7 @@ function nativeCompiler(template, options) {
   };
 }
 
-function traverse(ast, options, parent = null, childIndex) {
+function traverse(ast, options, importObj, parent = null, childIndex) {
   // Check for render-prop and render-prop-fn within child, if yes then add that as a prop
   //
   if (ast.attrsMap && (ast.attrsMap['render-prop'] || ast.attrsMap['render-prop-fn']) && ast.parent) {
@@ -5343,7 +5367,9 @@ function traverse(ast, options, parent = null, childIndex) {
       slotname &&
       ast.parent
     ) {
-      processAttrs(ast, options, true);
+      // Get modules imported for slots
+      let importModules = processAttrs(ast, options, true);
+      importObj.imports = _.union(importObj.imports, importModules)
       if (parent) {
         delete parent.children[childIndex]
       }
@@ -5351,7 +5377,7 @@ function traverse(ast, options, parent = null, childIndex) {
   }
   if (ast.children) {
     ast.children.forEach((child, index) => {
-      traverse(child, options, ast, index);
+      traverse(child, options, importObj, ast, index);
     });
   }
 }
