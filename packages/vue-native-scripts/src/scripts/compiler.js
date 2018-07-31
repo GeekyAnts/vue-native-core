@@ -5,13 +5,13 @@ const beautify = require('js-beautify').js_beautify;
 const constants = require('../util/constants');
 const addvm = require('../util/addvm');
 const parseCss = require('../util/parseCss');
-var   sourceMap = require('source-map');
-var   hash = require('hash-sum');
-var   path = require('path');
-var   lineNumber = require('line-number');
+var sourceMap = require('source-map');
+var hash = require('hash-sum');
+var path = require('path');
+var lineNumber = require('line-number');
 const parse5 = require('parse5');
 const filePath = 'test.js';
-var   splitRE = /\r?\n/g;
+var splitRE = /\r?\n/g;
 
 // the watch reference node-watch, there may be some changes in the future
 // const watch = require('../util/watch');
@@ -57,7 +57,7 @@ function compileVueToRn(resource) {
   // add react-vue import
   output += `import ${constants.VUE}, { observer as ${
     constants.OBSERVER
-  } } from 'vue-native-core'`;
+    } } from 'vue-native-core'`;
   output += '\n';
 
   // // add react import
@@ -75,7 +75,7 @@ function compileVueToRn(resource) {
   // add component builder import
   output += `import { buildNativeComponent as ${
     constants.BUILD_COMPONENT
-  } } from 'vue-native-helper'`;
+    } } from 'vue-native-helper'`;
   output += '\n';
 
   // parse template
@@ -84,7 +84,7 @@ function compileVueToRn(resource) {
   // Get tags and location of tags from template
   //
   let nodes = [];
-  const templateFragments = parse5.parseFragment(cparsed.template.content, {sourceCodeLocationInfo: true});
+  const templateFragments = parse5.parseFragment(cparsed.template.content, { sourceCodeLocationInfo: true });
   if (templateFragments.childNodes) {
     traverse(templateFragments, nodes);
   }
@@ -127,8 +127,8 @@ function compileVueToRn(resource) {
   output += scriptParsed;
   output += '\n\n';
 
-  var endLines = output.split(splitRE).length - 1; 
-  for(; scriptLine < endLines; scriptLine++) {
+  var endLines = output.split(splitRE).length - 1;
+  for (; scriptLine < endLines; scriptLine++) {
     //Skip export default line
     if (scriptLine !== exportDefaultLineNumber) {
       mappings.addMapping({
@@ -143,11 +143,11 @@ function compileVueToRn(resource) {
         }
       });
     }
-      beforeLines++;
+    beforeLines++;
   }
 
   // add render funtion
-  let beautifiedRender = beautify(addvm(templateParsed.render, { indent_size: 2}));
+  let beautifiedRender = beautify(addvm(templateParsed.render, { indent_size: 2 }));
   output += beautifiedRender;
   output += '\n\n';
 
@@ -163,7 +163,7 @@ function compileVueToRn(resource) {
     foundLines.forEach((line, index) => {
       let renderJsLine = endLines + line.number;
       if (foundLines[index + 1]) {
-        for(let i = line.number; i < foundLines[index + 1]; i++) {
+        for (let i = line.number; i < foundLines[index + 1]; i++) {
           // Add Mapping
           if (nodes[index]) {
             mappings.addMapping({
@@ -183,7 +183,7 @@ function compileVueToRn(resource) {
         // Last Line
         for (let i = line.number; i < renderEndLine; i++) {
           // Add Mapping
-          if (nodes[index]) {
+          if (nodes[index] && nodes[index].startTag) {
             mappings.addMapping({
               source: mappings._hashedFilename,
               generated: {
@@ -204,7 +204,7 @@ function compileVueToRn(resource) {
   // parse css
   const styles = cparsed.styles;
   let cssParsed = {};
-  styles.forEach(function(v) {
+  styles.forEach(function (v) {
     const cssAst = cssParse(v.content);
     cssParsed = Object.assign({}, cssParsed, parseCss(cssAst));
   });
@@ -216,21 +216,21 @@ function compileVueToRn(resource) {
   // add builder
   output += `const ${constants.COMPONENT_BUILDED} = ${
     constants.BUILD_COMPONENT
-  }(${constants.TEMPLATE_RENDER}, ${constants.SCRIPT_OPTIONS}, {Component: ${
+    }(${constants.TEMPLATE_RENDER}, ${constants.SCRIPT_OPTIONS}, {Component: ${
     constants.COMPONENT
-  }, PropTypes: ${constants.PROP_TYPE}, Vue: ${constants.VUE}, ReactNative: ${
+    }, PropTypes: ${constants.PROP_TYPE}, Vue: ${constants.VUE}, ReactNative: ${
     constants.REACT_NATIVE
-  }, css: ${constants.CSS}})`;
+    }, css: ${constants.CSS}})`;
   output += '\n\n';
 
   // export default
   output += `export default ${constants.OBSERVER}(${
     constants.COMPONENT_BUILDED
-  })`;
+    })`;
 
   // beautiful
   // output = beautify(output, { indent_size: 2 });
-  return {output, mappings: mappings.toJSON()};
+  return { output, mappings: mappings.toJSON() };
 
   // fs.writeFile(name.replace(FILTER, '.js'), output, function(err) {
   //   if (err) {
@@ -255,7 +255,7 @@ function parseTemplate(code) {
   };
 }
 
-function generateSourceMap (content) {
+function generateSourceMap(content) {
   // hot-reload source map busting
   var hashedFilename = path.basename(filePath) + '?' + hash(filePath + content);
   var map = new sourceMap.SourceMapGenerator();
@@ -272,7 +272,7 @@ function parseScript(code) {
   return code;
 }
 
-function traverse(ast,nodes = []) {
+function traverse(ast, nodes = []) {
   if (ast.tagName) {
     nodes.push(ast.sourceCodeLocation);
   }
