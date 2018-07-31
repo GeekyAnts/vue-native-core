@@ -5,6 +5,13 @@ const beautify = require('js-beautify').js_beautify;
 const constants = require('../util/constants');
 const addvm = require('../util/addvm');
 const parseCss = require('../util/parseCss');
+var   sourceMap = require('source-map');
+var   hash = require('hash-sum');
+var   path = require('path');
+var   lineNumber = require('line-number');
+const parse5 = require('parse5');
+const filePath = 'test.js';
+var   splitRE = /\r?\n/g;
 
 // the watch reference node-watch, there may be some changes in the future
 // const watch = require('../util/watch');
@@ -45,6 +52,7 @@ function compileVueToRn(resource) {
   // console.log(cparsed);
 
   let output = '';
+  let mappings = '';
 
   // add react-vue import
   output += `import ${constants.VUE}, { observer as ${
@@ -72,6 +80,16 @@ function compileVueToRn(resource) {
 
   // parse template
   const template = cparsed.template;
+
+  // Get tags and location of tags from template
+  //
+  let nodes = [];
+  const templateFragments = parse5.parseFragment(cparsed.template.content, {sourceCodeLocationInfo: true});
+  if (templateFragments.childNodes) {
+    traverse(templateFragments, nodes);
+  }
+
+
   let templateParsed = DEFAULT_OUTPUT.template;
   if (template) {
     const templateContent = template.content.replace(/\/\/\n/g, '').trim();
@@ -90,15 +108,98 @@ function compileVueToRn(resource) {
   if (script) {
     const scriptContent = script.content.replace(/\/\/\n/g, '').trim();
     scriptParsed = parseScript(scriptContent);
+    mappings = generateSourceMap(code);
+  }
+
+  if (mappings) {
+    // Start of the script content
+    //
+    var beforeLines = output.split(splitRE).length;
+    // Start of the script content of the original code
+    //
+    var scriptLine = code.slice(0, cparsed.script.start).split(splitRE).length + 1;
+    var exportDefaultIndex = code.indexOf('export default');
+    var tempString = code.substring(0, exportDefaultIndex);
+    var exportDefaultLineNumber = tempString.split('\n').length;
   }
 
   // add vue options
   output += scriptParsed;
   output += '\n\n';
 
+  var endLines = output.split(splitRE).length - 1; 
+  for(; scriptLine < endLines; scriptLine++) {
+    //Skip export default line
+    if (scriptLine !== exportDefaultLineNumber) {
+      mappings.addMapping({
+        source: mappings._hashedFilename,
+        generated: {
+          line: beforeLines,
+          column: 0
+        },
+        original: {
+          line: scriptLine,
+          column: 0
+        }
+      });
+    }
+      beforeLines++;
+  }
+
   // add render funtion
-  output += addvm(templateParsed.render);
+  let beautifiedRender = beautify(addvm(templateParsed.render, { indent_size: 2}));
+  output += beautifiedRender;
   output += '\n\n';
+
+  // Get last line of render code
+  //
+  let renderEndLine = beautifiedRender.split(splitRE).length - 1;
+
+  // Search Elements and postion based on render function
+  //
+  var reactVueElementRegex = /__react__vue__createElement/;
+  let foundLines = lineNumber(beautifiedRender, reactVueElementRegex);
+  if (mappings) {
+    foundLines.forEach((line, index) => {
+      let renderJsLine = endLines + line.number;
+      if (foundLines[index + 1]) {
+        for(let i = line.number; i < foundLines[index + 1]; i++) {
+          // Add Mapping
+          if (nodes[index]) {
+            mappings.addMapping({
+              source: mappings._hashedFilename,
+              generated: {
+                line: renderJsLine++,
+                column: 0
+              },
+              original: {
+                line: nodes[index].startTag.startLine + 1,
+                column: 0
+              }
+            });
+          }
+        }
+      } else {
+        // Last Line
+        for (let i = line.number; i < renderEndLine; i++) {
+          // Add Mapping
+          if (nodes[index]) {
+            mappings.addMapping({
+              source: mappings._hashedFilename,
+              generated: {
+                line: renderJsLine++,
+                column: 0
+              },
+              original: {
+                line: nodes[index].startTag.startLine + 1,
+                column: 0
+              }
+            });
+          }
+        }
+      }
+    });
+  }
 
   // parse css
   const styles = cparsed.styles;
@@ -128,8 +229,8 @@ function compileVueToRn(resource) {
   })`;
 
   // beautiful
-  output = beautify(output, { indent_size: 2 });
-  return output;
+  // output = beautify(output, { indent_size: 2 });
+  return {output, mappings: mappings.toJSON()};
 
   // fs.writeFile(name.replace(FILTER, '.js'), output, function(err) {
   //   if (err) {
@@ -154,12 +255,32 @@ function parseTemplate(code) {
   };
 }
 
+function generateSourceMap (content) {
+  // hot-reload source map busting
+  var hashedFilename = path.basename(filePath) + '?' + hash(filePath + content);
+  var map = new sourceMap.SourceMapGenerator();
+  map.setSourceContent(hashedFilename, content);
+  map._hashedFilename = hashedFilename;
+  return map;
+}
+
 function parseScript(code) {
   const s = `const ${constants.SCRIPT_OPTIONS} = `;
   code = code
     .replace(/[\s;]*module.exports[\s]*=/, `\n${s}`)
     .replace(/[\s;]*export[\s]+default[\s]*\{/, `\n${s} {`);
   return code;
+}
+
+function traverse(ast,nodes = []) {
+  if (ast.tagName) {
+    nodes.push(ast.sourceCodeLocation);
+  }
+  if (ast.childNodes) {
+    ast.childNodes.forEach((child) => {
+      traverse(child, nodes);
+    });
+  }
 }
 
 module.exports = compileVueToRn;
