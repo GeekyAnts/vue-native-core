@@ -230,7 +230,7 @@ function compileVueToRn(resource) {
 
   // beautiful
   // output = beautify(output, { indent_size: 2 });
-  return { output, mappings: mappings.toJSON() };
+  return { output, mappings: mappings ? mappings.toJSON() : null };
 
   // fs.writeFile(name.replace(FILTER, '.js'), output, function(err) {
   //   if (err) {

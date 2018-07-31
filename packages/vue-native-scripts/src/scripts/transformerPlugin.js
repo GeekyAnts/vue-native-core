@@ -64,7 +64,9 @@ function transform({ src, filename, options }) {
       filename,
       options
     });
-    sourceMapAstInPlace(outputFile.mappings, babelCompileResult.ast);
+    if (outputFile.mappings) {
+      sourceMapAstInPlace(outputFile.mappings, babelCompileResult.ast);
+    }
     return babelCompileResult;
   }
 }
