@@ -5324,6 +5324,8 @@ function nativeCompiler(template, options) {
     var renderer = new ReactNativeRenderGenerator(ast, options);
     importCode = renderer.generateImport();
     renderCode = renderer.generateRender();
+    // Remove extra commas
+    renderCode = renderCode.replace(/\},{2,}/g, "}");
   }
   return {
     ast: ast,
