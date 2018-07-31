@@ -50,12 +50,12 @@ function makeMap(str, expectsLowerCase) {
     map[list[i]] = true;
   }
   return expectsLowerCase
-    ? function(val) {
-        return map[val.toLowerCase()];
-      }
-    : function(val) {
-        return map[val];
-      };
+    ? function (val) {
+      return map[val.toLowerCase()];
+    }
+    : function (val) {
+      return map[val];
+    };
 }
 
 /**
@@ -86,8 +86,8 @@ function cached(fn) {
  * Camelize a hyphen-delimited string.
  */
 var camelizeRE = /-(\w)/g;
-var camelize = cached(function(str) {
-  return str.replace(camelizeRE, function(_, c) {
+var camelize = cached(function (str) {
+  return str.replace(camelizeRE, function (_, c) {
     return c ? c.toUpperCase() : "";
   });
 });
@@ -95,7 +95,7 @@ var camelize = cached(function(str) {
 /**
  * Capitalize a string.
  */
-var capitalize = cached(function(str) {
+var capitalize = cached(function (str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 });
 
@@ -122,19 +122,19 @@ var capitalize = cached(function(str) {
 /**
  * Perform no operation.
  */
-function noop() {}
+function noop() { }
 
 /**
  * Always return false.
  */
-var no = function() {
+var no = function () {
   return false;
 };
 
 /**
  * Return same value
  */
-var identity = function(_) {
+var identity = function (_) {
   return _;
 };
 
@@ -155,7 +155,7 @@ var identity = function(_) {
 
 var isUnaryTag = makeMap(
   "area,base,br,col,embed,frame,hr,img,input,isindex,keygen," +
-    "link,meta,param,source,track,wbr"
+  "link,meta,param,source,track,wbr"
 );
 
 // Elements that you can, intentionally, leave open
@@ -168,10 +168,10 @@ var canBeLeftOpenTag = makeMap(
 // Phrasing Content https://html.spec.whatwg.org/multipage/dom.html#phrasing-content
 var isNonPhrasingTag = makeMap(
   "address,article,aside,base,blockquote,body,caption,col,colgroup,dd," +
-    "details,dialog,div,dl,dt,fieldset,figcaption,figure,footer,form," +
-    "h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,legend,li,menuitem,meta," +
-    "optgroup,option,param,rp,rt,source,style,summary,tbody,td,tfoot,th,thead," +
-    "title,tr,track"
+  "details,dialog,div,dl,dt,fieldset,figcaption,figure,footer,form," +
+  "h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,legend,li,menuitem,meta," +
+  "optgroup,option,param,rp,rt,source,style,summary,tbody,td,tfoot,th,thead," +
+  "title,tr,track"
 );
 
 /**
@@ -197,13 +197,13 @@ var singleAttrValues = [
 ];
 var attribute = new RegExp(
   "^\\s*" +
-    singleAttrIdentifier.source +
-    "(?:\\s*(" +
-    singleAttrAssign.source +
-    ")" +
-    "\\s*(?:" +
-    singleAttrValues.join("|") +
-    "))?"
+  singleAttrIdentifier.source +
+  "(?:\\s*(" +
+  singleAttrAssign.source +
+  ")" +
+  "\\s*(?:" +
+  singleAttrValues.join("|") +
+  "))?"
 );
 
 // could use https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-QName
@@ -218,7 +218,7 @@ var comment = /^<!--/;
 var conditionalComment = /^<!\[/;
 
 var IS_REGEX_CAPTURING_BROKEN = false;
-"x".replace(/x(.)?/g, function(m, g) {
+"x".replace(/x(.)?/g, function (m, g) {
   IS_REGEX_CAPTURING_BROKEN = g === "";
 });
 
@@ -238,7 +238,7 @@ var encodedAttrWithNewLines = /&(?:lt|gt|quot|amp|#10);/g;
 
 function decodeAttr(value, shouldDecodeNewlines) {
   var re = shouldDecodeNewlines ? encodedAttrWithNewLines : encodedAttr;
-  return value.replace(re, function(match) {
+  return value.replace(re, function (match) {
     return decodingMap[match];
   });
 }
@@ -340,7 +340,7 @@ function parseHTML(html, options) {
           "i"
         ));
       var endTagLength = 0;
-      var rest = html.replace(reStackedTag, function(all, text, endTag) {
+      var rest = html.replace(reStackedTag, function (all, text, endTag) {
         endTagLength = endTag.length;
         if (!isPlainTextElement(stackedTag) && stackedTag !== "noscript") {
           text = text
@@ -554,7 +554,7 @@ function parseComponent(content, options) {
         type: tag,
         content: "",
         start: end,
-        attrs: attrs.reduce(function(cumulated, ref) {
+        attrs: attrs.reduce(function (cumulated, ref) {
           var name = ref.name;
           var value = ref.value;
 
@@ -764,7 +764,7 @@ function wrapFilter(exp, filter) {
 var defaultTagRE = /\{\{((?:.|\n)+?)\}\}/g;
 var regexEscapeRE = /[-.*+?^${}()|[\]\/\\]/g;
 
-var buildRegex = cached(function(delimiters) {
+var buildRegex = cached(function (delimiters) {
   var open = delimiters[0].replace(regexEscapeRE, "\\$&");
   var close = delimiters[1].replace(regexEscapeRE, "\\$&");
   return new RegExp(open + "((?:.|\\n)+?)" + close, "g");
@@ -1023,15 +1023,15 @@ var formatComponentName;
 if (process.env.NODE_ENV !== "production") {
   var hasConsole = typeof console !== "undefined";
   var classifyRE = /(?:^|[-_])(\w)/g;
-  var classify = function(str) {
+  var classify = function (str) {
     return str
-      .replace(classifyRE, function(c) {
+      .replace(classifyRE, function (c) {
         return c.toUpperCase();
       })
       .replace(/[-_]/g, "");
   };
 
-  warn$1 = function(msg, vm) {
+  warn$1 = function (msg, vm) {
     if (hasConsole && !config.silent) {
       console.error(
         "[Vue warn]: " + msg + (vm ? generateComponentTrace(vm) : "")
@@ -1039,7 +1039,7 @@ if (process.env.NODE_ENV !== "production") {
     }
   };
 
-  tip = function(msg, vm) {
+  tip = function (msg, vm) {
     if (hasConsole && !config.silent) {
       console.warn(
         "[Vue tip]: " + msg + (vm ? generateComponentTrace(vm) : "")
@@ -1047,7 +1047,7 @@ if (process.env.NODE_ENV !== "production") {
     }
   };
 
-  formatComponentName = function(vm, includeFile) {
+  formatComponentName = function (vm, includeFile) {
     if (vm.$root === vm) {
       return "<Root>";
     }
@@ -1072,7 +1072,7 @@ if (process.env.NODE_ENV !== "production") {
     );
   };
 
-  var repeat = function(str, n) {
+  var repeat = function (str, n) {
     var res = "";
     while (n) {
       if (n % 2 === 1) {
@@ -1086,7 +1086,7 @@ if (process.env.NODE_ENV !== "production") {
     return res;
   };
 
-  var generateComponentTrace = function(vm) {
+  var generateComponentTrace = function (vm) {
     if (vm._isVue && vm.$parent) {
       var tree = [];
       var currentRecursiveSequence = 0;
@@ -1108,15 +1108,15 @@ if (process.env.NODE_ENV !== "production") {
       return (
         "\n\nfound in\n\n" +
         tree
-          .map(function(vm, i) {
+          .map(function (vm, i) {
             return (
               "" +
               (i === 0 ? "---> " : repeat(" ", 5 + i * 2)) +
               (Array.isArray(vm)
                 ? formatComponentName(vm[0]) +
-                  "... (" +
-                  vm[1] +
-                  " recursive calls)"
+                "... (" +
+                vm[1] +
+                " recursive calls)"
                 : formatComponentName(vm))
             );
           })
@@ -1172,13 +1172,13 @@ if (inBrowser) {
       }
     }); // https://github.com/facebook/flow/issues/285
     window.addEventListener("test-passive", null, opts);
-  } catch (e) {}
+  } catch (e) { }
 }
 
 // this needs to be lazy-evaled because vue may be required before
 // vue-server-renderer can set VUE_ENV
 var _isServer;
-var isServerRendering = function() {
+var isServerRendering = function () {
   if (_isServer === undefined) {
     /* istanbul ignore if */
     if (!inBrowser && typeof global !== "undefined") {
@@ -1208,7 +1208,7 @@ var hasSymbol =
 /**
  * Defer a task to execute it asynchronously.
  */
-var nextTick = (function() {
+var nextTick = (function () {
   var callbacks = [];
   var pending = false;
   var timerFunc;
@@ -1231,10 +1231,10 @@ var nextTick = (function() {
   /* istanbul ignore if */
   if (typeof Promise !== "undefined" && isNative(Promise)) {
     var p = Promise.resolve();
-    var logError = function(err) {
+    var logError = function (err) {
       console.error(err);
     };
-    timerFunc = function() {
+    timerFunc = function () {
       p.then(nextTickHandler).catch(logError);
       // in problematic UIWebViews, Promise.then doesn't completely break, but
       // it can get stuck in a weird state where callbacks are pushed into the
@@ -1259,21 +1259,21 @@ var nextTick = (function() {
     observer.observe(textNode, {
       characterData: true
     });
-    timerFunc = function() {
+    timerFunc = function () {
       counter = (counter + 1) % 2;
       textNode.data = String(counter);
     };
   } else {
     // fallback to setTimeout
     /* istanbul ignore next */
-    timerFunc = function() {
+    timerFunc = function () {
       setTimeout(nextTickHandler, 0);
     };
   }
 
   return function queueNextTick(cb, ctx) {
     var _resolve;
-    callbacks.push(function() {
+    callbacks.push(function () {
       if (cb) {
         try {
           cb.call(ctx);
@@ -1289,7 +1289,7 @@ var nextTick = (function() {
       timerFunc();
     }
     if (!cb && typeof Promise !== "undefined") {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         _resolve = resolve;
       });
     }
@@ -1303,7 +1303,7 @@ if (typeof Set !== "undefined" && isNative(Set)) {
   _Set = Set;
 } else {
   // a non-standard Set polyfill that only works with primitive keys.
-  _Set = (function() {
+  _Set = (function () {
     function Set() {
       this.set = Object.create(null);
     }
@@ -1330,12 +1330,12 @@ function baseWarn(msg) {
 function pluckModuleFunction(modules, key) {
   return modules
     ? modules
-        .map(function(m) {
-          return m[key];
-        })
-        .filter(function(_) {
-          return _;
-        })
+      .map(function (m) {
+        return m[key];
+      })
+      .filter(function (_) {
+        return _;
+      })
     : [];
 }
 
@@ -1369,7 +1369,7 @@ function addHandler(el, name, value, modifiers, important, warn) {
   ) {
     warn(
       "passive and prevent can't be used together. " +
-        "Passive handler can't prevent default event."
+      "Passive handler can't prevent default event."
     );
   }
   // check capture modifier
@@ -1528,11 +1528,11 @@ function parse(template, options) {
         process.env.NODE_ENV !== "production" &&
           warn(
             "Templates should only be responsible for mapping the state to the " +
-              "UI. Avoid placing tags with side-effects in your templates, such as " +
-              "<" +
-              tag +
-              ">" +
-              ", as they will not be parsed."
+            "UI. Avoid placing tags with side-effects in your templates, such as " +
+            "<" +
+            tag +
+            ">" +
+            ", as they will not be parsed."
           );
       }
 
@@ -1576,15 +1576,15 @@ function parse(template, options) {
           if (el.tag === "slot" || el.tag === "template") {
             warnOnce(
               "Cannot use <" +
-                el.tag +
-                "> as component root element because it may " +
-                "contain multiple nodes."
+              el.tag +
+              "> as component root element because it may " +
+              "contain multiple nodes."
             );
           }
           if (el.attrsMap.hasOwnProperty("v-for")) {
             warnOnce(
               "Cannot use v-for on stateful component root element because " +
-                "it renders multiple elements."
+              "it renders multiple elements."
             );
           }
         }
@@ -1605,8 +1605,8 @@ function parse(template, options) {
         } else if (process.env.NODE_ENV !== "production") {
           warnOnce(
             "Component template should contain exactly one root element. " +
-              "If you are using v-if on multiple elements, " +
-              "use v-else-if to chain them instead."
+            "If you are using v-if on multiple elements, " +
+            "use v-else-if to chain them instead."
           );
         }
       }
@@ -1679,7 +1679,7 @@ function parse(template, options) {
         inPre || text.trim()
           ? decodeHTMLCached(text)
           : // only preserve whitespace if its not right after a starting tag
-            preserveWhitespace && children.length
+          preserveWhitespace && children.length
             ? " "
             : "";
       if (text) {
@@ -1805,11 +1805,11 @@ function processIfConditions(el, parent) {
   } else if (process.env.NODE_ENV !== "production") {
     warn(
       "v-" +
-        (el.elseif ? 'else-if="' + el.elseif + '"' : "else") +
-        " " +
-        "used on element <" +
-        el.tag +
-        "> without corresponding v-if."
+      (el.elseif ? 'else-if="' + el.elseif + '"' : "else") +
+      " " +
+      "used on element <" +
+      el.tag +
+      "> without corresponding v-if."
     );
   }
 }
@@ -1823,9 +1823,9 @@ function findPrevElement(children) {
       if (process.env.NODE_ENV !== "production" && children[i].text !== " ") {
         warn(
           'text "' +
-            children[i].text.trim() +
-            '" between v-if and v-else(-if) ' +
-            "will be ignored."
+          children[i].text.trim() +
+          '" between v-if and v-else(-if) ' +
+          "will be ignored."
         );
       }
       children.pop();
@@ -1853,8 +1853,8 @@ function processSlot(el) {
     if (process.env.NODE_ENV !== "production" && el.key) {
       warn(
         "`key` does not work on <slot> because slots are abstract outlets " +
-          "and can possibly expand into multiple elements. " +
-          "Use the key on a wrapping element instead."
+        "and can possibly expand into multiple elements. " +
+        "Use the key on a wrapping element instead."
       );
     }
   } else {
@@ -1878,7 +1878,7 @@ function processComponent(el) {
   }
 }
 
-function processAttrs(el) {
+function processAttrs(el, options, customSlot = false) {
   var list = el.attrsList;
   var i, l, name, rawName, value, modifiers, isProp;
   for (i = 0, l = list.length; i < l; i++) {
@@ -1929,7 +1929,7 @@ function processAttrs(el) {
         //
         if (isNative) {
           let camelCaseName = "on-" + name;
-          camelCaseName = camelCaseName.replace(/-([a-z])/g, function(g) {
+          camelCaseName = camelCaseName.replace(/-([a-z])/g, function (g) {
             return g[1].toUpperCase();
           });
           addAttr(el, camelCaseName, `() => ${value}`);
@@ -1983,12 +1983,12 @@ function processAttrs(el) {
         if (expression) {
           warn(
             name +
-              '="' +
-              value +
-              '": ' +
-              "Interpolation inside attributes has been removed. " +
-              "Use v-bind or the colon shorthand instead. For example, " +
-              'instead of <div id="{{ val }}">, use <div :id="val">.'
+            '="' +
+            value +
+            '": ' +
+            "Interpolation inside attributes has been removed. " +
+            "Use v-bind or the colon shorthand instead. For example, " +
+            'instead of <div id="{{ val }}">, use <div :id="val">.'
           );
         }
       }
@@ -1996,7 +1996,35 @@ function processAttrs(el) {
         value = value.replace(/\//, "");
         addAttr(el, "on-press", `() => ${"navigation"}.navigate('${value}')`);
       } else {
-        addAttr(el, name, JSON.stringify(value));
+        if ((name === 'render-prop-fn' || name === 'render-prop') && customSlot) {
+          // Add Attribute in parent element
+          //
+          var renderer = new ReactNativeRenderGenerator(el, options);
+          let customRenderer = renderer.generateRender();
+          customRenderer = customRenderer.replace(/render \(vm\)/, 'render (slotProps)')
+
+          if (name === 'render-prop') {
+            customRenderer = '(' + customRenderer + ')()'
+          } else {
+            // Support for args
+            customRenderer = customRenderer.replace(/render \(slotProps\)/, 'render (args)')
+            if (el.attrsMap['arguments'] && typeof el.attrsMap['arguments'] === 'string') {
+              let customArguments = el.attrsMap['arguments'].split(',');
+              customRenderer = customRenderer.replace(/render \(args\)/, `render (${el.attrsMap['arguments']})`)
+              // Replace each instance of the argument
+              //
+              customArguments.forEach((argument) => {
+                let reg = new RegExp('vm\[' + argument + '\]', 'g');
+                customRenderer = customRenderer.replace(reg, argument)
+              })
+            } else {
+              customRenderer = customRenderer.replace(/vm\(args\)/g, 'args')
+            }
+          }
+          addAttr(el.parent, value, `${customRenderer}`);
+        } else {
+          addAttr(el, name, JSON.stringify(value));
+        }
       }
     }
   }
@@ -2017,7 +2045,7 @@ function parseModifiers(name) {
   var match = name.match(modifierRE);
   if (match) {
     var ret = {};
-    match.forEach(function(m) {
+    match.forEach(function (m) {
       ret[m.slice(1)] = true;
     });
     return ret;
@@ -2070,14 +2098,14 @@ function checkForAliasModel(el, value) {
     if (_el.for && _el.alias === value) {
       warn(
         "<" +
-          el.tag +
-          ' v-model="' +
-          value +
-          '">: ' +
-          "You are binding v-model directly to a v-for iteration alias. " +
-          "This will not be able to modify the v-for source array because " +
-          "writing to the alias is like modifying a function local variable. " +
-          "Consider using an array of objects and use v-model on an object property instead."
+        el.tag +
+        ' v-model="' +
+        value +
+        '">: ' +
+        "You are binding v-model directly to a v-for iteration alias. " +
+        "This will not be able to modify the v-for source array because " +
+        "writing to the alias is like modifying a function local variable. " +
+        "Consider using an array of objects and use v-model on an object property instead."
       );
     }
     _el = _el.parent;
@@ -2230,40 +2258,40 @@ var isEnumeratedAttr = makeMap("contenteditable,draggable,spellcheck");
 
 var isBooleanAttr = makeMap(
   "allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare," +
-    "default,defaultchecked,defaultmuted,defaultselected,defer,disabled," +
-    "enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple," +
-    "muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly," +
-    "required,reversed,scoped,seamless,selected,sortable,translate," +
-    "truespeed,typemustmatch,visible"
+  "default,defaultchecked,defaultmuted,defaultselected,defer,disabled," +
+  "enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple," +
+  "muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly," +
+  "required,reversed,scoped,seamless,selected,sortable,translate," +
+  "truespeed,typemustmatch,visible"
 );
 
 /*  */
 
 var isUnaryTag$1 = makeMap(
   "area,base,br,col,embed,frame,hr,img,input,isindex,keygen," +
-    "link,meta,param,source,track,wbr"
+  "link,meta,param,source,track,wbr"
 );
 
 var isHTMLTag = makeMap(
   "html,body,base,head,link,meta,style,title," +
-    "address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section," +
-    "div,dd,dl,dt,figcaption,figure,hr,img,li,main,ol,p,pre,ul," +
-    "a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby," +
-    "s,samp,small,span,strong,sub,sup,time,u,var,wbr,area,audio,map,track,video," +
-    "embed,object,param,source,canvas,script,noscript,del,ins," +
-    "caption,col,colgroup,table,thead,tbody,td,th,tr," +
-    "button,datalist,fieldset,form,input,label,legend,meter,optgroup,option," +
-    "output,progress,select,textarea," +
-    "details,dialog,menu,menuitem,summary," +
-    "content,element,shadow,template"
+  "address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section," +
+  "div,dd,dl,dt,figcaption,figure,hr,img,li,main,ol,p,pre,ul," +
+  "a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby," +
+  "s,samp,small,span,strong,sub,sup,time,u,var,wbr,area,audio,map,track,video," +
+  "embed,object,param,source,canvas,script,noscript,del,ins," +
+  "caption,col,colgroup,table,thead,tbody,td,th,tr," +
+  "button,datalist,fieldset,form,input,label,legend,meter,optgroup,option," +
+  "output,progress,select,textarea," +
+  "details,dialog,menu,menuitem,summary," +
+  "content,element,shadow,template"
 );
 
 // this map is intentionally selective, only covering SVG elements that may
 // contain child elements.
 var isSVG = makeMap(
   "svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face," +
-    "foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern," +
-    "polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view",
+  "foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern," +
+  "polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view",
   true
 );
 
@@ -2277,10 +2305,10 @@ var canBeLeftOpenTag$1 = makeMap(
 // Phrasing Content https://html.spec.whatwg.org/multipage/dom.html#phrasing-content
 var isNonPhrasingTag$1 = makeMap(
   "address,article,aside,base,blockquote,body,caption,col,colgroup,dd," +
-    "details,dialog,div,dl,dt,fieldset,figcaption,figure,footer,form," +
-    "h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,legend,li,menuitem,meta," +
-    "optgroup,option,param,rp,rt,source,style,summary,tbody,td,tfoot,th,thead," +
-    "title,tr,track"
+  "details,dialog,div,dl,dt,fieldset,figcaption,figure,footer,form," +
+  "h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,legend,li,menuitem,meta," +
+  "optgroup,option,param,rp,rt,source,style,summary,tbody,td,tfoot,th,thead," +
+  "title,tr,track"
 );
 
 var buildInTags = [
@@ -2294,11 +2322,11 @@ var buildInTags = [
 
 var isBuildInTag = makeMap(buildInTags.join(","));
 
-var isPreTag = function(tag) {
+var isPreTag = function (tag) {
   return tag === "pre";
 };
 
-var isReservedTag = function(tag) {
+var isReservedTag = function (tag) {
   return isHTMLTag(tag) || isSVG(tag);
 };
 
@@ -2314,7 +2342,7 @@ function getTagNamespace(tag) {
 }
 
 function specialObserver(obj, cb) {
-  var loop = function(key) {
+  var loop = function (key) {
     var val = obj[key];
     if (typeof val === "string") {
       Object.defineProperty(obj, key, {
@@ -2355,7 +2383,7 @@ function handleUnaryTag(ast) {
 function filterDirective(ast) {
   var arr = ["show", "bind"];
   if (Array.isArray(ast.directives)) {
-    return ast.directives.filter(function(v) {
+    return ast.directives.filter(function (v) {
       return arr.indexOf(v.name) === -1;
     });
   } else {
@@ -2365,7 +2393,7 @@ function filterDirective(ast) {
 
 function filterDirectiveBindProps(ast) {
   if (Array.isArray(ast.directives)) {
-    return ast.directives.filter(function(v) {
+    return ast.directives.filter(function (v) {
       return v.name === "bind" && v.value === "$props";
     });
   } else {
@@ -2435,13 +2463,13 @@ BaseGenerator.prototype.generateRender = function generateRender() {
 
 BaseGenerator.prototype.genDependence = function genDependence() {
   var code = "";
-  var helperDependency = this.variableDependency.filter(function(v) {
+  var helperDependency = this.variableDependency.filter(function (v) {
     return v !== COMMON.createElement && v !== COMMON.component && v.alias;
   });
   if (helperDependency.length) {
     code += "import { ";
     code += helperDependency
-      .map(function(v) {
+      .map(function (v) {
         return v.alias + " as " + v.name;
       })
       .join(",");
@@ -2652,7 +2680,7 @@ function wrapFilter$1(exp, filter) {
 var defaultTagRE$1 = /\{\{((?:.|\n)+?)\}\}/g;
 var regexEscapeRE$1 = /[-.*+?^${}()|[\]\/\\]/g;
 
-var buildRegex$1 = cached(function(delimiters) {
+var buildRegex$1 = cached(function (delimiters) {
   var open = delimiters[0].replace(regexEscapeRE$1, "\\$&");
   var close = delimiters[1].replace(regexEscapeRE$1, "\\$&");
   return new RegExp(open + "((?:.|\\n)+?)" + close, "g");
@@ -2963,7 +2991,7 @@ var HTMLDOMPropertyConfig = {
   },
   DOMPropertyNames: {},
   DOMMutationMethods: {
-    value: function(node, value) {
+    value: function (node, value) {
       if (value == null) {
         return node.removeAttribute("value");
       }
@@ -3283,7 +3311,7 @@ var SVGDOMPropertyConfig = {
   DOMAttributeNames: {}
 };
 
-Object.keys(ATTRS).forEach(function(key) {
+Object.keys(ATTRS).forEach(function (key) {
   SVGDOMPropertyConfig.Properties[key] = 0;
   if (ATTRS[key]) {
     SVGDOMPropertyConfig.DOMAttributeNames[key] = ATTRS[key];
@@ -3397,31 +3425,31 @@ var reactProps = {
 
 var propertyMap = {};
 
-Object.keys(ARIADOMPropertyConfig.Properties).forEach(function(v) {
+Object.keys(ARIADOMPropertyConfig.Properties).forEach(function (v) {
   propertyMap[v.toLowerCase()] = v;
 });
 
-Object.keys(HTMLDOMPropertyConfig.Properties).forEach(function(v) {
+Object.keys(HTMLDOMPropertyConfig.Properties).forEach(function (v) {
   propertyMap[v.toLowerCase()] = v;
 });
 
-Object.keys(SVGDOMPropertyConfig.DOMAttributeNames).forEach(function(v) {
+Object.keys(SVGDOMPropertyConfig.DOMAttributeNames).forEach(function (v) {
   propertyMap[SVGDOMPropertyConfig.DOMAttributeNames[v]] = v;
 });
 
 Object.keys(EventConstants.topLevelTypes)
-  .map(function(v) {
+  .map(function (v) {
     return v.replace(/^top/, "on");
   })
-  .forEach(function(v) {
+  .forEach(function (v) {
     propertyMap[v.toLowerCase()] = v;
   });
 
-Object.keys(reactProps).map(function(v) {
+Object.keys(reactProps).map(function (v) {
   propertyMap[v.toLowerCase()] = v;
 });
 
-var RenderGenerator = (function(BaseGenerator$$1) {
+var RenderGenerator = (function (BaseGenerator$$1) {
   function RenderGenerator() {
     BaseGenerator$$1.apply(this, arguments);
   }
@@ -3534,7 +3562,7 @@ var RenderGenerator = (function(BaseGenerator$$1) {
     var children = [];
     if (ast.children && ast.children.length) {
       children = children.concat(
-        ast.children.map(function(v) {
+        ast.children.map(function (v) {
           return this$1.genElement(v);
         })
       );
@@ -3542,10 +3570,10 @@ var RenderGenerator = (function(BaseGenerator$$1) {
     if (ast.scopedSlots) {
       children = children.concat(
         Object.keys(ast.scopedSlots)
-          .map(function(v) {
+          .map(function (v) {
             return ast.scopedSlots[v];
           })
-          .map(function(v) {
+          .map(function (v) {
             var slotCode = this$1.genElement(v) || "";
             var slotScope = v.slotScope;
             var render = "render: (" + slotScope + ") => " + slotCode.trim();
@@ -3644,7 +3672,7 @@ var RenderGenerator = (function(BaseGenerator$$1) {
     var props = [];
     this.setSlots(ast.slotName);
     if (Array.isArray(ast.attrs)) {
-      ast.attrs.forEach(function(v) {
+      ast.attrs.forEach(function (v) {
         props.push(v.name + ": " + v.value);
       });
     }
@@ -3671,7 +3699,7 @@ var RenderGenerator = (function(BaseGenerator$$1) {
    * @param {Object} ast
    */
   RenderGenerator.prototype.genChildrenKey = function genChildrenKey(ast) {
-    ast.children.forEach(function(v, i) {
+    ast.children.forEach(function (v, i) {
       v.attrs = v.attrs || [];
       v.attrs.push({
         name: "key",
@@ -3734,12 +3762,12 @@ var RenderGenerator = (function(BaseGenerator$$1) {
       }
     }
     if (Array.isArray(ast.attrsList)) {
-      ast.attrsList.forEach(function(v) {
+      ast.attrsList.forEach(function (v) {
         if (v.name === "v-bind" && /^\{.*\}$/.test(v.value)) {
           try {
             var matchVArr = v.value.match(/^\{(.*)\}$/);
             if (matchVArr && matchVArr[1]) {
-              matchVArr[1].split(",").forEach(function(_v) {
+              matchVArr[1].split(",").forEach(function (_v) {
                 var _vArr = _v.split(":");
                 if (_vArr.length === 2) {
                   ast.attrs.push({
@@ -3757,10 +3785,10 @@ var RenderGenerator = (function(BaseGenerator$$1) {
     }
     if (Array.isArray(ast.attrs)) {
       var props = ast.attrs
-        .filter(function(v) {
+        .filter(function (v) {
           return v.name !== "class" && v.name !== "style" && v.name !== "v-pre";
         })
-        .map(function(v) {
+        .map(function (v) {
           var value = v.value;
           var name = v.name;
           if (
@@ -3794,21 +3822,21 @@ var RenderGenerator = (function(BaseGenerator$$1) {
    */
   RenderGenerator.prototype.genDirectives = function genDirectives(ast) {
     var code = [];
-    ast.directives.forEach(function(v) {
+    ast.directives.forEach(function (v) {
       code.push(
         '{name:"' +
-          v.name +
-          '",directiveName:"' +
-          changeCase.lowerCase(changeCase.camelCase(v.name)) +
-          '",rawName:"' +
-          v.rawName +
-          '"' +
-          (v.value
-            ? ",value:(" + v.value + "),expression:" + JSON.stringify(v.value)
-            : "") +
-          (v.arg ? ',arg:"' + v.arg + '"' : "") +
-          (v.modifiers ? ",modifiers:" + JSON.stringify(v.modifiers) : "") +
-          "}"
+        v.name +
+        '",directiveName:"' +
+        changeCase.lowerCase(changeCase.camelCase(v.name)) +
+        '",rawName:"' +
+        v.rawName +
+        '"' +
+        (v.value
+          ? ",value:(" + v.value + "),expression:" + JSON.stringify(v.value)
+          : "") +
+        (v.arg ? ',arg:"' + v.arg + '"' : "") +
+        (v.modifiers ? ",modifiers:" + JSON.stringify(v.modifiers) : "") +
+        "}"
       );
     });
     code = COMMON.directive.name + ": [" + code.join(",") + "]";
@@ -3907,7 +3935,7 @@ var RenderGenerator = (function(BaseGenerator$$1) {
       if (ast.tag === "textarea") {
         return true;
       } else if (ast.tag === "input") {
-        var type = ast.attrs.filter(function(v) {
+        var type = ast.attrs.filter(function (v) {
           return v.name === "type";
         })[0];
         if (type === undefined) {
@@ -3946,8 +3974,8 @@ var EVENT_ACTION = [
   "transition"
 ];
 
-var addSeparateLine = function(eventName) {
-  EVENT_ACTION.forEach(function(v) {
+var addSeparateLine = function (eventName) {
+  EVENT_ACTION.forEach(function (v) {
     eventName = eventName.replace(v, v + "-");
   });
   return eventName;
@@ -3971,7 +3999,7 @@ var keyCodes = {
 // #4868: modifiers that prevent the execution of the listener
 // need to explicitly return null so that we can determine whether to remove
 // the listener for .once
-var genGuard = function(condition) {
+var genGuard = function (condition) {
   return "if(" + condition + ")return null;";
 };
 
@@ -4005,7 +4033,7 @@ function genHandlers(events, options) {
     ) {
       console.warn(
         'Use "contextmenu" instead of "click.right" since right clicks ' +
-          'do not actually fire "click" events.'
+        'do not actually fire "click" events.'
       );
     }
     if (name.indexOf("!") === 0 || name.indexOf("~!") === 0) {
@@ -4049,7 +4077,7 @@ function genCustomEventHandlers(events, options) {
     ) {
       console.warn(
         'Use "contextmenu" instead of "click.right" since right clicks ' +
-          'do not actually fire "click" events.'
+        'do not actually fire "click" events.'
       );
     }
     if (name.indexOf("!") === 0 || name.indexOf("~!") === 0) {
@@ -4105,7 +4133,7 @@ function genHandler(name, handler) {
     return (
       "[" +
       handler
-        .map(function(handler) {
+        .map(function (handler) {
           return genHandler(name, handler);
         })
         .join(",") +
@@ -4162,7 +4190,7 @@ function genCustomHandler(name, handler) {
     return (
       "[" +
       handler
-        .map(function(handler) {
+        .map(function (handler) {
           return genHandler(name, handler);
         })
         .join(",") +
@@ -4216,7 +4244,7 @@ function genTransitionEventHandler(name, handler) {
     return (
       "[" +
       handler
-        .map(function(handler) {
+        .map(function (handler) {
           return genTransitionEventHandler(name, handler);
         })
         .join(",") +
@@ -4262,7 +4290,7 @@ function parseStyleText(cssText) {
   var res = {};
   var listDelimiter = /;(?![^(]*\))/g;
   var propertyDelimiter = /:(.+)/;
-  cssText.split(listDelimiter).forEach(function(item) {
+  cssText.split(listDelimiter).forEach(function (item) {
     if (item) {
       var tmp = item.split(propertyDelimiter);
       if (tmp.length > 1) {
@@ -4290,11 +4318,11 @@ function model(el, dir, warn) {
     if (tag === "input" && dynamicType) {
       warn(
         '<input :type="' +
-          dynamicType +
-          '" v-model="' +
-          value +
-          '">:\n' +
-          "v-model does not support dynamic input types. Use v-if branches instead."
+        dynamicType +
+        '" v-model="' +
+        value +
+        '">:\n' +
+        "v-model does not support dynamic input types. Use v-if branches instead."
       );
     }
     // inputs with type="file" are read only and setting the input's
@@ -4302,11 +4330,11 @@ function model(el, dir, warn) {
     if (tag === "input" && type === "file") {
       warn(
         "<" +
-          el.tag +
-          ' v-model="' +
-          value +
-          '" type="file">:\n' +
-          "File inputs are read only. Use a v-on:change listener instead."
+        el.tag +
+        ' v-model="' +
+        value +
+        '" type="file">:\n' +
+        "File inputs are read only. Use a v-on:change listener instead."
       );
     }
   }
@@ -4330,13 +4358,13 @@ function model(el, dir, warn) {
   } else if (process.env.NODE_ENV !== "production") {
     warn(
       "<" +
-        el.tag +
-        ' v-model="' +
-        value +
-        '">: ' +
-        "v-model is not supported on this element type. " +
-        "If you are working with contenteditable, it's recommended to " +
-        "wrap a library dedicated for that purpose inside a custom component."
+      el.tag +
+      ' v-model="' +
+      value +
+      '">: ' +
+      "v-model is not supported on this element type. " +
+      "If you are working with contenteditable, it's recommended to " +
+      "wrap a library dedicated for that purpose inside a custom component."
     );
   }
 
@@ -4353,55 +4381,55 @@ function genCheckboxModel(el, value, modifiers) {
     el,
     "checked",
     "Array.isArray(" +
-      value +
-      ")" +
-      "?" +
-      COMMON.looseIndexOf.name +
+    value +
+    ")" +
+    "?" +
+    COMMON.looseIndexOf.name +
+    "(" +
+    value +
+    "," +
+    valueBinding +
+    ")>-1" +
+    (trueValueBinding === "true"
+      ? ":(" + value + ")"
+      : ":" +
+      COMMON.looseEqual.name +
       "(" +
       value +
       "," +
-      valueBinding +
-      ")>-1" +
-      (trueValueBinding === "true"
-        ? ":(" + value + ")"
-        : ":" +
-          COMMON.looseEqual.name +
-          "(" +
-          value +
-          "," +
-          trueValueBinding +
-          ")")
+      trueValueBinding +
+      ")")
   );
   addHandler(
     el,
     "change",
     "var $$a=" +
-      value +
-      "," +
-      "$$el=$event.target," +
-      "$$c=$$el.checked?(" +
-      trueValueBinding +
-      "):(" +
-      falseValueBinding +
-      ");" +
-      "if(Array.isArray($$a)){" +
-      "var $$v=" +
-      (number
-        ? COMMON.toNumber.name + "(" + valueBinding + ")"
-        : valueBinding) +
-      "," +
-      "$$i=" +
-      COMMON.looseIndexOf.name +
-      "($$a,$$v);" +
-      "if($$c){$$i<0&&(" +
-      value +
-      "=$$a.concat($$v))}" +
-      "else{$$i>-1&&(" +
-      value +
-      "=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}" +
-      "}else{" +
-      genAssignmentCode(value, "$$c") +
-      "}",
+    value +
+    "," +
+    "$$el=$event.target," +
+    "$$c=$$el.checked?(" +
+    trueValueBinding +
+    "):(" +
+    falseValueBinding +
+    ");" +
+    "if(Array.isArray($$a)){" +
+    "var $$v=" +
+    (number
+      ? COMMON.toNumber.name + "(" + valueBinding + ")"
+      : valueBinding) +
+    "," +
+    "$$i=" +
+    COMMON.looseIndexOf.name +
+    "($$a,$$v);" +
+    "if($$c){$$i<0&&(" +
+    value +
+    "=$$a.concat($$v))}" +
+    "else{$$i>-1&&(" +
+    value +
+    "=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}" +
+    "}else{" +
+    genAssignmentCode(value, "$$c") +
+    "}",
     null,
     true
   );
@@ -4510,7 +4538,7 @@ function genComponentModel$1(el, value, modifiers) {
 
 function html(ast, level) {
   var obj = {};
-  var directive = ast.directives.filter(function(v) {
+  var directive = ast.directives.filter(function (v) {
     return v.name === "html";
   })[0];
   obj.name = "dangerouslySetInnerHTML";
@@ -4521,7 +4549,7 @@ function html(ast, level) {
 
 function text(ast) {
   var children = [];
-  var directive = ast.directives.filter(function(v) {
+  var directive = ast.directives.filter(function (v) {
     return v.name === "text";
   })[0];
   children.push({
@@ -4531,7 +4559,7 @@ function text(ast) {
   ast.children = children;
 }
 
-var ReactWebRenderGenerator = (function(RenderGenerator$$1) {
+var ReactWebRenderGenerator = (function (RenderGenerator$$1) {
   function ReactWebRenderGenerator() {
     RenderGenerator$$1.apply(this, arguments);
   }
@@ -4620,74 +4648,74 @@ var ReactWebRenderGenerator = (function(RenderGenerator$$1) {
     };
     var arr = [];
     var i = 0;
-    ast.children.forEach(function(v1, i1) {
+    ast.children.forEach(function (v1, i1) {
       if (v1.if) {
         var conditionsArr = [];
         v1.ifProcessed = true;
-        v1.ifConditions.forEach(function(v2) {
+        v1.ifConditions.forEach(function (v2) {
           conditionsArr.push(
             "{\n            index: " +
-              i++ +
-              ",\n            exp: " +
-              (v2.block.else ? true : v2.exp) +
-              ",\n            element: " +
-              this$1.genElement(v2.block) +
-              "\n          }"
+            i++ +
+            ",\n            exp: " +
+            (v2.block.else ? true : v2.exp) +
+            ",\n            element: " +
+            this$1.genElement(v2.block) +
+            "\n          }"
           );
         });
         arr.push(
           "{\n          type: 'if',\n          conditions: [" +
-            conditionsArr.join(",") +
-            "]\n        }"
+          conditionsArr.join(",") +
+          "]\n        }"
         );
       } else if (
         Array.isArray(v1.directives) &&
-        v1.directives.filter(function(v) {
+        v1.directives.filter(function (v) {
           return v.name === "show";
         }).length
       ) {
-        v1.directives.forEach(function(v) {
+        v1.directives.forEach(function (v) {
           if (v.name === "show") {
             arr.push(
               "{\n              index: " +
-                i++ +
-                ",\n              type: 'show',\n              exp: " +
-                v.value +
-                ",\n              element: " +
-                this$1.genElement(v1) +
-                "\n            }"
+              i++ +
+              ",\n              type: 'show',\n              exp: " +
+              v.value +
+              ",\n              element: " +
+              this$1.genElement(v1) +
+              "\n            }"
             );
           }
         });
       } else if (v1.key) {
         arr.push(
           "{\n          index: " +
-            i++ +
-            ",\n          type: 'key',\n          exp: " +
-            v1.key +
-            ",\n          element: " +
-            this$1.genElement(v1) +
-            "\n        }"
+          i++ +
+          ",\n          type: 'key',\n          exp: " +
+          v1.key +
+          ",\n          element: " +
+          this$1.genElement(v1) +
+          "\n        }"
         );
       } else if (v1.component !== undefined) {
         arr.push(
           "{\n          index: " +
-            i++ +
-            ",\n          type: 'component',\n          exp: " +
-            v1.component +
-            ",\n          element: " +
-            this$1.genElement(v1) +
-            "\n        }"
+          i++ +
+          ",\n          type: 'component',\n          exp: " +
+          v1.component +
+          ",\n          element: " +
+          this$1.genElement(v1) +
+          "\n        }"
         );
       } else {
         arr.push(
           "{\n          index: " +
-            i++ +
-            ",\n          exp: " +
-            v1.component +
-            ",\n          element: " +
-            this$1.genElement(v1) +
-            "\n        }"
+          i++ +
+          ",\n          exp: " +
+          v1.component +
+          ",\n          element: " +
+          this$1.genElement(v1) +
+          "\n        }"
         );
       }
     });
@@ -4722,46 +4750,46 @@ var ReactWebRenderGenerator = (function(RenderGenerator$$1) {
       value: ""
     };
     var arr = [];
-    ast.children.forEach(function(v1, i1) {
+    ast.children.forEach(function (v1, i1) {
       if (v1.if) {
         var conditionsArr = [];
         v1.ifProcessed = true;
-        v1.ifConditions.forEach(function(v2) {
+        v1.ifConditions.forEach(function (v2) {
           conditionsArr.push(
             "{\n            exp: " +
-              (v2.block.else ? true : v2.exp) +
-              ",\n            element: " +
-              this$1.genElement(v2.block) +
-              "\n          }"
+            (v2.block.else ? true : v2.exp) +
+            ",\n            element: " +
+            this$1.genElement(v2.block) +
+            "\n          }"
           );
         });
         arr.push(
           "{\n          type: 'if',\n          conditions: [" +
-            conditionsArr.join(",") +
-            "]\n        }"
+          conditionsArr.join(",") +
+          "]\n        }"
         );
       } else if (
         Array.isArray(v1.directives) &&
-        v1.directives.filter(function(v) {
+        v1.directives.filter(function (v) {
           return v.name === "show";
         }).length
       ) {
-        v1.directives.forEach(function(v) {
+        v1.directives.forEach(function (v) {
           if (v.name === "show") {
             arr.push(
               "{\n              type: 'show',\n              exp: " +
-                v.value +
-                ",\n              element: " +
-                this$1.genElement(v1) +
-                "\n            }"
+              v.value +
+              ",\n              element: " +
+              this$1.genElement(v1) +
+              "\n            }"
             );
           }
         });
       } else {
         arr.push(
           "{\n          exp: true,\n          element: " +
-            this$1.genElement(v1) +
-            "\n        }"
+          this$1.genElement(v1) +
+          "\n        }"
         );
       }
     });
@@ -4781,17 +4809,17 @@ var ReactWebRenderGenerator = (function(RenderGenerator$$1) {
     var code = "";
     var topParent = this.isAstTopParent(ast);
     var classAttrsValue = ast.attrs
-      .filter(function(v) {
+      .filter(function (v) {
         return v.name === "class";
       })
-      .map(function(v) {
+      .map(function (v) {
         return v.value;
       });
     if (classAttrsValue.length === 0 && !topParent) {
       return code;
     }
     var staticClass, dynamicClass;
-    classAttrsValue.forEach(function(v) {
+    classAttrsValue.forEach(function (v) {
       if (/^".*"$/.test(v) || /^'.*'$/.test(v)) {
         staticClass = v.trim(); // .replace(/^"(.*)"$/, '$1')
       } else {
@@ -4821,15 +4849,15 @@ var ReactWebRenderGenerator = (function(RenderGenerator$$1) {
     ast
   ) {
     var styleAttrsValue = ast.attrs
-      .filter(function(v) {
+      .filter(function (v) {
         return v.name === "style";
       })
-      .map(function(v) {
+      .map(function (v) {
         return v.value;
       });
     var show =
       ast.directives &&
-      ast.directives.filter(function(v) {
+      ast.directives.filter(function (v) {
         return v.name === "show";
       })[0];
     var topParent = this.isAstTopParent(ast);
@@ -4837,7 +4865,7 @@ var ReactWebRenderGenerator = (function(RenderGenerator$$1) {
       return;
     }
     var staticStyle, dynamicStyle, showStyle;
-    styleAttrsValue.forEach(function(v) {
+    styleAttrsValue.forEach(function (v) {
       if (/^".*"$/.test(v)) {
         staticStyle = v.trim().replace(/;*"$/, ';"');
       } else {
@@ -4848,7 +4876,7 @@ var ReactWebRenderGenerator = (function(RenderGenerator$$1) {
     if (staticStyle) {
       try {
         staticStyle = JSON.stringify(parseStyleText(staticStyle));
-      } catch (e) {}
+      } catch (e) { }
     }
     if (show) {
       showStyle = "{display: " + show.value + " ? '' : 'none'}";
@@ -4891,7 +4919,7 @@ var ReactWebRenderGenerator = (function(RenderGenerator$$1) {
     var this$1 = this;
 
     var code = RenderGenerator$$1.prototype.genDirectives.call(this, ast);
-    ast.directives.forEach(function(v) {
+    ast.directives.forEach(function (v) {
       if (v.name === "model") {
         this$1.genModelDirectives(ast, v);
       } else if (v.name === "html") {
@@ -4978,7 +5006,7 @@ var ReactWebRenderGenerator = (function(RenderGenerator$$1) {
   return ReactWebRenderGenerator;
 })(RenderGenerator);
 
-var ReactNativeRenderGenerator = (function(RenderGenerator$$1) {
+var ReactNativeRenderGenerator = (function (RenderGenerator$$1) {
   function ReactNativeRenderGenerator(ast, options) {
     RenderGenerator$$1.call(this, ast, options);
     this.isNative = true;
@@ -5002,7 +5030,7 @@ var ReactNativeRenderGenerator = (function(RenderGenerator$$1) {
     } else {
       var c = tag
         .split(":")
-        .map(function(v) {
+        .map(function (v) {
           return "['" + capitalize(camelize(v)) + "']";
         })
         .join("");
@@ -5059,10 +5087,10 @@ var ReactNativeRenderGenerator = (function(RenderGenerator$$1) {
     }
     if (Array.isArray(ast.attrs)) {
       var props = ast.attrs
-        .filter(function(v) {
+        .filter(function (v) {
           return v.name !== "class" && v.name !== "style" && v.name !== "v-pre";
         })
-        .map(function(v) {
+        .map(function (v) {
           var name = v.name;
           name = camelize(name);
           return name + ": " + v.value;
@@ -5149,15 +5177,15 @@ var ReactNativeRenderGenerator = (function(RenderGenerator$$1) {
     ast
   ) {
     var styleAttrsValue = ast.attrs
-      .filter(function(v) {
+      .filter(function (v) {
         return v.name === "style";
       })
-      .map(function(v) {
+      .map(function (v) {
         return v.value;
       });
     var show =
       ast.directives &&
-      ast.directives.filter(function(v) {
+      ast.directives.filter(function (v) {
         return v.name === "show";
       })[0];
     var topParent = this.isAstTopParent(ast);
@@ -5165,7 +5193,7 @@ var ReactNativeRenderGenerator = (function(RenderGenerator$$1) {
       return;
     }
     var staticStyle, dynamicStyle, showStyle;
-    styleAttrsValue.forEach(function(v) {
+    styleAttrsValue.forEach(function (v) {
       if (/^".*"$/.test(v)) {
         staticStyle = v.trim().replace(/;*"$/, ';"');
       } else {
@@ -5175,7 +5203,7 @@ var ReactNativeRenderGenerator = (function(RenderGenerator$$1) {
     if (staticStyle) {
       try {
         staticStyle = JSON.stringify(parseStyleText(staticStyle));
-      } catch (e) {}
+      } catch (e) { }
     }
     if (show) {
       showStyle = "{display: " + show.value + " ? '' : 'none'}";
@@ -5201,17 +5229,17 @@ var ReactNativeRenderGenerator = (function(RenderGenerator$$1) {
   ) {
     var topParent = this.isAstTopParent(ast);
     var classAttrsValue = ast.attrs
-      .filter(function(v) {
+      .filter(function (v) {
         return v.name === "class";
       })
-      .map(function(v) {
+      .map(function (v) {
         return v.value;
       });
     if (classAttrsValue.length === 0 && !topParent) {
       return;
     }
     var staticClass, dynamicClass;
-    classAttrsValue.forEach(function(v) {
+    classAttrsValue.forEach(function (v) {
       if (/^".*"$/.test(v) || /^'.*'$/.test(v)) {
         staticClass = v.trim(); // .replace(/^"(.*)"$/, '$1')
       } else {
@@ -5292,6 +5320,7 @@ function nativeCompiler(template, options) {
   template = template.trim();
   if (template) {
     ast = parse(template, options);
+    traverse(ast, options);
     var renderer = new ReactNativeRenderGenerator(ast, options);
     importCode = renderer.generateImport();
     renderCode = renderer.generateRender();
@@ -5301,6 +5330,28 @@ function nativeCompiler(template, options) {
     importCode: importCode,
     renderCode: renderCode
   };
+}
+
+function traverse(ast, options, parent = null, childIndex) {
+  // Check for render-prop and render-prop-fn within child, if yes then add that as a prop
+  //
+  if (ast.attrsMap && (ast.attrsMap['render-prop'] || ast.attrsMap['render-prop-fn']) && ast.parent) {
+    let slotname = (ast.attrsMap['render-prop'] || ast.attrsMap['render-prop-fn']);
+    if (
+      slotname &&
+      ast.parent
+    ) {
+      processAttrs(ast, options, true);
+      if (parent) {
+        delete parent.children[childIndex]
+      }
+    }
+  }
+  if (ast.children) {
+    ast.children.forEach((child, index) => {
+      traverse(child, options, ast, index);
+    });
+  }
 }
 
 /*  */
