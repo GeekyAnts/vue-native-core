@@ -1434,12 +1434,12 @@ function renderSlot(names, children) {
   children = children.filter(function (v) { return v != null; });
   children.forEach(function (v) {
     if (v.type === COMMON.template.type) {
-      if (v['data-slot'] === undefined) {
+      if (v['dataSlot'] === undefined) {
         defaultSlot.push(v.render);
       }
       return
     }
-    if (v.props === undefined || v.props['data-slot'] === undefined) {
+    if (v.props === undefined || v.props['dataSlot'] === undefined) {
       defaultSlot.push(v);
     }
   });
