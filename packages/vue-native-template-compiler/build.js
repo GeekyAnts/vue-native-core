@@ -5338,7 +5338,8 @@ function nativeCompiler(template, options) {
     importCode = renderer.generateImport();
     renderCode = renderer.generateRender();
     // Remove extra commas
-    renderCode = renderCode.replace(/\},{2,}/g, "}");
+    renderCode = renderCode.replace(/\},{2,}/g, "},");
+    renderCode = renderCode.replace(/\),{2,}/g, "),");
     // Add imports of the render props missing from main import
     let requiredImports = [];
     imports.forEach((customImport) => {
