@@ -20,7 +20,7 @@
     "line-number": "^0.1.0",
     "node-watch": "^0.5.4",
     "parse5": "^5.0.0",
-    "vue-native-template-compiler": "^0.0.10",
+    "vue-native-template-compiler": "^0.0.12",
     "walk": "^2.3.9"
   },
   "devDependencies": {
