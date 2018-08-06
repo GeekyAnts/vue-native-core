@@ -81,6 +81,12 @@ function compileVueToRn(resource) {
   // parse template
   const template = cparsed.template;
 
+  //Consider the start of template for debugging
+  //
+  let templateStartIndex = code.indexOf("<");
+  let tempStringBeforeStart = code.substring(0, templateStartIndex);
+  let templateLineNumber = tempStringBeforeStart.split(splitRE).length - 1;
+
   // Get tags and location of tags from template
   //
   let nodes = [];
@@ -163,7 +169,7 @@ function compileVueToRn(resource) {
     foundLines.forEach((line, index) => {
       let renderJsLine = endLines + line.number;
       if (foundLines[index + 1]) {
-        for (let i = line.number; i < foundLines[index + 1]; i++) {
+        for (let i = line.number; i < foundLines[index + 1].number; i++) {
           // Add Mapping
           if (nodes[index]) {
             mappings.addMapping({
@@ -173,29 +179,27 @@ function compileVueToRn(resource) {
                 column: 0
               },
               original: {
-                line: nodes[index].startTag.startLine + 1,
+                line: nodes[index].startTag.startLine + templateLineNumber,
                 column: 0
               }
             });
           }
         }
-      } else {
+      } else if (nodes[index] && nodes[index].startTag) {
         // Last Line
         for (let i = line.number; i < renderEndLine; i++) {
           // Add Mapping
-          if (nodes[index] && nodes[index].startTag) {
-            mappings.addMapping({
-              source: mappings._hashedFilename,
-              generated: {
-                line: renderJsLine++,
-                column: 0
-              },
-              original: {
-                line: nodes[index].startTag.startLine + 1,
-                column: 0
-              }
-            });
-          }
+          mappings.addMapping({
+            source: mappings._hashedFilename,
+            generated: {
+              line: renderJsLine++,
+              column: 0
+            },
+            original: {
+              line: nodes[index].startTag.startLine + templateLineNumber,
+              column: 0
+            }
+          });
         }
       }
     });
