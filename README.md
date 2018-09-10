@@ -37,4 +37,4 @@ $ vue-native init <projectName>
 
 ## Credits to [react-vue](https://github.com/SmallComfort/react-vue)
 
-A huge thanks to the author of react-vue for most of the work on Vue Native.
+A huge thanks to the author of react-vue for most of the work on Vue Native..
