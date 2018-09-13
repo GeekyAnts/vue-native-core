@@ -1520,7 +1520,7 @@ function bindNativeClass(obj) {
   var arr = [];
   var style = [];
   if (obj.dynamicClass) {
-    console.log('obj.dynamicClass', obj.dynamicClass);
+    // console.log('obj.dynamicClass', obj.dynamicClass);
     arr = arr.concat(classBinding(obj.dynamicClass));
   }
   if (obj.staticClass) {
