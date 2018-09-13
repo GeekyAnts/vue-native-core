@@ -60,7 +60,8 @@
     "release": "bash build/release.sh",
     "release:weex": "bash build/release-weex.sh",
     "install:hooks": "ln -fs ../../build/git-hooks/pre-commit .git/hooks/pre-commit",
-    "run-vue": "cross-env NODE_ENV=development webpack-dev-server --open --hot"
+    "run-vue": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "postinstall": "opencollective-postinstall"
   },
   "homepage": "https://github.com/GeekyAnts/vue-native-core",
   "devDependencies": {
@@ -150,11 +151,17 @@
   },
   "dependencies": {
     "element-ui": "^1.3.4",
+    "opencollective-postinstall": "^2.0.0",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "style-loader": "^0.17.0",
     "vue": "2.3.3",
-    "vuex": "^2.3.1"
+    "vuex": "^2.3.1",
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/vue-native-core"
   }
 }
