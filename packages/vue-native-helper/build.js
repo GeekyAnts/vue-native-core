@@ -1527,9 +1527,7 @@ function bindNativeClass(obj) {
     arr = arr.concat(obj.staticClass.split(/\s+/));
   }
   arr.forEach(function (v) {
-    if (typeof this$1.css[v] === 'number') {
-      style.push(this$1.css[v]);
-    }
+    style.push(this$1.css[v]);
   });
   if (obj.parentClass) {
     style.push(obj.parentClass);
@@ -2667,7 +2665,7 @@ function mergeProps() {
 }
 
 /**
- * 
+ *
  */
 
 function buildComponent(render, options, config) {
