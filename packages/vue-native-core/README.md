@@ -1,108 +1,40 @@
-# vue-native-core.js
+# Vue Native: Read more at [vue-native.io](https://vue-native.io)
 
-A fork of Vue, only modifies very litter code, extracts its reactivity core, and adds an observer function.
+### Start with the Vue Native CLI
 
-## Install
+The Vue Native CLI is used to generate a `Vue Native` app, which is a React Native API wrapper. This means that with Vue Native, you can do anything that could be done with React Native.
+
+The Vue Native CLI generates a simple single page appliction (SPA) using [create-react-native-app](https://github.com/react-community/create-react-native-app) and
+[vue-native-core](https://github.com/GeekyAnts/vue-native-core).
+
+## Installation Prerequisites
+
+You should have create-react-native-app or react-native-cli installed as a global dependency
 
 ```
-npm install --save vue-native-core
+For React Native ClI => npm install react-native-cli -g
 ```
 
-## Usage
-
-```javascript
-import React, { Component } from "react";
-import Vue, { observer } from "vue-native-core";
-
-const store = new Vue({
-  data() {
-    return {
-      count: 0
-    };
-  },
-  methods: {
-    increase() {
-      this.count++;
-    }
-  }
-});
-
-@observer
-export default class Demo extends Component {
-  render() {
-    return <h1 onClick={store.increase}>{store.count}</h1>;
-  }
-}
+```
+For CRNA => npm install create-react-native-app -g
 ```
 
-As shown above, the data changes, the view updates. Most of your vue magic is still available in react, even if [Vuex](https://vuex.vuejs.org/).
+## Installation:
 
-[demo](https://github.com/SmallComfort/react-vue-demo)
+```
+$ npm install -g vue-native-cli
+```
 
-## API
+Generate [CRNA + Vue App](https://github.com/GeekyAnts/vue-native-core) App
 
-> Almost all api points to the vue's official document. If you are familiar with vue, there is no unknown usage.
-
-### Global
-
-* [Vue.extend](https://vuejs.org/v2/api/#Vue-extend)
-
-* [Vue.nextTick](https://vuejs.org/v2/api/#Vue-nextTick)
-
-* [Vue.set](https://vuejs.org/v2/api/#Vue-set)
-
-* [Vue.delete](https://vuejs.org/v2/api/#Vue-delete)
-
-* [Vue.use](https://vuejs.org/v2/api/#Vue-use)
-
-* [Vue.mixin](https://vuejs.org/v2/api/#Vue-mixin)
-
-### Options
-
-* [data](https://vuejs.org/v2/api/#data)
-
-* [methods](https://vuejs.org/v2/api/#methods)
-
-* [computed](https://vuejs.org/v2/api/#computed)
-
-* [watch](https://vuejs.org/v2/api/#watch)
-
-* [mixins](https://vuejs.org/v2/api/#mixins)
-
-* [extends](https://vuejs.org/v2/api/#extends)
-
-  > Only options object is allowed
-
-### Instance
-
-* [vm.$watch](https://vuejs.org/v2/api/#vm-watch)
-
-* [vm.$set](https://vuejs.org/v2/api/#vm-set)
-
-* [vm.$delete](https://vuejs.org/v2/api/#vm-delete)
-
-* [vm.$on](https://vuejs.org/v2/api/#vm-on)
-
-* [vm.$once](https://vuejs.org/v2/api/#vm-once)
-
-* [vm.$off](https://vuejs.org/v2/api/#vm-off)
-
-* [vm.$emit](https://vuejs.org/v2/api/#vm-emit)
-
-* [vm.$nextTick](https://vuejs.org/v2/api/#vm-nextTick)
-
-### `observer`
-
-Inspiration from [mobx](https://github.com/mobxjs/mobx), used to convert React components into reactive components.
-
-`@observer` ([decorator](https://babeljs.io/docs/plugins/transform-decorators/)) is optional, `observer(class Timer ... { })` achieves exactly the same.
-
-## Single File Components
-
-Since react-vue only contains vue's reactivity system, there is no lifecycle, no template. For the full support of SFC, try [react-vue-loader](https://github.com/SmallComfort/react-vue-loader).
-
-[document](https://github.com/GeekyAnts/vue-native-core/blob/master/packages/vue-native-core/COMPONENT.md)
+```
+$ vue-native init <projectName>
+```
 
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
+
+## Credits to [react-vue](https://github.com/SmallComfort/react-vue)
+
+A huge thanks to the author of react-vue for most of the work on Vue Native.

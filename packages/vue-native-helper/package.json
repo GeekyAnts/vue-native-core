@@ -1,13 +1,17 @@
 {
   "name": "vue-native-helper",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "react vue render helper",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GeekyAnts/vue-native-core"
   },
-  "keywords": ["react", "vue", "helper"],
+  "keywords": [
+    "react",
+    "vue",
+    "helper"
+  ],
   "author": "Geekyants (https://geekyants.io/)",
   "license": "MIT",
   "bugs": {
