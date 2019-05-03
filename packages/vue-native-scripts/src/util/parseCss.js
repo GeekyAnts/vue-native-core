@@ -35,11 +35,13 @@ module.exports = function (ast) {
   if (ast.type === 'stylesheet') {
     ast.stylesheet.rules.forEach(function (rule) {
       const declarationObj = parseDeclarations(rule.declarations);
-      rule.selectors.forEach(function (selector) {
-        if (selector.indexOf('.') === 0) {
-          obj[selector.replace(/^\./, '')] = declarationObj;
-        }
-      });
+      if (rule.selectors) {
+        rule.selectors.forEach(function (selector) {
+          if (selector.indexOf('.') === 0) {
+            obj[selector.replace(/^\./, '')] = declarationObj;
+          }
+        });
+      }
     });
   }
   return obj;
