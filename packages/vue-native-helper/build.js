@@ -284,6 +284,21 @@ function def(obj, key, val, enumerable) {
 }
 
 /**
+ * List of soon to be deprecated packages in react native v0.59
+ */
+
+ var deprecatedPackages = [
+  'NetInfo',
+  'AsyncStorage',
+  'AlertIOS',
+  'WebView',
+  'ViewPagerAndroid',
+  'ListView',
+  'SwipeableListView',
+  'Slider'
+ ];
+
+/**
  * Parse simple path.
  */
 
@@ -3922,7 +3937,7 @@ function buildNativeComponent(render, options, config) {
   if (!Vue.ReactNativeInjected) {
     Vue.ReactNativeInjected = true;
     Object.keys(ReactNative).map(function (k) {
-      if (/^[A-Z]/.test(k)) {
+      if (/^[A-Z]/.test(k) && deprecatedPackages.indexOf(k) === -1) {
         try {
           Vue.component(k, ReactNative[k]);
         } catch (e) { }
