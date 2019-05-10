@@ -8,7 +8,9 @@ var reactVueTemplateParser = require('./compiler');
 const traverse = require('babel-traverse');
 const { SourceMapConsumer } = require('source-map');
 
-if (reactNativeMinorVersion >= 56) {
+if (reactNativeMinorVersion >= 59) {
+  upstreamTransformer = require("metro-react-native-babel-transformer");
+} else if (reactNativeMinorVersion >= 56) {
   upstreamTransformer = require('metro/src/reactNativeTransformer');
 } else if (reactNativeMinorVersion >= 52) {
   upstreamTransformer = require('metro/src/transformer');
