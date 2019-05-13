@@ -5125,6 +5125,22 @@ var ReactNativeRenderGenerator = (function (RenderGenerator$$1) {
     return code;
   };
 
+  /**
+   * override
+   */
+  ReactNativeRenderGenerator.prototype.genTemplate = function genTemplate(ast) {
+    if (ast.parent === undefined) {
+      return this.genElement(ast.children[0]);
+    } else {
+      if (ast.children.length > 1) {
+        ast.tag = 'view';
+        return this.genElement(ast);
+      } else {
+        return this.genElement(ast.children[0]);
+      }
+    }
+  };
+
   // Event emitters
   ReactNativeRenderGenerator.prototype.genNativeEventHandler = function genNativeEventHandler(
     ast
