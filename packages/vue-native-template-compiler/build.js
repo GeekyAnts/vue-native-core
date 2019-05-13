@@ -5113,7 +5113,47 @@ var ReactNativeRenderGenerator = (function (RenderGenerator$$1) {
     if (styleProps) {
       code.push(styleProps);
     }
+    const eventHandler = this.genEventHandler(ast)
+    if (eventHandler) {
+      code.push(eventHandler)
+    }
+    const nativeEventHandler = this.genNativeEventHandler(ast)
+    if (nativeEventHandler) {
+      code.push(nativeEventHandler)
+    }
 
+    return code;
+  };
+
+  // Event emitters
+  ReactNativeRenderGenerator.prototype.genNativeEventHandler = function genNativeEventHandler(
+    ast
+  ) {
+    var code = "";
+    if (ast.nativeEvents && !isReservedTag(ast.tag)) {
+      code =
+        HELPER_HEADER +
+        "nativeEvents: {" +
+        genHandlers(ast.nativeEvents, this.vueConfig) +
+        "}";
+    }
+    return code;
+  };
+
+  ReactNativeRenderGenerator.prototype.genEventHandler = function genEventHandler(
+    ast
+  ) {
+    var code = "";
+    if (ast.events) {
+      if (isReservedTag(ast.tag) || isBuildInTag(ast.tag)) {
+          code = genHandlers(ast.events, this.vueConfig);
+      } else {
+        code = genCustomEventHandlers(ast.events, this.vueConfig);
+        // code = Object.keys(ast.events).map(k => {
+        //   return `'${COMMON.customEvent.name}${k}': ${ast.events[k].value}`
+        // }).join(',')
+      }
+    }
     return code;
   };
 
