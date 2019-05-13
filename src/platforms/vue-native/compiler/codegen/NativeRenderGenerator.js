@@ -6,10 +6,15 @@ import {
 } from 'shared/util'
 
 import {
+  genHandlers,
+  genCustomEventHandlers,
+} from '../modules/events'
+import {
   NATIVE
 } from '../config'
 import parseStyleText from '../modules/style'
 import {
+  isReservedTag,
   isBuildInTag
 } from '../util/index'
 
@@ -99,7 +104,35 @@ class ReactNativeRenderGenerator extends RenderGenerator {
     if (styleProps) {
       code.push(styleProps)
     }
+    const eventHandler = this.genEventHandler(ast)
+    if (eventHandler) {
+      code.push(eventHandler)
+    }
+    const nativeEventHandler = this.genNativeEventHandler(ast)
+    if (nativeEventHandler) {
+      code.push(nativeEventHandler)
+    }
 
+    return code
+  }
+
+  genEventHandler (ast) {
+    let code = ''
+    if (ast.events) {
+      if (isReservedTag(ast.tag) || isBuildInTag(ast.tag)) {
+          code = genHandlers(ast.events, this.vueConfig)
+      } else {
+        code = genCustomEventHandlers(ast.events, this.vueConfig)
+      }
+    }
+    return code
+  }
+
+  genNativeEventHandler (ast) {
+    let code = ''
+    if (ast.nativeEvents && !isReservedTag(ast.tag)) {
+      code = `${HELPER_HEADER}nativeEvents: {${genHandlers(ast.nativeEvents, this.vueConfig)}}`
+    }
     return code
   }
 
