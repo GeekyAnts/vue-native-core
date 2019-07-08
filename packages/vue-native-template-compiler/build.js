@@ -2168,12 +2168,6 @@ function filterDirectiveBindProps (ast) {
   }
 }
 
-function transformSpecialNewlines (text) {
-  return text
-    .replace(/\u2028/g, '\\u2028')
-    .replace(/\u2029/g, '\\u2029')
-}
-
 var BaseGenerator = function BaseGenerator (ast, options) {
   this.ast = ast;
   this.variableDependency = [];
@@ -3272,7 +3266,8 @@ var RenderGenerator = /*@__PURE__*/(function (BaseGenerator) {
    * @param {Object} ast
    */
   RenderGenerator.prototype.genText = function genText (ast) {
-    var text = transformSpecialNewlines(ast.text);
+    // Replace all whitespace with a single space.
+    var text = ast.text.replace(/\s+/g, " ");
     return JSON.stringify(text);
   };
 

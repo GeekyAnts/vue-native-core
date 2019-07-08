@@ -6,8 +6,7 @@ import { isReservedTag, isBooleanAttr } from "../util/index";
 import BaseGenerator from "./BaseGenerator";
 import {
   filterDirective,
-  filterDirectiveBindProps,
-  transformSpecialNewlines
+  filterDirectiveBindProps
 } from "vue-native/compiler/helpers";
 import { parseText } from "vue-native/compiler/parser/text-parser";
 import propertyMap from "vue-native/compiler/property/index";
@@ -145,7 +144,8 @@ class RenderGenerator extends BaseGenerator {
    * @param {Object} ast
    */
   genText(ast) {
-    const text = transformSpecialNewlines(ast.text);
+    // Replace all whitespace with a single space.
+    const text = ast.text.replace(/\s+/g, " ");
     return JSON.stringify(text);
   }
 
