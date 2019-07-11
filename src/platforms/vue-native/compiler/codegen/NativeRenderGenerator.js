@@ -105,18 +105,11 @@ class ReactNativeRenderGenerator extends RenderGenerator {
 
   // merge style & class
   genNativeStyleProps (ast) {
-    let code = []
     const classProps = this.genClassProps(ast)
-    if (classProps) {
-      code = code.concat(classProps)
-    }
 
     const styleProps = this.genStyleProps(ast)
-    if (styleProps) {
-      code.push(styleProps)
-    }
 
-    return `style: [${code.join(',')}]`
+    return `style: ${NATIVE.mergeStyleAndClass.name}(${classProps}, ${styleProps})`
   }
 
   /**
