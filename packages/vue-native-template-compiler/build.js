@@ -4645,6 +4645,7 @@ var ReactNativeRenderGenerator$1 = (function (RenderGenerator$$1) {
 
     var styleProps = this.genStyleProps(ast);
 
+    // merge style and class props into style
     return ("style: " + (NATIVE.mergeStyleAndClass.name) + "(" + classProps + ", " + styleProps + ")")
   };
 

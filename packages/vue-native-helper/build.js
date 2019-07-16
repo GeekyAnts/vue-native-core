@@ -1546,6 +1546,7 @@ function bindNativeClass (obj) {
     arr = arr.concat(obj.staticClass.split(/\s+/));
   }
   arr.forEach(function (v) {
+    // commit cf4d099 change moved here
     style.push(this$1.css[v]);
   });
   if (obj.parentClass) {
@@ -1780,6 +1781,7 @@ function getSlots(children) {
       slots.default = slots.default || [];
       slots.default.push(v);
     } else if (v.type === COMMON.template.type) {
+      // data-slot renamed to dataSlot to fix named slot issue
       slots[v["dataSlot"]] = slots[v["dataSlot"]] || [];
       slots[v["dataSlot"]].push(v.render);
     } else if (v.props) {

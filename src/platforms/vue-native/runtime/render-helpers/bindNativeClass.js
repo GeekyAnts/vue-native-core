@@ -24,6 +24,7 @@ export function bindNativeClass (obj) {
     arr = arr.concat(obj.staticClass.split(/\s+/))
   }
   arr.forEach(v => {
+    // commit cf4d099 change moved here
     style.push(this.css[v])
   })
   if (obj.parentClass) {

@@ -96,6 +96,7 @@ export function getSlots(children) {
       slots.default = slots.default || [];
       slots.default.push(v);
     } else if (v.type === COMMON.template.type) {
+      // data-slot renamed to dataSlot to fix named slot issue
       slots[v["dataSlot"]] = slots[v["dataSlot"]] || [];
       slots[v["dataSlot"]].push(v.render);
     } else if (v.props) {

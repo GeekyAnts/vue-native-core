@@ -109,6 +109,7 @@ class ReactNativeRenderGenerator extends RenderGenerator {
 
     const styleProps = this.genStyleProps(ast)
 
+    // merge style and class props into style
     return `style: ${NATIVE.mergeStyleAndClass.name}(${classProps}, ${styleProps})`
   }
 
