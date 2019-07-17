@@ -46,7 +46,7 @@ function sourceMapAstInPlace(tsMap, babelAst) {
   });
 }
 
-function transform({ src, filename, options }) {
+export function transform({ src, filename, options }) {
   if (typeof src === 'object') {
     // handle RN >= 0.46
     ({ src, filename, options } = src);
@@ -72,5 +72,3 @@ function transform({ src, filename, options }) {
     return babelCompileResult;
   }
 }
-
-module.exports = transform;

@@ -13,13 +13,6 @@ const parse5 = require('parse5');
 const filePath = 'test.js';
 var splitRE = /\r?\n/g;
 
-// the watch reference node-watch, there may be some changes in the future
-// const watch = require('../util/watch');
-
-// const walk = require('../util/walk');
-
-// const FILTER = /\.vue$/;
-
 const DEFAULT_OUTPUT = {
   template: {
     import: `import { Component as ${constants.COMPONENT} } from 'react'`,
@@ -28,28 +21,9 @@ const DEFAULT_OUTPUT = {
   script: `const ${constants.SCRIPT_OPTIONS} = {}`
 };
 
-// walk('./', {
-//   filter:  FILTER
-// }, function (name) {
-//   compileVueToRn(name);
-// });
-
-// watch('./', {
-//   recursive: true,
-//   filter:  FILTER
-// }, function (evt, name) {
-//   if (evt === 'update') {
-//     compileVueToRn(name);
-//   } else if (evt === 'remove') {
-//     remove(name);
-//   }
-// });
-
-function compileVueToRn(resource) {
+export function compileVueToRn(resource) {
   const code = resource.toString();
   const cparsed = compiler.parseComponent(code, { pad: 'line' });
-
-  // console.log(cparsed);
 
   let output = '';
   let mappings = '';
@@ -235,12 +209,6 @@ function compileVueToRn(resource) {
   // beautiful
   // output = beautify(output, { indent_size: 2 });
   return { output, mappings: mappings ? mappings.toJSON() : null };
-
-  // fs.writeFile(name.replace(FILTER, '.js'), output, function(err) {
-  //   if (err) {
-  //     throw err;
-  //   }
-  // });
 }
 
 // function remove(name) {
@@ -286,5 +254,3 @@ function traverse(ast, nodes = []) {
     });
   }
 }
-
-module.exports = compileVueToRn;
