@@ -51,6 +51,12 @@ const builds = {
     format: "cjs",
     external: ["react", "change-case", "he", "de-indent"]
   },
+  "vue-native-scripts": {
+    entry: resolve("vue-native/scripts/index.js"),
+    dest: resolve("packages/vue-native-scripts/build.js"),
+    format: "cjs",
+    external: Object.keys(require("../packages/vue-native-scripts/package.json").dependencies)
+  },
   "vue-native-template-compiler": {
     entry: resolve("vue-native/compiler.js"),
     dest: resolve("packages/vue-native-template-compiler/build.js"),
