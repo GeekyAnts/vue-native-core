@@ -1,17 +1,245 @@
 'use strict';
 
-// const fs = require('fs');
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
 var compiler = require('vue-native-template-compiler');
-var cssParse = require('css-parse');
-var beautify = require('js-beautify').js_beautify;
-var constants = require('./util/constants');
-var addvm = require('./util/addvm');
-var parseCss = require('./util/parseCss');
+var cssParse = _interopDefault(require('css-parse'));
+var jsBeautify = require('js-beautify');
 var sourceMap = require('source-map');
-var hash = require('hash-sum');
-var path = require('path');
-var lineNumber = require('line-number');
-var parse5 = require('parse5');
+var sourceMap__default = _interopDefault(sourceMap);
+var hash = _interopDefault(require('hash-sum'));
+var path = _interopDefault(require('path'));
+var lineNumber = _interopDefault(require('line-number'));
+var parse5 = _interopDefault(require('parse5'));
+var babelCore = require('babel-core');
+var semver = _interopDefault(require('semver'));
+var traverse = _interopDefault(require('babel-traverse'));
+var reactNative_package_json = require('react-native/package.json');
+
+var HELPER_HEADER = '__react__vue__';
+var SCRIPT_OPTIONS = HELPER_HEADER + "options";
+var TEMPLATE_RENDER = HELPER_HEADER + "render";
+var REACT_NATIVE = HELPER_HEADER + "ReactNative";  
+var BUILD_COMPONENT = HELPER_HEADER + "buildNativeComponent";
+var COMPONENT_BUILDED = HELPER_HEADER + "ComponentBuilded";
+var VUE = HELPER_HEADER + "Vue";
+var REACT = HELPER_HEADER + "React";  
+var COMPONENT = HELPER_HEADER + "Component";
+var PROP_TYPE = HELPER_HEADER + "PropType";
+var OBSERVER = HELPER_HEADER + "observer";
+var CSS = HELPER_HEADER + "css";
+
+var constants = {
+  HELPER_HEADER: HELPER_HEADER,
+  SCRIPT_OPTIONS: SCRIPT_OPTIONS,
+  TEMPLATE_RENDER: TEMPLATE_RENDER,
+  REACT_NATIVE: REACT_NATIVE,
+  BUILD_COMPONENT: BUILD_COMPONENT,
+  COMPONENT_BUILDED: COMPONENT_BUILDED,
+  VUE: VUE,
+  REACT: REACT,
+  COMPONENT: COMPONENT,
+  PROP_TYPE: PROP_TYPE,
+  OBSERVER: OBSERVER,
+  CSS: CSS
+};
+
+var names = 'Infinity,undefined,NaN,isFinite,isNaN,console,' +
+  'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
+  'Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,' +
+  'require,' + // for webpack
+  'arguments'; // parsed as identifier but is a special keyword...
+
+var hash$1 = Object.create(null);
+names.split(',').forEach(function (name) {
+  hash$1[name] = true;
+});
+
+function addvm (code) {
+  var r = babelCore.transform(code, {
+    plugins: [function (ref) {
+      var t = ref.types;
+
+      return {
+        visitor: {
+          Identifier: function (path$$1) {
+            if (path$$1.parent.type === 'ObjectProperty' && path$$1.parent.key === path$$1.node) { return; }
+            if (t.isDeclaration(path$$1.parent.type) && path$$1.parent.id === path$$1.node) { return; }
+            if (t.isFunction(path$$1.parent.type) && path$$1.parent.params.indexOf(path$$1.node) > -1) { return; }
+            if (path$$1.parent.type === 'Property' && path$$1.parent.key === path$$1.node && !path$$1.parent.computed) { return; }
+            if (path$$1.parent.type === 'MemberExpression' && path$$1.parent.property === path$$1.node && !path$$1.parent.computed) { return; }
+            if (path$$1.parent.type === 'ArrayPattern') { return; }
+            if (path$$1.parent.type === 'ImportSpecifier') { return; }
+            if (path$$1.scope.hasBinding(path$$1.node.name)) { return; }
+            if (hash$1[path$$1.node.name]) { return; }
+            if (path$$1.node.name.indexOf(constants.HELPER_HEADER) === 0) { return; }
+            path$$1.node.name = "vm['" + (path$$1.node.name) + "']";
+          }
+        }
+      };
+    }]
+  });
+  return r.code;
+}
+
+var TRANSFORM_TRANSLATE_REGEX = /translate\(([-+]?[\d]*\.?[\d]+)(px)?,[\s]+([-+]?[\d]*\.?[\d]+)(px)?\)/;
+var TRANSFORM_TRANSLATE_X_REGEX = /translateX\(([-+]?[\d]*\.?[\d]+)(px)?\)/;
+var TRANSFORM_TRANSLATE_Y_REGEX = /translateY\(([-+]?[\d]*\.?[\d]+)(px)?\)/;
+var TRANSFORM_ROTATE_REGEX = /rotate\(([-+]?[\d]*\.?[\d]+)deg\)/;
+var TRANSFORM_ROTATE_X_REGEX = /rotateX\(([-+]?[\d]*\.?[\d]+)deg\)/;
+var TRANSFORM_ROTATE_Y_REGEX = /rotateY\(([-+]?[\d]*\.?[\d]+)deg\)/;
+var TRANSFORM_ROTATE_Z_REGEX = /rotateZ\(([-+]?[\d]*\.?[\d]+)deg\)/;
+var TRANSFORM_SCALE_REGEX = /scale\(([-+]?[\d]*\.?[\d]+)\)/;
+var TRANSFORM_SCALE_X_REGEX = /scaleX\(([-+]?[\d]*\.?[\d]+)\)/;
+var TRANSFORM_SCALE_Y_REGEX = /scaleY\(([-+]?[\d]*\.?[\d]+)\)/;
+var TRANSFORM_SKEW_X_REGEX = /skewX\(([-+]?[\d]*\.?[\d]+)deg\)/;
+var TRANSFORM_SKEW_Y_REGEX = /skewY\(([-+]?[\d]*\.?[\d]+)deg\)/;
+
+function parseTransform(value) {
+  var arr = [];
+  if (TRANSFORM_ROTATE_REGEX.test(value)) {
+    arr.push({
+      rotate: ((value.match(TRANSFORM_ROTATE_REGEX)[1]) + "deg")
+    });
+  }
+  if (TRANSFORM_ROTATE_X_REGEX.test(value)) {
+    arr.push({
+      rotateX: ((value.match(TRANSFORM_ROTATE_X_REGEX)[1]) + "deg")
+    });
+  }
+  if (TRANSFORM_ROTATE_Y_REGEX.test(value)) {
+    arr.push({
+      rotateY: ((value.match(TRANSFORM_ROTATE_Y_REGEX)[1]) + "deg")
+    });
+  }
+  if (TRANSFORM_ROTATE_Z_REGEX.test(value)) {
+    arr.push({
+      rotateZ: ((value.match(TRANSFORM_ROTATE_Z_REGEX)[1]) + "deg")
+    });
+  }
+  if (TRANSFORM_SKEW_X_REGEX.test(value)) {
+    arr.push({
+      skewX: ((value.match(TRANSFORM_SKEW_X_REGEX)[1]) + "deg")
+    });
+  }
+  if (TRANSFORM_SKEW_Y_REGEX.test(value)) {
+    arr.push({
+      skewY: ((value.match(TRANSFORM_SKEW_Y_REGEX)[1]) + "deg")
+    });
+  }
+  if (TRANSFORM_SCALE_REGEX.test(value)) {
+    var r = value.match(TRANSFORM_SCALE_REGEX)[1];
+    if (isNaN(r) === false) {
+      r = parseFloat(r);
+    }
+    arr.push({
+      scale: r
+    });
+  }
+  if (TRANSFORM_SCALE_X_REGEX.test(value)) {
+    var r$1 = value.match(TRANSFORM_SCALE_X_REGEX)[1];
+    if (isNaN(r$1) === false) {
+      r$1 = parseFloat(r$1);
+    }
+    arr.push({
+      scaleX: r$1
+    });
+  }
+  if (TRANSFORM_SCALE_Y_REGEX.test(value)) {
+    var r$2 = value.match(TRANSFORM_SCALE_Y_REGEX)[1];
+    if (isNaN(r$2) === false) {
+      r$2 = parseFloat(r$2);
+    }
+    arr.push({
+      scaleY: r$2
+    });
+  }
+  if (TRANSFORM_TRANSLATE_REGEX.test(value)) {
+    var rs = value.match(TRANSFORM_TRANSLATE_REGEX);
+    var rx = rs[1];
+    var ry = rs[2];
+    if (isNaN(rx) === false) {
+      rx = parseFloat(rx);
+    }
+    if (isNaN(ry) === false) {
+      ry = parseFloat(ry);
+    }
+    arr.push({
+      translateX: rx
+    });
+    arr.push({
+      translateY: ry
+    });
+  }
+  if (TRANSFORM_TRANSLATE_X_REGEX.test(value)) {
+    var r$3 = value.match(TRANSFORM_TRANSLATE_X_REGEX)[1];
+    if (isNaN(r$3) === false) {
+      r$3 = parseFloat(r$3);
+    }
+    arr.push({
+      translateX: r$3
+    });
+  }
+  if (TRANSFORM_TRANSLATE_Y_REGEX.test(value)) {
+    var r$4 = value.match(TRANSFORM_TRANSLATE_Y_REGEX)[1];
+    if (isNaN(r$4) === false) {
+      r$4 = parseFloat(r$4);
+    }
+    arr.push({
+      translateY: r$4
+    });
+  }
+  return arr;
+}
+
+var camelizeRE = /-(\w)/g;
+
+function camelize(str) {
+  return str.replace(camelizeRE, function (_, c) { return c ? c.toUpperCase() : ''; })
+}
+
+function parseDeclarations(declarations) {
+  var declarationObj = {};
+
+  // Comments and @media blocks don't have declarations at the top level.
+  if (declarations) {
+    declarations.forEach(function (declaration) {
+      if (declaration.type === 'declaration') {
+        var value = declaration.value;
+        if (/px$/.test(value)) {
+          value = parseFloat(value.replace(/px$/, ''));
+        } else if (declaration.property !== 'font-weight' &&  isNaN(value) === false){
+          value = parseFloat(value);
+        }
+        if (declaration.property === 'transform') {
+          value = parseTransform(value);
+        }
+        declarationObj[camelize(declaration.property)] = value;
+      }
+    });
+  }
+
+  return declarationObj;
+}
+
+function parseCss(ast) {
+  var obj = {};
+  if (ast.type === 'stylesheet') {
+    ast.stylesheet.rules.forEach(function (rule) {
+      var declarationObj = parseDeclarations(rule.declarations);
+      if (rule.selectors) {
+        rule.selectors.forEach(function (selector) {
+          if (selector.indexOf('.') === 0) {
+            obj[selector.replace(/^\./, '')] = declarationObj;
+          }
+        });
+      }
+    });
+  }
+  return obj;
+}
+
+// const fs = require('fs');
 var filePath = 'test.js';
 var splitRE = /\r?\n/g;
 
@@ -64,7 +292,7 @@ function compileVueToRn(resource) {
   var nodes = [];
   var templateFragments = parse5.parseFragment(cparsed.template.content, { sourceCodeLocationInfo: true });
   if (templateFragments.childNodes) {
-    traverse(templateFragments, nodes);
+    traverse$1(templateFragments, nodes);
   }
 
 
@@ -125,7 +353,7 @@ function compileVueToRn(resource) {
   }
 
   // add render funtion
-  var beautifiedRender = beautify(addvm(templateParsed.render, { indent_size: 2 }));
+  var beautifiedRender = jsBeautify.js_beautify(addvm(templateParsed.render, { indent_size: 2 }));
   output += beautifiedRender;
   output += '\n\n';
 
@@ -220,7 +448,7 @@ function parseTemplate(code) {
 function generateSourceMap(content) {
   // hot-reload source map busting
   var hashedFilename = path.basename(filePath) + '?' + hash(filePath + content);
-  var map = new sourceMap.SourceMapGenerator();
+  var map = new sourceMap__default.SourceMapGenerator();
   map.setSourceContent(hashedFilename, content);
   map._hashedFilename = hashedFilename;
   return map;
@@ -234,7 +462,7 @@ function parseScript(code) {
   return code;
 }
 
-function traverse(ast, nodes) {
+function traverse$1(ast, nodes) {
   if ( nodes === void 0 ) nodes = [];
 
   if (ast.tagName) {
@@ -242,22 +470,15 @@ function traverse(ast, nodes) {
   }
   if (ast.childNodes) {
     ast.childNodes.forEach(function (child) {
-      traverse(child, nodes);
+      traverse$1(child, nodes);
     });
   }
 }
 
-var semver = require('semver');
+// const reactNativeVersionString = require('react-native/package.json').version;
+var reactNativeMinorVersion = semver(reactNative_package_json.version).minor;
 
 var upstreamTransformer = null;
-
-var reactNativeVersionString = require('react-native/package.json').version;
-var reactNativeMinorVersion = semver(reactNativeVersionString).minor;
-var reactVueTemplateParser = require('./compiler');
-var traverse$1 = require('babel-traverse');
-var ref = require('source-map');
-var SourceMapConsumer = ref.SourceMapConsumer;
-
 if (reactNativeMinorVersion >= 59) {
   upstreamTransformer = require("metro-react-native-babel-transformer");
 } else if (reactNativeMinorVersion >= 56) {
@@ -272,7 +493,7 @@ if (reactNativeMinorVersion >= 59) {
   // handle RN <= 0.45
   var oldUpstreamTransformer = require('react-native/packager/transformer');
   upstreamTransformer = {
-    transform: function transform(ref) {
+    transform: function transform$$1(ref) {
       var src = ref.src;
       var filename = ref.filename;
       var options = ref.options;
@@ -283,8 +504,8 @@ if (reactNativeMinorVersion >= 59) {
 }
 
 function sourceMapAstInPlace(tsMap, babelAst) {
-  var tsConsumer = new SourceMapConsumer(tsMap);
-  traverse$1.default.cheap(babelAst, function (node) {
+  var tsConsumer = new sourceMap.SourceMapConsumer(tsMap);
+  traverse.cheap(babelAst, function (node) {
     if (node.loc) {
       var originalStart = tsConsumer.originalPositionFor(node.loc.start);
       if (originalStart.line) {
@@ -300,7 +521,7 @@ function sourceMapAstInPlace(tsMap, babelAst) {
   });
 }
 
-function transform(ref) {
+function transform$1(ref) {
   var src = ref.src;
   var filename = ref.filename;
   var options = ref.options;
@@ -310,7 +531,7 @@ function transform(ref) {
     var assign;
     ((assign = src, src = assign.src, filename = assign.filename, options = assign.options));
   }
-  var outputFile = reactVueTemplateParser(src);
+  var outputFile = compileVueToRn(src);
 
   if (!outputFile.output) {
     return upstreamTransformer.transform({
@@ -334,7 +555,7 @@ function transform(ref) {
 
 var index = {
   compileVueToRn: compileVueToRn,
-  transform: transform,
+  transform: transform$1,
 };
 
 module.exports = index;

@@ -1,4 +1,4 @@
-const parseTransform = require('./parseTransform');
+import { parseTransform } from './parseTransform';
 
 const camelizeRE = /-(\w)/g;
 
@@ -30,7 +30,7 @@ function parseDeclarations(declarations) {
   return declarationObj;
 }
 
-module.exports = function (ast) {
+export function parseCss(ast) {
   const obj = {};
   if (ast.type === 'stylesheet') {
     ast.stylesheet.rules.forEach(function (rule) {

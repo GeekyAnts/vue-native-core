@@ -1,5 +1,5 @@
-const babel = require('babel-core');
-const constants = require('./constants');
+import { transform } from 'babel-core';
+import constants from './constants';
 
 const names = 'Infinity,undefined,NaN,isFinite,isNaN,console,' +
   'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
@@ -12,8 +12,8 @@ names.split(',').forEach(function (name) {
   hash[name] = true;
 });
 
-function addvm (code) {
-  const r = babel.transform(code, {
+export function addvm (code) {
+  const r = transform(code, {
     plugins: [function ({ types: t }) {
       return {
         visitor: {
@@ -36,5 +36,3 @@ function addvm (code) {
   });
   return r.code;
 }
-
-module.exports = addvm;

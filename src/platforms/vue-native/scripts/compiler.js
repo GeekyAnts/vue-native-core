@@ -1,15 +1,17 @@
 // const fs = require('fs');
-const compiler = require('vue-native-template-compiler');
-const cssParse = require('css-parse');
-const beautify = require('js-beautify').js_beautify;
-const constants = require('./util/constants');
-const addvm = require('./util/addvm');
-const parseCss = require('./util/parseCss');
-var sourceMap = require('source-map');
-var hash = require('hash-sum');
-var path = require('path');
-var lineNumber = require('line-number');
-const parse5 = require('parse5');
+import * as compiler from 'vue-native-template-compiler';
+import cssParse from 'css-parse';
+import { js_beautify as beautify } from 'js-beautify';
+import sourceMap from 'source-map';
+import hash from 'hash-sum';
+import path from 'path';
+import lineNumber from 'line-number';
+import parse5 from 'parse5';
+
+import constants from './util/constants';
+import { addvm } from './util/addvm';
+import { parseCss } from './util/parseCss';
+
 const filePath = 'test.js';
 var splitRE = /\r?\n/g;
 
