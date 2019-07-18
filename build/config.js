@@ -36,14 +36,15 @@ const builds = {
   "vue-native-helper": {
     entry: resolve("vue-native/runtime/helpers.js"),
     dest: resolve("packages/vue-native-helper/build.js"),
-    format: "cjs",
-    external: ["react", "change-case", "he", "de-indent"]
+    format: "cjs"
   },
   "vue-native-scripts": {
     entry: resolve("vue-native/scripts/index.js"),
     dest: resolve("packages/vue-native-scripts/build.js"),
     format: "cjs",
-    external: Object.keys(require("../packages/vue-native-scripts/package.json").dependencies)
+    external: []
+      .concat(Object.keys(require("../packages/vue-native-scripts/package.json").dependencies))
+      .concat(Object.keys(require("../packages/vue-native-scripts/package.json").peerDependencies))
   },
   "vue-native-template-compiler": {
     entry: resolve("vue-native/compiler.js"),
