@@ -4,9 +4,6 @@ const alias = require("rollup-plugin-alias");
 const replace = require("rollup-plugin-replace");
 const flow = require("rollup-plugin-flow-no-whitespace");
 const version = process.env.VERSION || require("../package.json").version;
-const weexVersion =
-  process.env.WEEX_VERSION ||
-  require("../packages/weex-vue-framework/package.json").version;
 
 const banner =
   "/*!\n" +
@@ -18,15 +15,6 @@ const banner =
   " Evan You\n" +
   " * Released under the MIT License.\n" +
   " */";
-
-const weexFactoryPlugin = {
-  intro() {
-    return "module.exports = function weexFactory (exports, renderer) {";
-  },
-  outro() {
-    return "}";
-  }
-};
 
 const aliases = require("./alias");
 const resolve = p => {
@@ -75,8 +63,6 @@ function genConfig(opts) {
     moduleName: "Vue",
     plugins: [
       replace({
-        __WEEX__: !!opts.weex,
-        __WEEX_VERSION__: weexVersion,
         __VERSION__: version
       }),
       flow(),
