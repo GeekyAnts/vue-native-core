@@ -13,6 +13,14 @@ The Vue Native CLI generates a simple single page application (SPA) using [expo-
 
 You should have expo-cli or react-native-cli installed as a global dependency
 
+in linux need set corect permission in npm folder
+```
+sudo chown -R $USER:$GROUP ~/.npm
+sudo chown -R $USER:$GROUP ~/.config
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+export PATH=~/.npm-global/bin:$PATH
+```
 ```
 For React Native ClI => npm install react-native-cli -g
 ```
