@@ -128,6 +128,10 @@ const NATIVE = {
   'bindStyle': {
     name: `${HELPER_HEADER}bindStyle`,
     alias: `bindNativeStyle`
+  },
+  'mergeStyleAndClass': {
+    name: HELPER_HEADER + "mergeNativeStyleAndNativeClass",
+    alias: "mergeNativeStyleAndNativeClass"
   }
 }
 

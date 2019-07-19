@@ -96,10 +96,11 @@ export function getSlots(children) {
       slots.default = slots.default || [];
       slots.default.push(v);
     } else if (v.type === COMMON.template.type) {
-      slots[v["data-slot"]] = slots[v["data-slot"]] || [];
-      slots[v["data-slot"]].push(v.render);
+      // data-slot renamed to dataSlot to fix named slot issue
+      slots[v["dataSlot"]] = slots[v["dataSlot"]] || [];
+      slots[v["dataSlot"]].push(v.render);
     } else if (v.props) {
-      const dataSlot = v.props["data-slot"];
+      const dataSlot = v.props["dataSlot"];
       if (dataSlot == null) {
         slots.default = slots.default || [];
         slots.default.push(v);

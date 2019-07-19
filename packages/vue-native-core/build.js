@@ -478,15 +478,19 @@ function handleError (err, vm, info) {
 /* globals MutationObserver */
 
 // can we use __proto__?
-var hasProto = '__proto__' in {};
+var hasProto = "__proto__" in {};
 
 // Browser environment sniffing
-var inBrowser = typeof window !== 'undefined';
-var UA = inBrowser && window.navigator && window.navigator.userAgent && window.navigator.userAgent.toLowerCase();
+var inBrowser = typeof window !== "undefined";
+var UA =
+  inBrowser &&
+  window.navigator &&
+  window.navigator.userAgent &&
+  window.navigator.userAgent.toLowerCase();
 var isIE = UA && /msie|trident/.test(UA);
-var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
-var isEdge = UA && UA.indexOf('edge/') > 0;
-var isAndroid = UA && UA.indexOf('android') > 0;
+var isIE9 = UA && UA.indexOf("msie 9.0") > 0;
+var isEdge = UA && UA.indexOf("edge/") > 0;
+var isAndroid = UA && UA.indexOf("android") > 0;
 var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
 var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
 
@@ -494,13 +498,17 @@ var supportsPassive = false;
 if (inBrowser) {
   try {
     var opts = {};
-    Object.defineProperty(opts, 'passive', ({
-      get: function get () {
-        /* istanbul ignore next */
-        supportsPassive = true;
-      }
-    } )); // https://github.com/facebook/flow/issues/285
-    window.addEventListener('test-passive', null, opts);
+    Object.defineProperty(
+      opts,
+      "passive",
+      ({
+        get: function get() {
+          /* istanbul ignore next */
+          supportsPassive = true;
+        }
+      })
+    ); // https://github.com/facebook/flow/issues/285
+    window.addEventListener("test-passive", null, opts);
   } catch (e) {}
 }
 
@@ -510,38 +518,40 @@ var _isServer;
 var isServerRendering = function () {
   if (_isServer === undefined) {
     /* istanbul ignore if */
-    if (!inBrowser && typeof global !== 'undefined') {
+    if (!inBrowser && typeof global !== "undefined") {
       // detect presence of vue-server-renderer and avoid
       // Webpack shimming the process
-      _isServer = global['process'].env.VUE_ENV === 'server';
+      _isServer = global["process"].env.VUE_ENV === "server";
     } else {
       _isServer = false;
     }
   }
-  return _isServer
+  return _isServer;
 };
 
 // detect devtools
 var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 /* istanbul ignore next */
-function isNative (Ctor) {
-  return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
+function isNative(Ctor) {
+  return typeof Ctor === "function" && /native code/.test(Ctor.toString());
 }
 
 var hasSymbol =
-  typeof Symbol !== 'undefined' && isNative(Symbol) &&
-  typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys);
+  typeof Symbol !== "undefined" &&
+  isNative(Symbol) &&
+  typeof Reflect !== "undefined" &&
+  isNative(Reflect.ownKeys);
 
 /**
  * Defer a task to execute it asynchronously.
  */
-var nextTick = (function () {
+var nextTick = (function() {
   var callbacks = [];
   var pending = false;
   var timerFunc;
 
-  function nextTickHandler () {
+  function nextTickHandler() {
     pending = false;
     var copies = callbacks.slice(0);
     callbacks.length = 0;
@@ -557,9 +567,11 @@ var nextTick = (function () {
   // completely stops working after triggering a few times... so, if native
   // Promise is available, we will use it:
   /* istanbul ignore if */
-  if (typeof Promise !== 'undefined' && isNative(Promise)) {
+  if (typeof Promise !== "undefined" && isNative(Promise)) {
     var p = Promise.resolve();
-    var logError = function (err) { console.error(err); };
+    var logError = function (err) {
+      console.error(err);
+    };
     timerFunc = function () {
       p.then(nextTickHandler).catch(logError);
       // in problematic UIWebViews, Promise.then doesn't completely break, but
@@ -569,11 +581,12 @@ var nextTick = (function () {
       // "force" the microtask queue to be flushed by adding an empty timer.
       if (isIOS) { setTimeout(noop); }
     };
-  } else if (typeof MutationObserver !== 'undefined' && (
-    isNative(MutationObserver) ||
-    // PhantomJS and iOS 7.x
-    MutationObserver.toString() === '[object MutationObserverConstructor]'
-  )) {
+  } else if (
+    typeof MutationObserver !== "undefined" &&
+    (isNative(MutationObserver) ||
+      // PhantomJS and iOS 7.x
+      MutationObserver.toString() === "[object MutationObserverConstructor]")
+  ) {
     // use MutationObserver where native Promise is not available,
     // e.g. PhantomJS IE11, iOS7, Android 4.4
     var counter = 1;
@@ -592,24 +605,24 @@ var nextTick = (function () {
       timerFunc = function() {
         var p = Promise.resolve();
         p.then(nextTickHandler).catch(logError);
-      }
+      };
     } else {
       // fallback to setTimeout
       /* istanbul ignore next */
       timerFunc = function() {
         setTimeout(nextTickHandler, 0);
-      }
+      };
     }
   }
 
-  return function queueNextTick (cb, ctx) {
+  return function queueNextTick(cb, ctx) {
     var _resolve;
     callbacks.push(function () {
       if (cb) {
         try {
           cb.call(ctx);
         } catch (e) {
-          handleError(e, ctx, 'nextTick');
+          handleError(e, ctx, "nextTick");
         }
       } else if (_resolve) {
         _resolve(ctx);
@@ -619,27 +632,27 @@ var nextTick = (function () {
       pending = true;
       timerFunc();
     }
-    if (!cb && typeof Promise !== 'undefined') {
+    if (!cb && typeof Promise !== "undefined") {
       return new Promise(function (resolve, reject) {
         _resolve = resolve;
-      })
+      });
     }
-  }
+  };
 })();
 
 var _Set;
 /* istanbul ignore if */
-if (typeof Set !== 'undefined' && isNative(Set)) {
+if (typeof Set !== "undefined" && isNative(Set)) {
   // use native Set when available.
   _Set = Set;
 } else {
   // a non-standard Set polyfill that only works with primitive keys.
   _Set = (function () {
-    function Set () {
+    function Set() {
       this.set = Object.create(null);
     }
     Set.prototype.has = function has (key) {
-      return this.set[key] === true
+      return this.set[key] === true;
     };
     Set.prototype.add = function add (key) {
       this.set[key] = true;
@@ -3959,7 +3972,7 @@ Object.defineProperty(Vue$2.prototype, '$isServer', {
   get: isServerRendering
 });
 
-Vue$2.version = '2.2.6';
+Vue$2.version = '0.0.1';
 
 /**
  * Reference to mobx https://github.com/mobxjs/mobx-react-vue/blob/master/src/observer.js

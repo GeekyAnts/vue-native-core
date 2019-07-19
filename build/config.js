@@ -4,9 +4,6 @@ const alias = require("rollup-plugin-alias");
 const replace = require("rollup-plugin-replace");
 const flow = require("rollup-plugin-flow-no-whitespace");
 const version = process.env.VERSION || require("../package.json").version;
-const weexVersion =
-  process.env.WEEX_VERSION ||
-  require("../packages/weex-vue-framework/package.json").version;
 
 const banner =
   "/*!\n" +
@@ -18,15 +15,6 @@ const banner =
   " Evan You\n" +
   " * Released under the MIT License.\n" +
   " */";
-
-const weexFactoryPlugin = {
-  intro() {
-    return "module.exports = function weexFactory (exports, renderer) {";
-  },
-  outro() {
-    return "}";
-  }
-};
 
 const aliases = require("./alias");
 const resolve = p => {
@@ -48,8 +36,15 @@ const builds = {
   "vue-native-helper": {
     entry: resolve("vue-native/runtime/helpers.js"),
     dest: resolve("packages/vue-native-helper/build.js"),
+    format: "cjs"
+  },
+  "vue-native-scripts": {
+    entry: resolve("vue-native/scripts/index.js"),
+    dest: resolve("packages/vue-native-scripts/build.js"),
     format: "cjs",
-    external: ["react", "change-case", "he", "de-indent"]
+    external: []
+      .concat(Object.keys(require("../packages/vue-native-scripts/package.json").dependencies))
+      .concat(Object.keys(require("../packages/vue-native-scripts/package.json").peerDependencies))
   },
   "vue-native-template-compiler": {
     entry: resolve("vue-native/compiler.js"),
@@ -57,120 +52,6 @@ const builds = {
     format: "cjs",
     external: ["change-case", "he", "de-indent"]
   }
-  // Runtime only (CommonJS). Used by bundlers e.g. Webpack & Browserify
-  // 'web-runtime-cjs': {
-  //   entry: resolve('web/runtime.js'),
-  //   dest: resolve('dist/vue.runtime.common.js'),
-  //   format: 'cjs',
-  //   banner
-  // },
-  // // Runtime+compiler CommonJS build (CommonJS)
-  // 'web-full-cjs': {
-  //   entry: resolve('web/runtime-with-compiler.js'),
-  //   dest: resolve('dist/vue.common.js'),
-  //   format: 'cjs',
-  //   alias: { he: './entity-decoder' },
-  //   banner
-  // },
-  // // Runtime only (ES Modules). Used by bundlers that support ES Modules,
-  // // e.g. Rollup & Webpack 2
-  // 'web-runtime-esm': {
-  //   entry: resolve('web/runtime.js'),
-  //   dest: resolve('dist/vue.runtime.esm.js'),
-  //   format: 'es',
-  //   banner
-  // },
-  // // Runtime+compiler CommonJS build (ES Modules)
-  // 'web-full-esm': {
-  //   entry: resolve('web/runtime-with-compiler.js'),
-  //   dest: resolve('dist/vue.esm.js'),
-  //   format: 'es',
-  //   alias: { he: './entity-decoder' },
-  //   banner
-  // },
-  // // runtime-only build (Browser)
-  // 'web-runtime-dev': {
-  //   entry: resolve('web/runtime.js'),
-  //   dest: resolve('dist/vue.runtime.js'),
-  //   format: 'umd',
-  //   env: 'development',
-  //   banner
-  // },
-  // // runtime-only production build (Browser)
-  // 'web-runtime-prod': {
-  //   entry: resolve('web/runtime.js'),
-  //   dest: resolve('dist/vue.runtime.min.js'),
-  //   format: 'umd',
-  //   env: 'production',
-  //   banner
-  // },
-  // // Runtime+compiler development build (Browser)
-  // 'web-full-dev': {
-  //   entry: resolve('web/runtime-with-compiler.js'),
-  //   dest: resolve('dist/vue.js'),
-  //   format: 'umd',
-  //   env: 'development',
-  //   alias: { he: './entity-decoder' },
-  //   banner
-  // },
-  // // Runtime+compiler production build  (Browser)
-  // 'web-full-prod': {
-  //   entry: resolve('web/runtime-with-compiler.js'),
-  //   dest: resolve('dist/vue.min.js'),
-  //   format: 'umd',
-  //   env: 'production',
-  //   alias: { he: './entity-decoder' },
-  //   banner
-  // },
-  // // Web compiler (CommonJS).
-  // 'web-compiler': {
-  //   entry: resolve('web/compiler.js'),
-  //   dest: resolve('packages/vue-template-compiler/build.js'),
-  //   format: 'cjs',
-  //   external: Object.keys(require('../packages/vue-template-compiler/package.json').dependencies)
-  // },
-  // // Web server renderer (CommonJS).
-  // 'web-server-renderer': {
-  //   entry: resolve('web/server-renderer.js'),
-  //   dest: resolve('packages/vue-server-renderer/build.js'),
-  //   format: 'cjs',
-  //   external: Object.keys(require('../packages/vue-server-renderer/package.json').dependencies)
-  // },
-  // 'web-server-renderer-webpack-server-plugin': {
-  //   entry: resolve('server/webpack-plugin/server.js'),
-  //   dest: resolve('packages/vue-server-renderer/server-plugin.js'),
-  //   format: 'cjs',
-  //   external: Object.keys(require('../packages/vue-server-renderer/package.json').dependencies)
-  // },
-  // 'web-server-renderer-webpack-client-plugin': {
-  //   entry: resolve('server/webpack-plugin/client.js'),
-  //   dest: resolve('packages/vue-server-renderer/client-plugin.js'),
-  //   format: 'cjs',
-  //   external: Object.keys(require('../packages/vue-server-renderer/package.json').dependencies)
-  // },
-  // // Weex runtime factory
-  // 'weex-factory': {
-  //   weex: true,
-  //   entry: resolve('weex/runtime-factory.js'),
-  //   dest: resolve('packages/weex-vue-framework/factory.js'),
-  //   format: 'cjs',
-  //   plugins: [weexFactoryPlugin]
-  // },
-  // // Weex runtime framework (CommonJS).
-  // 'weex-framework': {
-  //   weex: true,
-  //   entry: resolve('weex/framework.js'),
-  //   dest: resolve('packages/weex-vue-framework/index.js'),
-  //   format: 'cjs'
-  // },
-  // // Weex compiler (CommonJS). Used by Weex's Webpack loader.
-  // 'weex-compiler': {
-  //   weex: true,
-  //   entry: resolve('weex/compiler.js'),
-  //   dest: resolve('packages/weex-template-compiler/build.js'),
-  //   format: 'cjs',
-  //   external: Object.keys(require('../packages/weex-template-compiler/package.json').dependencies)
-  // }
 };
 
 function genConfig(opts) {
@@ -183,8 +64,6 @@ function genConfig(opts) {
     moduleName: "Vue",
     plugins: [
       replace({
-        __WEEX__: !!opts.weex,
-        __WEEX_VERSION__: weexVersion,
         __VERSION__: version
       }),
       flow(),

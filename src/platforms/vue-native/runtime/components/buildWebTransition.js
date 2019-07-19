@@ -291,7 +291,7 @@ export function leave({ el, cb }) {
     });
   }
   onLeave && onLeave(el, _cb);
-  if (!expectsCSS && !userWantsControl) {
+  if (!expectsCSS && !userWantsControl && !onLeave) {
     _cb();
   }
 }
