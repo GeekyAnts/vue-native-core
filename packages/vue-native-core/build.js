@@ -47,17 +47,6 @@ function isPlainObject (obj) {
 }
 
 /**
- * Convert a value to a string that is actually rendered.
- */
-
-
-/**
- * Convert a input value to a number for persistence.
- * If the conversion fails, return original string.
- */
-
-
-/**
  * Make a map and return a function for checking if a key
  * is in that map.
  */
@@ -178,11 +167,6 @@ function extend (to, _from) {
 }
 
 /**
- * Merge an Array of Objects into a single Object.
- */
-
-
-/**
  * Perform no operation.
  */
 function noop () {}
@@ -196,19 +180,6 @@ var no = function () { return false; };
  * Return same value
  */
 var identity = function (_) { return _; };
-
-/**
- * Generate a static keys string from compiler modules.
- */
-
-
-/**
- * Check if two values are loosely equal - that is,
- * if they are plain objects, do they have the same shape?
- */
-
-
-
 
 /**
  * Ensure a function is called only once.
@@ -243,6 +214,8 @@ var LIFECYCLE_HOOKS = [
 ];
 
 /*  */
+
+
 
 var config = ({
   /**
@@ -475,7 +448,6 @@ function handleError (err, vm, info) {
 }
 
 /*  */
-/* globals MutationObserver */
 
 // can we use __proto__?
 var hasProto = "__proto__" in {};
@@ -647,7 +619,7 @@ if (typeof Set !== "undefined" && isNative(Set)) {
   _Set = Set;
 } else {
   // a non-standard Set polyfill that only works with primitive keys.
-  _Set = (function () {
+  _Set = /*@__PURE__*/(function () {
     function Set() {
       this.set = Object.create(null);
     }
@@ -667,15 +639,14 @@ if (typeof Set !== "undefined" && isNative(Set)) {
 
 /*  */
 
-
-var uid$1 = 0;
+var uid = 0;
 
 /**
  * A dep is an observable that can have multiple
  * directives subscribing to it.
  */
 var Dep = function Dep () {
-  this.id = uid$1++;
+  this.id = uid++;
   this.subs = [];
 };
 
@@ -722,7 +693,12 @@ function popTarget () {
  */
 
 var arrayProto = Array.prototype;
-var arrayMethods = Object.create(arrayProto);[
+var arrayMethods = Object.create(arrayProto)
+
+/**
+ * Intercept mutating methods and emit events
+ */
+;[
   'push',
   'pop',
   'shift',
@@ -810,7 +786,7 @@ var Observer = function Observer (value) {
 Observer.prototype.walk = function walk (obj) {
   var keys = Object.keys(obj);
   for (var i = 0; i < keys.length; i++) {
-    defineReactive$$1(obj, keys[i], obj[keys[i]]);
+    defineReactive(obj, keys[i], obj[keys[i]]);
   }
 };
 
@@ -877,7 +853,7 @@ function observe (value, asRootData) {
 /**
  * Define a reactive property on an Object.
  */
-function defineReactive$$1 (
+function defineReactive (
   obj,
   key,
   val,
@@ -959,7 +935,7 @@ function set (target, key, val) {
     target[key] = val;
     return val
   }
-  defineReactive$$1(ob.value, key, val);
+  defineReactive(ob.value, key, val);
   ob.dep.notify();
   return val
 }
@@ -1330,6 +1306,8 @@ function resolveAsset (
 
 /*  */
 
+
+
 function validateProp (
   key,
   propOptions,
@@ -1620,7 +1598,7 @@ var VNode = function VNode (
   this.isOnce = false;
 };
 
-var prototypeAccessors = { child: {} };
+var prototypeAccessors = { child: { configurable: true } };
 
 // DEPRECATED: alias for componentInstance for backwards compat.
 /* istanbul ignore next */
@@ -1641,23 +1619,18 @@ function createTextVNode (val) {
   return new VNode(undefined, undefined, undefined, String(val))
 }
 
-// optimized shallow clone
-// used for static nodes and slot nodes because they may be reused across
-// multiple renders, cloning them avoids errors when DOM manipulations rely
-// on their elm reference.
-
 /*  */
 
 var normalizeEvent = cached(function (name) {
   var passive = name.charAt(0) === '&';
   name = passive ? name.slice(1) : name;
-  var once$$1 = name.charAt(0) === '~'; // Prefixed last, checked first
-  name = once$$1 ? name.slice(1) : name;
+  var once = name.charAt(0) === '~'; // Prefixed last, checked first
+  name = once ? name.slice(1) : name;
   var capture = name.charAt(0) === '!';
   name = capture ? name.slice(1) : name;
   return {
     name: name,
-    once: once$$1,
+    once: once,
     capture: capture,
     passive: passive
   }
@@ -1685,7 +1658,7 @@ function updateListeners (
   on,
   oldOn,
   add,
-  remove$$1,
+  remove,
   vm
 ) {
   var name, cur, old, event;
@@ -1711,12 +1684,10 @@ function updateListeners (
   for (name in oldOn) {
     if (isUndef(on[name])) {
       event = normalizeEvent(name);
-      remove$$1(event.name, oldOn[name], event.capture);
+      remove(event.name, oldOn[name], event.capture);
     }
   }
 }
-
-/*  */
 
 /*  */
 
@@ -1976,8 +1947,6 @@ function getFirstComponentChild (children) {
 
 /*  */
 
-/*  */
-
 function initEvents (vm) {
   vm._events = Object.create(null);
 
@@ -1999,8 +1968,8 @@ function initEvents (vm) {
 
 var target;
 
-function add (event, fn, once$$1) {
-  if (once$$1) {
+function add (event, fn, once) {
+  if (once) {
     target.$once(event, fn);
   } else {
     target.$on(event, fn);
@@ -2023,12 +1992,10 @@ function updateComponentListeners (
 function eventsMixin (Vue) {
   var hookRE = /^hook:/;
   Vue.prototype.$on = function (event, fn) {
-    var this$1 = this;
-
     var vm = this;
     if (Array.isArray(event)) {
       for (var i = 0, l = event.length; i < l; i++) {
-        this$1.$on(event[i], fn);
+        this.$on(event[i], fn);
       }
     } else {
       (vm._events[event] || (vm._events[event] = [])).push(fn);
@@ -2053,8 +2020,6 @@ function eventsMixin (Vue) {
   };
 
   Vue.prototype.$off = function (event, fn) {
-    var this$1 = this;
-
     var vm = this;
     // all
     if (!arguments.length) {
@@ -2064,7 +2029,7 @@ function eventsMixin (Vue) {
     // array of events
     if (Array.isArray(event)) {
       for (var i$1 = 0, l = event.length; i$1 < l; i$1++) {
-        this$1.$off(event[i$1], fn);
+        this.$off(event[i$1], fn);
       }
       return vm
     }
@@ -2145,10 +2110,6 @@ function initLifecycle (vm) {
   vm._isDestroyed = false;
   vm._isBeingDestroyed = false;
 }
-
-
-
-
 
 function updateChildComponent (
   vm,
@@ -2262,7 +2223,6 @@ function callHook (vm, hook) {
 }
 
 /*  */
-
 
 var MAX_UPDATE_COUNT = 100;
 
@@ -2403,7 +2363,7 @@ function queueWatcher (watcher) {
 
 /*  */
 
-var uid$2 = 0;
+var uid$1 = 0;
 
 /**
  * A watcher parses an expression, collects dependencies,
@@ -2428,7 +2388,7 @@ var Watcher = function Watcher (
     this.deep = this.user = this.lazy = this.sync = false;
   }
   this.cb = cb;
-  this.id = ++uid$2; // uid for batching
+  this.id = ++uid$1; // uid for batching
   this.active = true;
   this.dirty = this.lazy; // for lazy watchers
   this.deps = [];
@@ -2502,13 +2462,11 @@ Watcher.prototype.addDep = function addDep (dep) {
  * Clean up for dependency collection.
  */
 Watcher.prototype.cleanupDeps = function cleanupDeps () {
-    var this$1 = this;
-
   var i = this.deps.length;
   while (i--) {
-    var dep = this$1.deps[i];
-    if (!this$1.newDepIds.has(dep.id)) {
-      dep.removeSub(this$1);
+    var dep = this.deps[i];
+    if (!this.newDepIds.has(dep.id)) {
+      dep.removeSub(this);
     }
   }
   var tmp = this.depIds;
@@ -2580,11 +2538,9 @@ Watcher.prototype.evaluate = function evaluate () {
  * Depend on all deps collected by this watcher.
  */
 Watcher.prototype.depend = function depend () {
-    var this$1 = this;
-
   var i = this.deps.length;
   while (i--) {
-    this$1.deps[i].depend();
+    this.deps[i].depend();
   }
 };
 
@@ -2592,8 +2548,6 @@ Watcher.prototype.depend = function depend () {
  * Remove self from all dependencies' subscriber list.
  */
 Watcher.prototype.teardown = function teardown () {
-    var this$1 = this;
-
   if (this.active) {
     // remove self from vm's watcher list
     // this is a somewhat expensive operation so we skip it
@@ -2603,7 +2557,7 @@ Watcher.prototype.teardown = function teardown () {
     }
     var i = this.deps.length;
     while (i--) {
-      this$1.deps[i].removeSub(this$1);
+      this.deps[i].removeSub(this);
     }
     this.active = false;
   }
@@ -2705,7 +2659,7 @@ function initProps (vm, propsOptions) {
       /**
        * react-vue change
        */
-      defineReactive$$1(props, key, value, function () {
+      defineReactive(props, key, value, function () {
         // if (vm.$parent && !observerState.isSettingProps) {
         //   warn(
         //     `Avoid mutating a prop directly since the value will be ` +
@@ -2717,7 +2671,7 @@ function initProps (vm, propsOptions) {
         // }
       });
     } else {
-      defineReactive$$1(props, key, value);
+      defineReactive(props, key, value);
     }
     // static props are already proxied on the component's prototype
     // during Vue.extend(). We only need to proxy props defined at
@@ -2945,7 +2899,7 @@ function initInjections (vm) {
     Object.keys(result).forEach(function (key) {
       /* istanbul ignore else */
       if (process.env.NODE_ENV !== 'production') {
-        defineReactive$$1(vm, key, result[key], function () {
+        defineReactive(vm, key, result[key], function () {
           warn(
             "Avoid mutating an injected value directly since the changes will be " +
             "overwritten whenever the provided component re-renders. " +
@@ -2954,7 +2908,7 @@ function initInjections (vm) {
           );
         });
       } else {
-        defineReactive$$1(vm, key, result[key]);
+        defineReactive(vm, key, result[key]);
       }
     });
   }
@@ -3280,7 +3234,8 @@ function mergeHook$1 (one, two) {
 // prop and event handler respectively.
 function transformModel (options, data) {
   var prop = (options.model && options.model.prop) || 'value';
-  var event = (options.model && options.model.event) || 'input';(data.props || (data.props = {}))[prop] = data.model.value;
+  var event = (options.model && options.model.event) || 'input'
+  ;(data.props || (data.props = {}))[prop] = data.model.value;
   var on = data.on || (data.on = {});
   if (isDef(on[event])) {
     on[event] = [data.model.callback].concat(on[event]);
@@ -3398,48 +3353,6 @@ function applyNS (vnode, ns) {
 
 /*  */
 
-/**
- * Runtime helper for rendering v-for lists.
- */
-
-/*  */
-
-/**
- * Runtime helper for rendering <slot>
- */
-
-/*  */
-
-/**
- * Runtime helper for resolving filters
- */
-
-/*  */
-
-/**
- * Runtime helper for checking keyCodes from config.
- */
-
-/*  */
-
-/**
- * Runtime helper for merging v-bind="object" into a VNode's data.
- */
-
-/*  */
-
-/**
- * Runtime helper for rendering static trees.
- */
-
-
-/**
- * Runtime helper for v-once.
- * Effectively it means marking the node as static with a unique key.
- */
-
-/*  */
-
 function initRender (vm) {
   vm._vnode = null; // the root of the child tree
   vm._staticTrees = null;
@@ -3462,13 +3375,13 @@ function initRender (vm) {
 
 /*  */
 
-var uid = 0;
+var uid$2 = 0;
 
 function initMixin (Vue) {
   Vue.prototype._init = function (options) {
     var vm = this;
     // a uid
-    vm._uid = uid++;
+    vm._uid = uid$2++;
 
     var startTag, endTag;
     /* istanbul ignore if */
@@ -3594,17 +3507,9 @@ function dedupe (latest, sealed) {
   }
 }
 
-/**
- * react-vue change
- */
-// import { renderMixin } from './render'
-/**
- * react-vue change
- */
-// import { lifecycleMixin } from './lifecycle'
-function Vue$2 (options) {
+function Vue (options) {
   if (process.env.NODE_ENV !== 'production' &&
-    !(this instanceof Vue$2)) {
+    !(this instanceof Vue)) {
     warn('Vue is a constructor and should be called with the `new` keyword');
   }
   /**
@@ -3621,9 +3526,9 @@ function Vue$2 (options) {
   this._init(options);
 }
 
-initMixin(Vue$2);
-stateMixin(Vue$2);
-eventsMixin(Vue$2);
+initMixin(Vue);
+stateMixin(Vue);
+eventsMixin(Vue);
 
 /**
  * react-vue change
@@ -3634,11 +3539,11 @@ eventsMixin(Vue$2);
 /**
  * react-vue change
  */
-Vue$2.prototype.$nextTick = function (fn) {
+Vue.prototype.$nextTick = function (fn) {
   return nextTick(fn, this)
 };
 
-Vue$2.prototype.$destroy = function (fn) {
+Vue.prototype.$destroy = function (fn) {
   // nothing
 };
 
@@ -3821,6 +3726,8 @@ function initAssetRegisters (Vue) {
 
 /*  */
 
+
+
 var patternTypes = [String, RegExp];
 
 function getComponentName (opts) {
@@ -3872,10 +3779,8 @@ var KeepAlive = {
   },
 
   destroyed: function destroyed () {
-    var this$1 = this;
-
-    for (var key in this$1.cache) {
-      pruneCacheEntry(this$1.cache[key]);
+    for (var key in this.cache) {
+      pruneCacheEntry(this.cache[key]);
     }
   },
 
@@ -3942,7 +3847,7 @@ function initGlobalAPI (Vue) {
     warn: warn,
     extend: extend,
     mergeOptions: mergeOptions,
-    defineReactive: defineReactive$$1
+    defineReactive: defineReactive
   };
 
   Vue.set = set;
@@ -3966,13 +3871,13 @@ function initGlobalAPI (Vue) {
   initAssetRegisters(Vue);
 }
 
-initGlobalAPI(Vue$2);
+initGlobalAPI(Vue);
 
-Object.defineProperty(Vue$2.prototype, '$isServer', {
+Object.defineProperty(Vue.prototype, '$isServer', {
   get: isServerRendering
 });
 
-Vue$2.version = '0.0.1';
+Vue.version = '0.0.1';
 
 /**
  * Reference to mobx https://github.com/mobxjs/mobx-react-vue/blob/master/src/observer.js
@@ -3982,7 +3887,7 @@ function observer (componentClass) {
   if (typeof componentClass === 'function' &&
     (!componentClass.prototype || !componentClass.prototype.render) && !componentClass.isReactClass && !React.Component.isPrototypeOf(componentClass)
   ) {
-    var ObserverComponent = (function (superclass) {
+    var ObserverComponent = /*@__PURE__*/(function (superclass) {
       function ObserverComponent () {
         superclass.apply(this, arguments);
       }
@@ -4014,7 +3919,7 @@ function observer (componentClass) {
 }
 
 function mixinLifecycleEvents (target) {
-  for (var key in lifecycleMixin$1) {
+  for (var key in lifecycleMixin) {
     if (key === 'shouldComponentUpdate' &&
       typeof target.shouldComponentUpdate === 'function') {
       continue
@@ -4023,7 +3928,7 @@ function mixinLifecycleEvents (target) {
   }
 }
 
-var lifecycleMixin$1 = {
+var lifecycleMixin = {
   componentWillMount: function componentWillMount () {
     var cb = this.forceUpdate.bind(this);
     var render = this.render.bind(this);
@@ -4046,7 +3951,7 @@ var lifecycleMixin$1 = {
 
 function patch (target, funcName) {
   var base = target[funcName];
-  var mixinFunc = lifecycleMixin$1[funcName];
+  var mixinFunc = lifecycleMixin[funcName];
   target[funcName] = !base ? function () {
     return mixinFunc.apply(this, arguments)
   } : function () {
@@ -4075,6 +3980,6 @@ function isObjectShallowModified (prev, next) {
 
 /**  */
 
-Vue$2.observer = observer;
+Vue.observer = observer;
 
-module.exports = Vue$2;
+module.exports = Vue;

@@ -267,11 +267,6 @@ function once (fn) {
 var emptyObject = Object.freeze({});
 
 /**
- * Check if a string starts with $ or _
- */
-
-
-/**
  * Define a property.
  */
 function def (obj, key, val, enumerable) {
@@ -303,6 +298,8 @@ var LIFECYCLE_HOOKS = [
 ];
 
 /*  */
+
+
 
 var config = ({
   /**
@@ -386,7 +383,6 @@ var config = ({
 });
 
 var warn = noop;
-var tip = noop;
 var formatComponentName;
 
 if (process.env.NODE_ENV !== 'production') {
@@ -399,14 +395,6 @@ if (process.env.NODE_ENV !== 'production') {
   warn = function (msg, vm) {
     if (hasConsole && (!config.silent)) {
       console.error("[Vue warn]: " + msg + (
-        vm ? generateComponentTrace(vm) : ''
-      ));
-    }
-  };
-
-  tip = function (msg, vm) {
-    if (hasConsole && (!config.silent)) {
-      console.warn("[Vue tip]: " + msg + (
         vm ? generateComponentTrace(vm) : ''
       ));
     }
@@ -477,9 +465,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 function handleError (err, vm, info) {
-  if (config.errorHandler) {
-    config.errorHandler.call(null, err, vm, info);
-  } else {
+  {
     if (process.env.NODE_ENV !== 'production') {
       warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
     }
@@ -493,7 +479,6 @@ function handleError (err, vm, info) {
 }
 
 /*  */
-/* globals MutationObserver */
 
 // can we use __proto__?
 var hasProto = "__proto__" in {};
@@ -548,7 +533,7 @@ var isServerRendering = function () {
 };
 
 // detect devtools
-
+var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 /* istanbul ignore next */
 function isNative(Ctor) {
@@ -657,34 +642,10 @@ var nextTick = (function() {
     }
   };
 })();
-
-var _Set;
 /* istanbul ignore if */
-if (typeof Set !== "undefined" && isNative(Set)) {
-  // use native Set when available.
-  _Set = Set;
-} else {
-  // a non-standard Set polyfill that only works with primitive keys.
-  _Set = (function () {
-    function Set() {
-      this.set = Object.create(null);
-    }
-    Set.prototype.has = function has (key) {
-      return this.set[key] === true;
-    };
-    Set.prototype.add = function add (key) {
-      this.set[key] = true;
-    };
-    Set.prototype.clear = function clear () {
-      this.set = Object.create(null);
-    };
-
-    return Set;
-  }());
-}
+if (typeof Set !== "undefined" && isNative(Set)) ;
 
 /*  */
-
 
 var uid = 0;
 
@@ -730,7 +691,12 @@ Dep.target = null;
  */
 
 var arrayProto = Array.prototype;
-var arrayMethods = Object.create(arrayProto);[
+var arrayMethods = Object.create(arrayProto)
+
+/**
+ * Intercept mutating methods and emit events
+ */
+;[
   'push',
   'pop',
   'shift',
@@ -818,7 +784,7 @@ var Observer = function Observer (value) {
 Observer.prototype.walk = function walk (obj) {
   var keys = Object.keys(obj);
   for (var i = 0; i < keys.length; i++) {
-    defineReactive$$1(obj, keys[i], obj[keys[i]]);
+    defineReactive(obj, keys[i], obj[keys[i]]);
   }
 };
 
@@ -885,7 +851,7 @@ function observe (value, asRootData) {
 /**
  * Define a reactive property on an Object.
  */
-function defineReactive$$1 (
+function defineReactive (
   obj,
   key,
   val,
@@ -967,15 +933,10 @@ function set (target, key, val) {
     target[key] = val;
     return val
   }
-  defineReactive$$1(ob.value, key, val);
+  defineReactive(ob.value, key, val);
   ob.dep.notify();
   return val
 }
-
-/**
- * Delete a property and trigger change if necessary.
- */
-
 
 /**
  * Collect dependencies on array elements when the array is touched, since
@@ -1176,12 +1137,6 @@ var defaultStrat = function (parentVal, childVal) {
 };
 
 /**
- * Merge two option objects into a new one.
- * Core utility used in both instantiation and inheritance.
- */
-
-
-/**
  * Resolve an asset.
  * This function is used because child instances need access
  * to assets defined in its ancestor chain.
@@ -1213,8 +1168,6 @@ function resolveAsset (
   }
   return res
 }
-
-/*  */
 
 function setSelected (el, binding, vm) {
   var value = binding.value;
@@ -1262,7 +1215,7 @@ function setCheckBox (el, binding) {
 }
 
 var model = {
-  bind: function bind$$1 (el, binding) {
+  bind: function bind (el, binding) {
     if (el.tagName) {
       var lowerTagName = el.tagName.toLowerCase();
       if (lowerTagName === 'select') {
@@ -2568,7 +2521,6 @@ var isReservedAttr = makeMap('style,class');
 // attributes that should be using props for binding
 var acceptValue = makeMap('input,textarea,option,select');
 
-
 var isEnumeratedAttr = makeMap('contenteditable,draggable,spellcheck');
 
 var isBooleanAttr = makeMap(
@@ -2581,8 +2533,6 @@ var isBooleanAttr = makeMap(
 );
 
 /*  */
-
-
 
 var isUnaryTag = makeMap(
   "area,base,br,col,embed,frame,hr,img,input,isindex,keygen," +
@@ -2639,8 +2589,6 @@ var buildInTags = [
 
 var isBuildInTag = makeMap(buildInTags.join(","));
 
-
-
 var isReservedTag = function (tag) {
   return isHTMLTag(tag) || isSVG(tag);
 };
@@ -2689,10 +2637,9 @@ function mergeProps () {
       if (typeof _p[0] === 'function') {
         obj[k] = function () {
           var arguments$1 = arguments;
-          var this$1 = this;
 
           for (var i = 0; i < l; i++) {
-            typeof _p[i] === 'function' && _p[i].apply(this$1, arguments$1);
+            typeof _p[i] === 'function' && _p[i].apply(this, arguments$1);
           }
         }.bind(this$1);
       } else {
@@ -2705,10 +2652,6 @@ function mergeProps () {
   return obj
 }
 
-/**
- * 
- */
-
 function buildComponent (render, options, config) {
   var Component = config.Component;
   var PropTypes = config.PropTypes;
@@ -2717,7 +2660,7 @@ function buildComponent (render, options, config) {
   if (cssModules) {
     options.computed = mergeCssModule$1(options.computed, cssModules);
   }
-  var ReactVueComponent = (function (Component) {
+  var ReactVueComponent = /*@__PURE__*/(function (Component) {
     function ReactVueComponent (props) {
       Component.call(this, props);
       this._ref = null;
@@ -2881,7 +2824,7 @@ function buildComponent (render, options, config) {
 }
 
 function buildMixin (Component) {
-  return (function (Component) {
+  return /*@__PURE__*/(function (Component) {
     function Mixin (props) {
       Component.call(this, props);
       /**
@@ -2990,7 +2933,7 @@ function triggerDirective(newData, oldData, vm, ref) {
 }
 
 function buildDirective(Component, createElement) {
-  return (function (superclass) {
+  return /*@__PURE__*/(function (superclass) {
     function Directive(props) {
       superclass.call(this, props);
       // set vm from parent context that
@@ -3153,20 +3096,20 @@ function removeClass (el, cls) {
 
 /*  */
 
-function resolveTransition (def$$1) {
-  if (!def$$1) {
+function resolveTransition (def) {
+  if (!def) {
     return
   }
   /* istanbul ignore else */
-  if (typeof def$$1 === 'object') {
+  if (typeof def === 'object') {
     var res = {};
-    if (def$$1.css !== false) {
-      extend(res, autoCssTransition(def$$1.name || 'v'));
+    if (def.css !== false) {
+      extend(res, autoCssTransition(def.name || 'v'));
     }
-    extend(res, def$$1);
+    extend(res, def);
     return res
-  } else if (typeof def$$1 === 'string') {
-    return autoCssTransition(def$$1)
+  } else if (typeof def === 'string') {
+    return autoCssTransition(def)
   }
 }
 
@@ -3214,10 +3157,6 @@ function nextFrame (fn) {
     raf(fn);
   });
 }
-
-
-
-
 
 function whenTransitionEnds (
   el,
@@ -3317,7 +3256,7 @@ function toMs (s) {
 }
 
 function buildWebEmptyComponent (Component, createElement) {
-  return (function (Component) {
+  return /*@__PURE__*/(function (Component) {
     function EmptyComponent (props) {
       Component.call(this, props);
       this._ref = null;
@@ -3455,11 +3394,11 @@ function isValidDuration(val) {
   return typeof val === "number" && !isNaN(val);
 }
 
-function addTransitionClass$$1(ref, className) {
+function addTransitionClass(ref, className) {
   addClass(ref, className);
 }
 
-function removeTransitionClass$$1(ref, className) {
+function removeTransitionClass(ref, className) {
   removeClass(ref, className);
 }
 
@@ -3559,13 +3498,13 @@ function enter(ref) {
 
   var _cb = (el._enterCb = once(function () {
     if (expectsCSS) {
-      removeTransitionClass$$1(el, activeClass);
-      removeTransitionClass$$1(el, toClass);
+      removeTransitionClass(el, activeClass);
+      removeTransitionClass(el, toClass);
     }
     cb && cb();
     if (_cb.cancelled) {
       if (expectsCSS) {
-        removeTransitionClass$$1(el, startClass);
+        removeTransitionClass(el, startClass);
       }
       enterCancelledHook && enterCancelledHook(el);
     } else {
@@ -3577,12 +3516,12 @@ function enter(ref) {
   beforeEnterHook && beforeEnterHook(el);
 
   if (expectsCSS) {
-    addTransitionClass$$1(el, startClass);
-    addTransitionClass$$1(el, activeClass);
+    addTransitionClass(el, startClass);
+    addTransitionClass(el, activeClass);
 
     nextFrame(function () {
-      removeTransitionClass$$1(el, startClass);
-      addTransitionClass$$1(el, toClass);
+      removeTransitionClass(el, startClass);
+      addTransitionClass(el, toClass);
       if (!_cb.cancelled && !userWantsControl) {
         if (isValidDuration(explicitEnterDuration)) {
           setTimeout(_cb, explicitEnterDuration);
@@ -3637,13 +3576,13 @@ function leave(ref) {
 
   var _cb = (el._leaveCb = once(function () {
     if (expectsCSS) {
-      removeTransitionClass$$1(el, leaveActiveClass);
-      removeTransitionClass$$1(el, leaveToClass);
+      removeTransitionClass(el, leaveActiveClass);
+      removeTransitionClass(el, leaveToClass);
     }
     cb && cb();
     if (_cb.cancelled) {
       if (expectsCSS) {
-        removeTransitionClass$$1(el, leaveClass);
+        removeTransitionClass(el, leaveClass);
       }
       onLeaveCancelled && onLeaveCancelled(el);
     } else {
@@ -3654,12 +3593,12 @@ function leave(ref) {
 
   onBeforeLeave && onBeforeLeave(el);
   if (expectsCSS) {
-    addTransitionClass$$1(el, leaveClass);
-    addTransitionClass$$1(el, leaveActiveClass);
+    addTransitionClass(el, leaveClass);
+    addTransitionClass(el, leaveActiveClass);
 
     nextFrame(function () {
-      removeTransitionClass$$1(el, leaveClass);
-      addTransitionClass$$1(el, leaveToClass);
+      removeTransitionClass(el, leaveClass);
+      addTransitionClass(el, leaveToClass);
       if (!_cb.cancelled && !userWantsControl) {
         if (isValidDuration(explicitLeaveDuration)) {
           setTimeout(_cb, explicitLeaveDuration);
@@ -3677,7 +3616,7 @@ function leave(ref) {
 
 function buildWebTransition(Component, createElement) {
   var EmptyComponent = buildWebEmptyComponent(Component, createElement);
-  var Transition = (function (Component) {
+  var Transition = /*@__PURE__*/(function (Component) {
     function Transition(props) {
       Component.call(this, props);
       this._ref = null;
@@ -3923,7 +3862,7 @@ function buildWebTransition(Component, createElement) {
 }
 
 function buildInputComponent(Component, createElement) {
-  return (function (superclass) {
+  return /*@__PURE__*/(function (superclass) {
     function Input(props) {
       superclass.call(this, props);
       this.state = {
@@ -3994,7 +3933,7 @@ function buildNativeComponent (render, options, config) {
       }
     });
   }
-  var ReactVueComponent = (function (Component) {
+  var ReactVueComponent = /*@__PURE__*/(function (Component) {
     function ReactVueComponent (props) {
       Component.call(this, props);
       this._ref = null;
@@ -4160,52 +4099,52 @@ function buildNativeComponent (render, options, config) {
   return ReactVueComponent
 }
 
-exports.platformDirectives = index;
-exports.renderList = renderList;
-exports.renderSlot = renderSlot;
-exports.bindWebClass = bindWebClass;
-exports.bindNativeClass = bindNativeClass;
-exports.bindWebStyle = bindWebStyle;
-exports.bindNativeStyle = bindNativeStyle;
-exports.mergeNativeStyleAndNativeClass = mergeNativeStyleAndNativeClass;
-exports.checkKeyCodes = checkKeyCodes;
-exports.template = template;
-exports.event = event;
-exports.mergeCssModule = mergeCssModule;
-exports.dynamicComponent = dynamicComponent;
-exports.resolveFilter = resolveFilter;
-exports.handleProps = handleProps;
-exports.mergeProps = mergeProps;
-exports.isUndef = isUndef;
-exports.isDef = isDef;
-exports.isTrue = isTrue;
-exports.isPrimitive = isPrimitive;
-exports.isObject = isObject;
-exports.isPlainObject = isPlainObject;
 exports._toString = _toString;
-exports.toNumber = toNumber;
-exports.makeMap = makeMap;
-exports.isBuiltInTag = isBuiltInTag;
-exports.remove = remove;
-exports.hasOwn = hasOwn;
+exports.bind = bind;
+exports.bindNativeClass = bindNativeClass;
+exports.bindNativeStyle = bindNativeStyle;
+exports.bindWebClass = bindWebClass;
+exports.bindWebStyle = bindWebStyle;
+exports.buildComponent = buildComponent;
+exports.buildDirective = buildDirective;
+exports.buildNativeComponent = buildNativeComponent;
+exports.buildWebEmptyComponent = buildWebEmptyComponent;
+exports.buildWebInputComponent = buildWebInputComponent;
+exports.buildWebTransition = buildWebTransition;
 exports.cached = cached;
 exports.camelize = camelize;
 exports.capitalize = capitalize;
-exports.hyphenate = hyphenate;
-exports.bind = bind;
-exports.toArray = toArray;
+exports.checkKeyCodes = checkKeyCodes;
+exports.dynamicComponent = dynamicComponent;
+exports.event = event;
 exports.extend = extend;
-exports.toObject = toObject;
-exports.noop = noop;
-exports.no = no;
-exports.identity = identity;
 exports.genStaticKeys = genStaticKeys;
+exports.handleProps = handleProps;
+exports.hasOwn = hasOwn;
+exports.hyphenate = hyphenate;
+exports.identity = identity;
+exports.isBuiltInTag = isBuiltInTag;
+exports.isDef = isDef;
+exports.isObject = isObject;
+exports.isPlainObject = isPlainObject;
+exports.isPrimitive = isPrimitive;
+exports.isTrue = isTrue;
+exports.isUndef = isUndef;
 exports.looseEqual = looseEqual;
 exports.looseIndexOf = looseIndexOf;
+exports.makeMap = makeMap;
+exports.mergeCssModule = mergeCssModule;
+exports.mergeNativeStyleAndNativeClass = mergeNativeStyleAndNativeClass;
+exports.mergeProps = mergeProps;
+exports.no = no;
+exports.noop = noop;
 exports.once = once;
-exports.buildComponent = buildComponent;
-exports.buildDirective = buildDirective;
-exports.buildWebTransition = buildWebTransition;
-exports.buildWebEmptyComponent = buildWebEmptyComponent;
-exports.buildWebInputComponent = buildWebInputComponent;
-exports.buildNativeComponent = buildNativeComponent;
+exports.platformDirectives = index;
+exports.remove = remove;
+exports.renderList = renderList;
+exports.renderSlot = renderSlot;
+exports.resolveFilter = resolveFilter;
+exports.template = template;
+exports.toArray = toArray;
+exports.toNumber = toNumber;
+exports.toObject = toObject;

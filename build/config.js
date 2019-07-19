@@ -31,12 +31,12 @@ const builds = {
     entry: resolve("vue-native/index.js"),
     dest: resolve("packages/vue-native-core/build.js"),
     format: "cjs",
-    external: ["react"]
+    external: ["react"],
   },
   "vue-native-helper": {
     entry: resolve("vue-native/runtime/helpers.js"),
     dest: resolve("packages/vue-native-helper/build.js"),
-    format: "cjs"
+    format: "cjs",
   },
   "vue-native-scripts": {
     entry: resolve("vue-native/scripts/index.js"),
@@ -44,24 +44,26 @@ const builds = {
     format: "cjs",
     external: []
       .concat(Object.keys(require("../packages/vue-native-scripts/package.json").dependencies))
-      .concat(Object.keys(require("../packages/vue-native-scripts/package.json").peerDependencies))
+      .concat(Object.keys(require("../packages/vue-native-scripts/package.json").peerDependencies)),
   },
   "vue-native-template-compiler": {
     entry: resolve("vue-native/compiler.js"),
     dest: resolve("packages/vue-native-template-compiler/build.js"),
     format: "cjs",
-    external: ["change-case", "he", "de-indent"]
+    external: ["change-case", "he", "de-indent"],
   }
 };
 
 function genConfig(opts) {
   const config = {
-    entry: opts.entry,
-    dest: opts.dest,
+    input: opts.entry,
+    output: {
+      file: opts.dest,
+      format: opts.format,
+      banner: opts.banner,
+      name: "Vue",
+    },
     external: opts.external,
-    format: opts.format,
-    banner: opts.banner,
-    moduleName: "Vue",
     plugins: [
       replace({
         __VERSION__: version
@@ -69,7 +71,12 @@ function genConfig(opts) {
       flow(),
       buble(),
       alias(Object.assign({}, aliases, opts.alias))
-    ].concat(opts.plugins || [])
+    ].concat(opts.plugins || []),
+    onwarn: (msg, warn) => {
+      if (!/Circular/.test(msg)) {
+        warn(msg)
+      }
+    },
   };
 
   if (opts.env) {

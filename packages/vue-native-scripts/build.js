@@ -7,14 +7,14 @@ var cssParse = _interopDefault(require('css-parse'));
 var jsBeautify = require('js-beautify');
 var sourceMap = require('source-map');
 var sourceMap__default = _interopDefault(sourceMap);
-var hash = _interopDefault(require('hash-sum'));
+var hash$1 = _interopDefault(require('hash-sum'));
 var path = _interopDefault(require('path'));
 var lineNumber = _interopDefault(require('line-number'));
 var parse5 = _interopDefault(require('parse5'));
 var babelCore = require('babel-core');
 var semver = _interopDefault(require('semver'));
-var traverse = _interopDefault(require('babel-traverse'));
-var reactNative_package_json = require('react-native/package.json');
+var traverse$1 = _interopDefault(require('babel-traverse'));
+var package_json = require('react-native/package.json');
 
 var HELPER_HEADER = '__react__vue__';
 var SCRIPT_OPTIONS = HELPER_HEADER + "options";
@@ -50,9 +50,9 @@ var names = 'Infinity,undefined,NaN,isFinite,isNaN,console,' +
   'require,' + // for webpack
   'arguments'; // parsed as identifier but is a special keyword...
 
-var hash$1 = Object.create(null);
+var hash = Object.create(null);
 names.split(',').forEach(function (name) {
-  hash$1[name] = true;
+  hash[name] = true;
 });
 
 function addvm (code) {
@@ -62,18 +62,18 @@ function addvm (code) {
 
       return {
         visitor: {
-          Identifier: function (path$$1) {
-            if (path$$1.parent.type === 'ObjectProperty' && path$$1.parent.key === path$$1.node) { return; }
-            if (t.isDeclaration(path$$1.parent.type) && path$$1.parent.id === path$$1.node) { return; }
-            if (t.isFunction(path$$1.parent.type) && path$$1.parent.params.indexOf(path$$1.node) > -1) { return; }
-            if (path$$1.parent.type === 'Property' && path$$1.parent.key === path$$1.node && !path$$1.parent.computed) { return; }
-            if (path$$1.parent.type === 'MemberExpression' && path$$1.parent.property === path$$1.node && !path$$1.parent.computed) { return; }
-            if (path$$1.parent.type === 'ArrayPattern') { return; }
-            if (path$$1.parent.type === 'ImportSpecifier') { return; }
-            if (path$$1.scope.hasBinding(path$$1.node.name)) { return; }
-            if (hash$1[path$$1.node.name]) { return; }
-            if (path$$1.node.name.indexOf(constants.HELPER_HEADER) === 0) { return; }
-            path$$1.node.name = "vm['" + (path$$1.node.name) + "']";
+          Identifier: function (path) {
+            if (path.parent.type === 'ObjectProperty' && path.parent.key === path.node) { return; }
+            if (t.isDeclaration(path.parent.type) && path.parent.id === path.node) { return; }
+            if (t.isFunction(path.parent.type) && path.parent.params.indexOf(path.node) > -1) { return; }
+            if (path.parent.type === 'Property' && path.parent.key === path.node && !path.parent.computed) { return; }
+            if (path.parent.type === 'MemberExpression' && path.parent.property === path.node && !path.parent.computed) { return; }
+            if (path.parent.type === 'ArrayPattern') { return; }
+            if (path.parent.type === 'ImportSpecifier') { return; }
+            if (path.scope.hasBinding(path.node.name)) { return; }
+            if (hash[path.node.name]) { return; }
+            if (path.node.name.indexOf(constants.HELPER_HEADER) === 0) { return; }
+            path.node.name = "vm['" + (path.node.name) + "']";
           }
         }
       };
@@ -240,6 +240,7 @@ function parseCss(ast) {
 }
 
 // const fs = require('fs');
+
 var filePath = 'test.js';
 var splitRE = /\r?\n/g;
 
@@ -292,7 +293,7 @@ function compileVueToRn(resource) {
   var nodes = [];
   var templateFragments = parse5.parseFragment(cparsed.template.content, { sourceCodeLocationInfo: true });
   if (templateFragments.childNodes) {
-    traverse$1(templateFragments, nodes);
+    traverse(templateFragments, nodes);
   }
 
 
@@ -353,7 +354,7 @@ function compileVueToRn(resource) {
   }
 
   // add render funtion
-  var beautifiedRender = jsBeautify.js_beautify(addvm(templateParsed.render, { indent_size: 2 }));
+  var beautifiedRender = jsBeautify.js_beautify(addvm(templateParsed.render));
   output += beautifiedRender;
   output += '\n\n';
 
@@ -447,7 +448,7 @@ function parseTemplate(code) {
 
 function generateSourceMap(content) {
   // hot-reload source map busting
-  var hashedFilename = path.basename(filePath) + '?' + hash(filePath + content);
+  var hashedFilename = path.basename(filePath) + '?' + hash$1(filePath + content);
   var map = new sourceMap__default.SourceMapGenerator();
   map.setSourceContent(hashedFilename, content);
   map._hashedFilename = hashedFilename;
@@ -462,7 +463,7 @@ function parseScript(code) {
   return code;
 }
 
-function traverse$1(ast, nodes) {
+function traverse(ast, nodes) {
   if ( nodes === void 0 ) nodes = [];
 
   if (ast.tagName) {
@@ -470,13 +471,13 @@ function traverse$1(ast, nodes) {
   }
   if (ast.childNodes) {
     ast.childNodes.forEach(function (child) {
-      traverse$1(child, nodes);
+      traverse(child, nodes);
     });
   }
 }
 
 // const reactNativeVersionString = require('react-native/package.json').version;
-var reactNativeMinorVersion = semver(reactNative_package_json.version).minor;
+var reactNativeMinorVersion = semver(package_json.version).minor;
 
 var upstreamTransformer = null;
 if (reactNativeMinorVersion >= 59) {
@@ -493,7 +494,7 @@ if (reactNativeMinorVersion >= 59) {
   // handle RN <= 0.45
   var oldUpstreamTransformer = require('react-native/packager/transformer');
   upstreamTransformer = {
-    transform: function transform$$1(ref) {
+    transform: function transform(ref) {
       var src = ref.src;
       var filename = ref.filename;
       var options = ref.options;
@@ -505,7 +506,7 @@ if (reactNativeMinorVersion >= 59) {
 
 function sourceMapAstInPlace(tsMap, babelAst) {
   var tsConsumer = new sourceMap.SourceMapConsumer(tsMap);
-  traverse.cheap(babelAst, function (node) {
+  traverse$1.cheap(babelAst, function (node) {
     if (node.loc) {
       var originalStart = tsConsumer.originalPositionFor(node.loc.start);
       if (originalStart.line) {
@@ -521,14 +522,14 @@ function sourceMapAstInPlace(tsMap, babelAst) {
   });
 }
 
-function transform$1(ref) {
+function transform(ref) {
+  var assign;
+
   var src = ref.src;
   var filename = ref.filename;
   var options = ref.options;
-
   if (typeof src === 'object') {
     // handle RN >= 0.46
-    var assign;
     ((assign = src, src = assign.src, filename = assign.filename, options = assign.options));
   }
   var outputFile = compileVueToRn(src);
@@ -555,7 +556,7 @@ function transform$1(ref) {
 
 var index = {
   compileVueToRn: compileVueToRn,
-  transform: transform$1,
+  transform: transform,
 };
 
 module.exports = index;

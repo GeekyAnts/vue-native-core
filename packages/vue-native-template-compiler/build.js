@@ -10,39 +10,6 @@ var changeCase = _interopDefault(require('change-case'));
 
 /*  */
 
-// these helpers produces better vm code in JS engines due to their
-// explicitness and function inlining
-
-
-
-
-
-
-/**
- * Check if value is primitive
- */
-
-
-/**
- * Quick object check - this is primarily used to tell
- * Objects from primitive values when we know the value
- * is a JSON-compliant type.
- */
-
-
-
-
-/**
- * Convert a value to a string that is actually rendered.
- */
-
-
-/**
- * Convert a input value to a number for persistence.
- * If the conversion fails, return original string.
- */
-
-
 /**
  * Make a map and return a function for checking if a key
  * is in that map.
@@ -65,13 +32,6 @@ function makeMap (
  * Check if a tag is a built-in tag.
  */
 var isBuiltInTag = makeMap('slot,component', true);
-
-/**
- * Remove an item from an array
- */
-
-
-
 
 /**
  * Create a cached version of a pure function.
@@ -99,28 +59,6 @@ var capitalize = cached(function (str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 });
 
-
-
-/**
- * Simple bind, faster than native
- */
-
-
-/**
- * Convert an Array-like object to a real Array.
- */
-
-
-/**
- * Mix properties into target object.
- */
-
-
-/**
- * Merge an Array of Objects into a single Object.
- */
-
-
 /**
  * Perform no operation.
  */
@@ -135,23 +73,6 @@ var no = function () { return false; };
  * Return same value
  */
 var identity = function (_) { return _; };
-
-/**
- * Generate a static keys string from compiler modules.
- */
-
-
-/**
- * Check if two values are loosely equal - that is,
- * if they are plain objects, do they have the same shape?
- */
-
-
-
-
-/**
- * Ensure a function is called only once.
- */
 
 /*  */
 
@@ -178,13 +99,6 @@ var isNonPhrasingTag = makeMap(
 
 /**
  * Not type-checking this file because it's mostly vendor code.
- */
-
-/*!
- * HTML Parser By John Resig (ejohn.org)
- * Modified by Juriy "kangax" Zaytsev
- * Original code by Erik Arvidsson, Mozilla Public License
- * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
  */
 
 // Regular Expressions for parsing tags and attributes
@@ -242,8 +156,8 @@ function decodeAttr (value, shouldDecodeNewlines) {
 function parseHTML (html, options) {
   var stack = [];
   var expectHTML = options.expectHTML;
-  var isUnaryTag$$1 = options.isUnaryTag || no;
-  var canBeLeftOpenTag$$1 = options.canBeLeftOpenTag || no;
+  var isUnaryTag = options.isUnaryTag || no;
+  var canBeLeftOpenTag = options.canBeLeftOpenTag || no;
   var index = 0;
   var last, lastTag;
   while (html) {
@@ -392,12 +306,12 @@ function parseHTML (html, options) {
       if (lastTag === 'p' && isNonPhrasingTag(tagName)) {
         parseEndTag(lastTag);
       }
-      if (canBeLeftOpenTag$$1(tagName) && lastTag === tagName) {
+      if (canBeLeftOpenTag(tagName) && lastTag === tagName) {
         parseEndTag(tagName);
       }
     }
 
-    var unary = isUnaryTag$$1(tagName) || tagName === 'html' && lastTag === 'head' || !!unarySlash;
+    var unary = isUnaryTag(tagName) || tagName === 'html' && lastTag === 'head' || !!unarySlash;
 
     var l = match.attrs.length;
     var attrs = new Array(l);
@@ -748,11 +662,6 @@ function parseText (
 /*  */
 
 /**
- * Cross-platform code generation for component v-model
- */
-
-
-/**
  * Cross-platform codegen helper for generating v-model value assignment code.
  */
 function genAssignmentCode (
@@ -784,12 +693,7 @@ function genAssignmentCode (
  *
  */
 
-var len;
-var str;
-var chr;
-var index;
-var expressionPos;
-var expressionEndPos;
+var len, str, chr, index, expressionPos, expressionEndPos;
 
 function parseModel (val) {
   str = val;
@@ -874,6 +778,8 @@ var LIFECYCLE_HOOKS = [
 
 /*  */
 
+
+
 var config = ({
   /**
    * Option merge strategies (used in core/util/options)
@@ -955,8 +861,7 @@ var config = ({
   _lifecycleHooks: LIFECYCLE_HOOKS
 });
 
-var warn$1 = noop;
-var tip = noop;
+var warn = noop;
 var formatComponentName;
 
 if (process.env.NODE_ENV !== 'production') {
@@ -966,17 +871,9 @@ if (process.env.NODE_ENV !== 'production') {
     .replace(classifyRE, function (c) { return c.toUpperCase(); })
     .replace(/[-_]/g, ''); };
 
-  warn$1 = function (msg, vm) {
+  warn = function (msg, vm) {
     if (hasConsole && (!config.silent)) {
       console.error("[Vue warn]: " + msg + (
-        vm ? generateComponentTrace(vm) : ''
-      ));
-    }
-  };
-
-  tip = function (msg, vm) {
-    if (hasConsole && (!config.silent)) {
-      console.warn("[Vue tip]: " + msg + (
         vm ? generateComponentTrace(vm) : ''
       ));
     }
@@ -1047,11 +944,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 function handleError (err, vm, info) {
-  if (config.errorHandler) {
-    config.errorHandler.call(null, err, vm, info);
-  } else {
+  {
     if (process.env.NODE_ENV !== 'production') {
-      warn$1(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
+      warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
     }
     /* istanbul ignore else */
     if (inBrowser && typeof console !== 'undefined') {
@@ -1063,10 +958,6 @@ function handleError (err, vm, info) {
 }
 
 /*  */
-/* globals MutationObserver */
-
-// can we use __proto__?
-
 
 // Browser environment sniffing
 var inBrowser = typeof window !== "undefined";
@@ -1118,7 +1009,7 @@ var isServerRendering = function () {
 };
 
 // detect devtools
-
+var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
 /* istanbul ignore next */
 function isNative(Ctor) {
@@ -1227,31 +1118,8 @@ var nextTick = (function() {
     }
   };
 })();
-
-var _Set;
 /* istanbul ignore if */
-if (typeof Set !== "undefined" && isNative(Set)) {
-  // use native Set when available.
-  _Set = Set;
-} else {
-  // a non-standard Set polyfill that only works with primitive keys.
-  _Set = (function () {
-    function Set() {
-      this.set = Object.create(null);
-    }
-    Set.prototype.has = function has (key) {
-      return this.set[key] === true;
-    };
-    Set.prototype.add = function add (key) {
-      this.set[key] = true;
-    };
-    Set.prototype.clear = function clear () {
-      this.set = Object.create(null);
-    };
-
-    return Set;
-  }());
-}
+if (typeof Set !== "undefined" && isNative(Set)) ;
 
 /*  */
 
@@ -1381,12 +1249,12 @@ var forIteratorRE = /\((\{[^}]*\}|[^,]*),([^,]*)(?:,([^,]*))?\)/;
 var argRE = /:(.*)$/;
 var bindRE = /^:|^v-bind:/;
 var modifierRE = /\.[^.]+/g;
-var splitRE$1 = /\r?\n/g;
+var  splitRE$1 = /\r?\n/g;
 
 var decodeHTMLCached = cached(he.decode);
 
 // configurable state
-var warn;
+var warn$1;
 var delimiters;
 var transforms;
 var preTransforms;
@@ -1402,7 +1270,7 @@ function parse (
   template,
   options
 ) {
-  warn = options.warn || baseWarn;
+  warn$1 = options.warn || baseWarn;
   platformGetTagNamespace = options.getTagNamespace || no;
   platformMustUseProp = options.mustUseProp || no;
   platformIsPreTag = options.isPreTag || no;
@@ -1422,7 +1290,7 @@ function parse (
   function warnOnce (msg) {
     if (!warned) {
       warned = true;
-      warn(msg);
+      warn$1(msg);
     }
   }
 
@@ -1437,7 +1305,7 @@ function parse (
   }
 
   parseHTML(template, {
-    warn: warn,
+    warn: warn$1,
     expectHTML: options.expectHTML,
     isUnaryTag: options.isUnaryTag,
     canBeLeftOpenTag: options.canBeLeftOpenTag,
@@ -1467,7 +1335,7 @@ function parse (
 
       if (isForbiddenTag(element) && !isServerRendering()) {
         element.forbidden = true;
-        process.env.NODE_ENV !== 'production' && warn(
+        process.env.NODE_ENV !== 'production' && warn$1(
           'Templates should only be responsible for mapping the state to the ' +
           'UI. Avoid placing tags with side-effects in your templates, such as ' +
           "<" + tag + ">" + ', as they will not be parsed.'
@@ -1551,7 +1419,8 @@ function parse (
           processIfConditions(element, currentParent);
         } else if (element.slotScope) { // scoped slot
           currentParent.plain = false;
-          var name = element.slotTarget || '"default"';(currentParent.scopedSlots || (currentParent.scopedSlots = {}))[name] = element;
+          var name = element.slotTarget || '"default"'
+          ;(currentParent.scopedSlots || (currentParent.scopedSlots = {}))[name] = element;
         } else {
           currentParent.children.push(element);
           element.parent = currentParent;
@@ -1655,7 +1524,7 @@ function processKey (el) {
   var exp = getBindingAttr(el, 'key');
   if (exp) {
     if (process.env.NODE_ENV !== 'production' && el.tag === 'template') {
-      warn("<template> cannot be keyed. Place the key on real elements instead.");
+      warn$1("<template> cannot be keyed. Place the key on real elements instead.");
     }
     el.key = exp;
   }
@@ -1674,7 +1543,7 @@ function processFor (el) {
   if ((exp = getAndRemoveAttr(el, 'v-for'))) {
     var inMatch = exp.match(forAliasRE);
     if (!inMatch) {
-      process.env.NODE_ENV !== 'production' && warn(
+      process.env.NODE_ENV !== 'production' && warn$1(
         ("Invalid v-for expression: " + exp)
       );
       return
@@ -1721,7 +1590,7 @@ function processIfConditions (el, parent) {
       block: el
     });
   } else if (process.env.NODE_ENV !== 'production') {
-    warn(
+    warn$1(
       "v-" + (el.elseif ? ('else-if="' + el.elseif + '"') : 'else') + " " +
       "used on element <" + (el.tag) + "> without corresponding v-if."
     );
@@ -1735,7 +1604,7 @@ function findPrevElement (children) {
       return children[i]
     } else {
       if (process.env.NODE_ENV !== 'production' && children[i].text !== ' ') {
-        warn(
+        warn$1(
           "text \"" + (children[i].text.trim()) + "\" between v-if and v-else(-if) " +
           "will be ignored."
         );
@@ -1753,8 +1622,8 @@ function addIfCondition (el, condition) {
 }
 
 function processOnce (el) {
-  var once$$1 = getAndRemoveAttr(el, 'v-once');
-  if (once$$1 != null) {
+  var once = getAndRemoveAttr(el, 'v-once');
+  if (once != null) {
     el.once = true;
   }
 }
@@ -1763,7 +1632,7 @@ function processSlot (el) {
   if (el.tag === 'slot') {
     el.slotName = getBindingAttr(el, 'name');
     if (process.env.NODE_ENV !== 'production' && el.key) {
-      warn(
+      warn$1(
         "`key` does not work on <slot> because slots are abstract outlets " +
         "and can possibly expand into multiple elements. " +
         "Use the key on a wrapping element instead."
@@ -1834,7 +1703,7 @@ function processAttrs (el, options, customSlot) {
         }
       } else if (onRE.test(name)) { // v-on
         name = name.replace(onRE, '');
-        addHandler(el, name, value, modifiers, false, warn);
+        addHandler(el, name, value, modifiers, false, warn$1);
         //Check if its expression or function
         //
         if (isNative) {
@@ -1853,7 +1722,7 @@ function processAttrs (el, options, customSlot) {
           name = name.slice(0, -(arg.length + 1));
         }
         if (isNative) {
-          addHandler(el, name, value, modifiers, false, warn);
+          addHandler(el, name, value, modifiers, false, warn$1);
           if (name === "model") {
             addAttr(el, "value", value);
             var detectOnChange = false;
@@ -1886,7 +1755,7 @@ function processAttrs (el, options, customSlot) {
       if (process.env.NODE_ENV !== 'production') {
         var expression = parseText(value, delimiters);
         if (expression) {
-          warn(
+          warn$1(
             name + "=\"" + value + "\": " +
             'Interpolation inside attributes has been removed. ' +
             'Use v-bind or the colon shorthand instead. For example, ' +
@@ -1984,7 +1853,7 @@ function makeAttrsMap (attrs) {
       process.env.NODE_ENV !== 'production' &&
       map[attrs[i].name] && !isIE && !isEdge
     ) {
-      warn('duplicate attribute: ' + attrs[i].name);
+      warn$1('duplicate attribute: ' + attrs[i].name);
     }
     map[attrs[i].name] = attrs[i].value;
   }
@@ -2021,7 +1890,7 @@ function checkForAliasModel (el, value) {
   var _el = el;
   while (_el) {
     if (_el.for && _el.alias === value) {
-      warn(
+      warn$1(
         "<" + (el.tag) + " v-model=\"" + value + "\">: " +
         "You are binding v-model directly to a v-for iteration alias. " +
         "This will not be able to modify the v-for source array because " +
@@ -2177,7 +2046,6 @@ var isReservedAttr = makeMap('style,class');
 // attributes that should be using props for binding
 var acceptValue = makeMap('input,textarea,option,select');
 
-
 var isEnumeratedAttr = makeMap('contenteditable,draggable,spellcheck');
 
 var isBooleanAttr = makeMap(
@@ -2190,8 +2058,6 @@ var isBooleanAttr = makeMap(
 );
 
 /*  */
-
-
 
 var isUnaryTag$1 = makeMap(
   "area,base,br,col,embed,frame,hr,img,input,isindex,keygen," +
@@ -2283,25 +2149,6 @@ function specialObserver (obj, cb) {
   };
 
   for (var key in obj) loop( key );
-}
-
-function handleUnaryTag (ast) {
-  if (!ast.children) {
-    return
-  }
-  if (isUnaryTag$1(ast.tag)) {
-    var unaryTagChildren = ast.children.shift();
-    while (unaryTagChildren) {
-      handleUnaryTag(unaryTagChildren);
-      ast.parent.children.push(unaryTagChildren);
-      unaryTagChildren = ast.children.shift();
-    }
-  } else {
-    var length = ast.children.length;
-    while (length--) {
-      handleUnaryTag(ast.children[length]);
-    }
-  }
 }
 
 function filterDirective (ast) {
@@ -2403,6 +2250,7 @@ BaseGenerator.prototype.genDependence = function genDependence () {
 };
 
 /*  */
+
 var validDivisionCharRE$1 = /[\w).+\-_$\]]/;
 
 function parseFilters$1(exp) {
@@ -3283,13 +3131,13 @@ Object.keys(reactProps).map(function (v) {
   propertyMap[v.toLowerCase()] = v;
 });
 
-var RenderGenerator = (function (BaseGenerator$$1) {
+var RenderGenerator = /*@__PURE__*/(function (BaseGenerator) {
   function RenderGenerator () {
-    BaseGenerator$$1.apply(this, arguments);
+    BaseGenerator.apply(this, arguments);
   }
 
-  if ( BaseGenerator$$1 ) RenderGenerator.__proto__ = BaseGenerator$$1;
-  RenderGenerator.prototype = Object.create( BaseGenerator$$1 && BaseGenerator$$1.prototype );
+  if ( BaseGenerator ) RenderGenerator.__proto__ = BaseGenerator;
+  RenderGenerator.prototype = Object.create( BaseGenerator && BaseGenerator.prototype );
   RenderGenerator.prototype.constructor = RenderGenerator;
 
   RenderGenerator.prototype.genElement = function genElement (ast) {
@@ -4066,17 +3914,10 @@ function model (
     genRadioModel(el, value, modifiers);
   } else if (tag === 'input' || tag === 'textarea' || tag === WEB.inputComponent.component) {
     genDefaultModel(el, value, modifiers);
-  } else if (!config.isReservedTag(tag)) {
-    genComponentModel$1(el, value, modifiers);
+  } else {
+    genComponentModel(el, value, modifiers);
     // component v-model doesn't need extra runtime
     return false
-  } else if (process.env.NODE_ENV !== 'production') {
-    warn(
-      "<" + (el.tag) + " v-model=\"" + value + "\">: " +
-      "v-model is not supported on this element type. " +
-      'If you are working with contenteditable, it\'s recommended to ' +
-      'wrap a library dedicated for that purpose inside a custom component.'
-    );
   }
 
   // ensure runtime directive metadata
@@ -4180,7 +4021,7 @@ function genDefaultModel (
   }
 }
 
-function genComponentModel$1 (
+function genComponentModel (
   el,
   value,
   modifiers
@@ -4235,13 +4076,13 @@ function text (ast) {
   ast.children = children;
 }
 
-var ReactWebRenderGenerator = (function (RenderGenerator$$1) {
+var ReactWebRenderGenerator = /*@__PURE__*/(function (RenderGenerator) {
   function ReactWebRenderGenerator () {
-    RenderGenerator$$1.apply(this, arguments);
+    RenderGenerator.apply(this, arguments);
   }
 
-  if ( RenderGenerator$$1 ) ReactWebRenderGenerator.__proto__ = RenderGenerator$$1;
-  ReactWebRenderGenerator.prototype = Object.create( RenderGenerator$$1 && RenderGenerator$$1.prototype );
+  if ( RenderGenerator ) ReactWebRenderGenerator.__proto__ = RenderGenerator;
+  ReactWebRenderGenerator.prototype = Object.create( RenderGenerator && RenderGenerator.prototype );
   ReactWebRenderGenerator.prototype.constructor = ReactWebRenderGenerator;
 
   ReactWebRenderGenerator.prototype.genTag = function genTag (ast) {
@@ -4268,7 +4109,7 @@ var ReactWebRenderGenerator = (function (RenderGenerator$$1) {
    */
   ReactWebRenderGenerator.prototype.genProps = function genProps (ast) {
     var code = [];
-    code = code.concat(RenderGenerator$$1.prototype.genProps.call(this, ast));
+    code = code.concat(RenderGenerator.prototype.genProps.call(this, ast));
     ast.attrs = ast.attrs || [];
     if (this.vueConfig.scopeId) {
       code.push(("'" + (this.vueConfig.scopeId) + "': ''"));
@@ -4478,7 +4319,7 @@ var ReactWebRenderGenerator = (function (RenderGenerator$$1) {
   ReactWebRenderGenerator.prototype.genDirectives = function genDirectives (ast) {
     var this$1 = this;
 
-    var code = RenderGenerator$$1.prototype.genDirectives.call(this, ast);
+    var code = RenderGenerator.prototype.genDirectives.call(this, ast);
     ast.directives.forEach(function (v) {
       if (v.name === 'model') {
         this$1.genModelDirectives(ast, v);
@@ -4545,14 +4386,14 @@ var ReactWebRenderGenerator = (function (RenderGenerator$$1) {
   return ReactWebRenderGenerator;
 }(RenderGenerator));
 
-var ReactNativeRenderGenerator$1 = (function (RenderGenerator$$1) {
+var ReactNativeRenderGenerator$1 = /*@__PURE__*/(function (RenderGenerator) {
   function ReactNativeRenderGenerator (ast, options) {
-    RenderGenerator$$1.call(this, ast, options);
+    RenderGenerator.call(this, ast, options);
     this.isNative = true;
   }
 
-  if ( RenderGenerator$$1 ) ReactNativeRenderGenerator.__proto__ = RenderGenerator$$1;
-  ReactNativeRenderGenerator.prototype = Object.create( RenderGenerator$$1 && RenderGenerator$$1.prototype );
+  if ( RenderGenerator ) ReactNativeRenderGenerator.__proto__ = RenderGenerator;
+  ReactNativeRenderGenerator.prototype = Object.create( RenderGenerator && RenderGenerator.prototype );
   ReactNativeRenderGenerator.prototype.constructor = ReactNativeRenderGenerator;
 
   /**
@@ -4577,7 +4418,7 @@ var ReactNativeRenderGenerator$1 = (function (RenderGenerator$$1) {
    * @param {Object} ast
    */
   ReactNativeRenderGenerator.prototype.genTextExpression = function genTextExpression (ast) {
-    var code = RenderGenerator$$1.prototype.genTextExpression.call(this, ast);
+    var code = RenderGenerator.prototype.genTextExpression.call(this, ast);
     code = code
       .replace(/^"\\n\s*/, '"')
       .replace(/\\n\s*"$/, '"');
@@ -4590,7 +4431,7 @@ var ReactNativeRenderGenerator$1 = (function (RenderGenerator$$1) {
    * @param {Object} ast
    */
   ReactNativeRenderGenerator.prototype.genText = function genText (ast) {
-    var code = RenderGenerator$$1.prototype.genText.call(this, ast);
+    var code = RenderGenerator.prototype.genText.call(this, ast);
     code = code
       .replace(/^"\\n\s*/, '"')
       .replace(/\\n\s*"$/, '"');
@@ -4824,8 +4665,6 @@ function traverse(ast, options, importObj, parent, childIndex) {
   }
 }
 
-/*  */
-
-exports.parseComponent = parseComponent;
 exports.compile = compile;
 exports.nativeCompiler = nativeCompiler;
+exports.parseComponent = parseComponent;
