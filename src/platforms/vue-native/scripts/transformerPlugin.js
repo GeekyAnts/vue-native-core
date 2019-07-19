@@ -1,13 +1,14 @@
-var semver = require('semver');
+import semver from 'semver';
+import traverse from 'babel-traverse';
+import { SourceMapConsumer } from 'source-map';
 
-var upstreamTransformer = null;
+import { compileVueToRn as reactVueTemplateParser } from './compiler';
+import { version as reactNativeVersionString } from 'react-native/package.json';
 
-var reactNativeVersionString = require('react-native/package.json').version;
-var reactNativeMinorVersion = semver(reactNativeVersionString).minor;
-var reactVueTemplateParser = require('./compiler');
-const traverse = require('babel-traverse');
-const { SourceMapConsumer } = require('source-map');
+// const reactNativeVersionString = require('react-native/package.json').version;
+const reactNativeMinorVersion = semver(reactNativeVersionString).minor;
 
+let upstreamTransformer = null;
 if (reactNativeMinorVersion >= 59) {
   upstreamTransformer = require("metro-react-native-babel-transformer");
 } else if (reactNativeMinorVersion >= 56) {
@@ -30,7 +31,7 @@ if (reactNativeMinorVersion >= 59) {
 
 function sourceMapAstInPlace(tsMap, babelAst) {
   const tsConsumer = new SourceMapConsumer(tsMap);
-  traverse.default.cheap(babelAst, node => {
+  traverse.cheap(babelAst, node => {
     if (node.loc) {
       const originalStart = tsConsumer.originalPositionFor(node.loc.start);
       if (originalStart.line) {
@@ -46,7 +47,7 @@ function sourceMapAstInPlace(tsMap, babelAst) {
   });
 }
 
-function transform({ src, filename, options }) {
+export function transform({ src, filename, options }) {
   if (typeof src === 'object') {
     // handle RN >= 0.46
     ({ src, filename, options } = src);
@@ -72,5 +73,3 @@ function transform({ src, filename, options }) {
     return babelCompileResult;
   }
 }
-
-module.exports = transform;

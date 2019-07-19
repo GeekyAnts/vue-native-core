@@ -11,7 +11,7 @@ const PROP_TYPE = `${HELPER_HEADER}PropType`;
 const OBSERVER = `${HELPER_HEADER}observer`;
 const CSS = `${HELPER_HEADER}css`;
 
-module.exports = {
+export default {
   HELPER_HEADER,
   SCRIPT_OPTIONS,
   TEMPLATE_RENDER,

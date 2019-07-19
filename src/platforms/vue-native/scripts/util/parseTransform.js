@@ -11,7 +11,7 @@ const TRANSFORM_SCALE_Y_REGEX = /scaleY\(([-+]?[\d]*\.?[\d]+)\)/;
 const TRANSFORM_SKEW_X_REGEX = /skewX\(([-+]?[\d]*\.?[\d]+)deg\)/;
 const TRANSFORM_SKEW_Y_REGEX = /skewY\(([-+]?[\d]*\.?[\d]+)deg\)/;
 
-module.exports = function (value) {
+export function parseTransform(value) {
   const arr = [];
   if (TRANSFORM_ROTATE_REGEX.test(value)) {
     arr.push({

@@ -39,6 +39,11 @@ class ReactWebRenderGenerator extends RenderGenerator {
     } else if (isBuildInTag(tag)) {
       tag = `${tag}`
     } else {
+      // Add support for react-router
+      //
+      if (tag === "router-link") {
+        tag = "touchable-opacity";
+      }
       tag = `vm.$options.components['${capitalize(camelize(tag))}']`
     }
 
