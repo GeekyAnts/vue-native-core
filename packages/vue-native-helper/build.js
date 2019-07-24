@@ -295,7 +295,8 @@ function def(obj, key, val, enumerable) {
   'ViewPagerAndroid',
   'ListView',
   'SwipeableListView',
-  'Slider'
+  'Slider',
+  'ImageStore'
  ];
 
 /**
