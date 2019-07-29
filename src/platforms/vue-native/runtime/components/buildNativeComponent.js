@@ -1,4 +1,8 @@
 import {
+  deprecatedPackages
+} from 'shared/constants';
+
+import {
   isObjectShallowModified,
   handleComponents,
   handleDirectives,
@@ -12,7 +16,7 @@ export function buildNativeComponent (render, options, config) {
   if (!Vue.ReactNativeInjected) {
     Vue.ReactNativeInjected = true
     Object.keys(ReactNative).map(k => {
-      if (/^[A-Z]/.test(k)) {
+      if (/^[A-Z]/.test(k) && deprecatedPackages.indexOf(k) === -1) {
         try {
           Vue.component(k, ReactNative[k])
         } catch (e) {}

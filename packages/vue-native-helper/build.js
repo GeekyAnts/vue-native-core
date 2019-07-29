@@ -281,8 +281,7 @@ function def (obj, key, val, enumerable) {
 /**
  * List of soon to be deprecated packages in react native v0.59
  */
-
- var deprecatedPackages = [
+var deprecatedPackages = [
   'NetInfo',
   'AsyncStorage',
   'AlertIOS',
@@ -291,11 +290,7 @@ function def (obj, key, val, enumerable) {
   'ListView',
   'SwipeableListView',
   'Slider'
- ];
-
-/**
- * Parse simple path.
- */
+];
 
 var ASSET_TYPES = [
   'component',

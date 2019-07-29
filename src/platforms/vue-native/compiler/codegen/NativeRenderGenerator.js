@@ -18,6 +18,10 @@ import {
   isBuildInTag
 } from '../util/index'
 
+import {
+  HELPER_HEADER
+} from '../constants'
+
 class ReactNativeRenderGenerator extends RenderGenerator {
   constructor (ast, options) {
     super(ast, options)
@@ -114,6 +118,19 @@ class ReactNativeRenderGenerator extends RenderGenerator {
     }
 
     return code
+  }
+
+  genTemplate(ast) {
+    if (ast.parent === undefined) {
+      return this.genElement(ast.children[0]);
+    } else {
+      if (ast.children.length > 1) {
+        ast.tag = 'view';
+        return this.genElement(ast);
+      } else {
+        return this.genElement(ast.children[0]);
+      }
+    }
   }
 
   genEventHandler (ast) {
