@@ -282,15 +282,16 @@ function def (obj, key, val, enumerable) {
  * List of soon to be deprecated packages in react native v0.59
  */
 var deprecatedPackages = [
-  'NetInfo',
-  'AsyncStorage',
   'AlertIOS',
-  'WebView',
-  'ViewPagerAndroid',
+  'AsyncStorage',
+  'ImageStore',
   'ListView',
+  'MaskedViewIOS',
+  'NetInfo',
+  'Slider',
   'SwipeableListView',
-  'Slider'
-];
+  'ViewPagerAndroid',
+  'WebView' ];
 
 var ASSET_TYPES = [
   'component',

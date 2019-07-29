@@ -4,14 +4,16 @@ export const SSR_ATTR = 'data-server-rendered'
  * List of soon to be deprecated packages in react native v0.59
  */
 export const deprecatedPackages = [
-  'NetInfo',
-  'AsyncStorage',
   'AlertIOS',
-  'WebView',
-  'ViewPagerAndroid',
+  'AsyncStorage',
+  'ImageStore',
   'ListView',
+  'MaskedViewIOS',
+  'NetInfo',
+  'Slider',
   'SwipeableListView',
-  'Slider'
+  'ViewPagerAndroid',
+  'WebView',
 ];
 
 export const ASSET_TYPES = [
