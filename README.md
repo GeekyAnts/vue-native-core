@@ -33,6 +33,22 @@ Generate [CRNA + Vue App](https://github.com/GeekyAnts/vue-native-core)
 $ vue-native init <projectName>
 ```
 
+## NOTE: 
+
+```
+'NetInfo',
+  'AsyncStorage',
+  'AlertIOS',
+  'WebView',
+  'ViewPagerAndroid',
+  'ListView',
+  'SwipeableListView',
+  'Slider'
+``` 
+The above modules are set to be removed from future core react-native. 
+Hence these modules can no longer be imported from vue-native.
+[[Further Instructions](https://facebook.github.io/react-native/blog/2019/03/12/releasing-react-native-059#lean-core-is-underway)]
+
 ## Contributors
 
 This project exists thanks to all the people who contribute. 

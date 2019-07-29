@@ -4476,8 +4476,64 @@ var ReactNativeRenderGenerator$1 = /*@__PURE__*/(function (RenderGenerator) {
     if (styleProps) {
       code.push(styleProps);
     }
+    const eventHandler = this.genEventHandler(ast)
+    if (eventHandler) {
+      code.push(eventHandler)
+    }
+    const nativeEventHandler = this.genNativeEventHandler(ast)
+    if (nativeEventHandler) {
+      code.push(nativeEventHandler)
+    }
 
-    return code
+    return code;
+  };
+
+  /**
+   * override
+   */
+  ReactNativeRenderGenerator.prototype.genTemplate = function genTemplate(ast) {
+    if (ast.parent === undefined) {
+      return this.genElement(ast.children[0]);
+    } else {
+      if (ast.children.length > 1) {
+        ast.tag = 'view';
+        return this.genElement(ast);
+      } else {
+        return this.genElement(ast.children[0]);
+      }
+    }
+  };
+
+  // Event emitters
+  ReactNativeRenderGenerator.prototype.genNativeEventHandler = function genNativeEventHandler(
+    ast
+  ) {
+    var code = "";
+    if (ast.nativeEvents && !isReservedTag(ast.tag)) {
+      code =
+        HELPER_HEADER +
+        "nativeEvents: {" +
+        genHandlers(ast.nativeEvents, this.vueConfig) +
+        "}";
+    }
+    return code;
+  };
+
+  ReactNativeRenderGenerator.prototype.genEventHandler = function genEventHandler(
+    ast
+  ) {
+    var code = "";
+    if (ast.events) {
+      if (isReservedTag(ast.tag) || isBuildInTag(ast.tag)) {
+          code = genHandlers(ast.events, this.vueConfig);
+      } else {
+        code = genCustomEventHandlers(ast.events, this.vueConfig);
+        // code = Object.keys(ast.events).map(k => {
+        //   return `'${COMMON.customEvent.name}${k}': ${ast.events[k].value}`
+        // }).join(',')
+      }
+    }
+    return code;
   };
 
   // merge style & class

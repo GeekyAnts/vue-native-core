@@ -1,6 +1,6 @@
 {
   "name": "vue-native-scripts",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Compile Vue component to React Native",
   "main": "index.js",
   "scripts": {},
@@ -21,7 +21,7 @@
     "path": "^0.12.7",
     "semver": "^6.2.0",
     "source-map": "^0.7.3",
-    "vue-native-template-compiler": "^0.0.12"
+    "vue-native-template-compiler": "^0.0.13"
   },
   "peerDependencies": {
     "react-native": "*",
