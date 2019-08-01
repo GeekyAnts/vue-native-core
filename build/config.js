@@ -3,7 +3,9 @@ const buble = require("rollup-plugin-buble");
 const alias = require("rollup-plugin-alias");
 const replace = require("rollup-plugin-replace");
 const flow = require("rollup-plugin-flow-no-whitespace");
-const version = process.env.VERSION || require("../package.json").version;
+const version =
+  process.env.VERSION
+  || require("../packages/vue-native-core/package.json").version;
 
 const banner =
   "/*!\n" +
