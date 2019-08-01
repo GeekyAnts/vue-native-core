@@ -6,12 +6,21 @@ import {
 } from 'shared/util'
 
 import {
+  genHandlers,
+  genCustomEventHandlers,
+} from '../modules/events'
+import {
   NATIVE
 } from '../config'
 import parseStyleText from '../modules/style'
 import {
+  isReservedTag,
   isBuildInTag
 } from '../util/index'
+
+import {
+  HELPER_HEADER
+} from '../constants'
 
 class ReactNativeRenderGenerator extends RenderGenerator {
   constructor (ast, options) {
@@ -99,7 +108,48 @@ class ReactNativeRenderGenerator extends RenderGenerator {
     if (styleProps) {
       code.push(styleProps)
     }
+    const eventHandler = this.genEventHandler(ast)
+    if (eventHandler) {
+      code.push(eventHandler)
+    }
+    const nativeEventHandler = this.genNativeEventHandler(ast)
+    if (nativeEventHandler) {
+      code.push(nativeEventHandler)
+    }
 
+    return code
+  }
+
+  genTemplate(ast) {
+    if (ast.parent === undefined) {
+      return this.genElement(ast.children[0]);
+    } else {
+      if (ast.children.length > 1) {
+        ast.tag = 'view';
+        return this.genElement(ast);
+      } else {
+        return this.genElement(ast.children[0]);
+      }
+    }
+  }
+
+  genEventHandler (ast) {
+    let code = ''
+    if (ast.events) {
+      if (isReservedTag(ast.tag) || isBuildInTag(ast.tag)) {
+          code = genHandlers(ast.events, this.vueConfig)
+      } else {
+        code = genCustomEventHandlers(ast.events, this.vueConfig)
+      }
+    }
+    return code
+  }
+
+  genNativeEventHandler (ast) {
+    let code = ''
+    if (ast.nativeEvents && !isReservedTag(ast.tag)) {
+      code = `${HELPER_HEADER}nativeEvents: {${genHandlers(ast.nativeEvents, this.vueConfig)}}`
+    }
     return code
   }
 

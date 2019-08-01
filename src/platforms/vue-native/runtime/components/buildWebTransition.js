@@ -381,7 +381,7 @@ export function buildWebTransition(Component, createElement) {
       }
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
       this.transitionResolved = resolveTransition(this.props);
       this.isAppear = true;
       const state = this.resolveData(this.props);
@@ -394,7 +394,7 @@ export function buildWebTransition(Component, createElement) {
       });
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
       this.transitionResolved = resolveTransition(nextProps);
       this.isAppear = false;
       const nextState = this.resolveData(nextProps, "update");

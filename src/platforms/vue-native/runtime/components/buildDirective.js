@@ -143,13 +143,13 @@ export function buildDirective(Component, createElement) {
         props: handleProps(stateProps, props[COMMON.directive.tag])
       });
     }
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
       this.buildInHandle(this.props);
     }
     componentDidMount() {
       this.setDirectiveLifeCycle(this.props);
     }
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
       this.buildInHandle(nextProps);
       this.setDirectiveLifeCycle(nextProps, this.props);
     }

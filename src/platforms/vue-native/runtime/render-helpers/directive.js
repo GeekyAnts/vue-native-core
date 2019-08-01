@@ -158,13 +158,13 @@ export function directive(Component, createElement) {
         formProps: obj
       });
     }
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
       this.handle(this.props);
     }
     componentDidMount() {
       this.directive(this.props);
     }
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
       this.handle(nextProps);
       this.directive(nextProps, this.props);
     }

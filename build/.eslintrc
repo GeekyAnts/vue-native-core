@@ -1,5 +1,9 @@
+
 {
+  "env": {
+    "es6": true,
+  },
   "rules": {
-    "camelcase": 0
-  }
+    "camelcase": 0,
+  },
 }
