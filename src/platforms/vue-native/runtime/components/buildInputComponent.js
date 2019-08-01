@@ -34,10 +34,10 @@ export function buildInputComponent(Component, createElement) {
         props: stateProps
       });
     }
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
       this.setStateProps(this.props);
     }
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
       this.setStateProps(nextProps);
     }
     render() {

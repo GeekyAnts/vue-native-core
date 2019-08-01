@@ -122,7 +122,7 @@ export function buildNativeComponent (render, options, config) {
       return vm
     }
 
-    componentWillMount () {
+    UNSAFE_componentWillMount () {
       this.vm = this.buildVM(options)
 
       this.beforeMount = this.vm.$options.beforeMount || []
@@ -139,7 +139,7 @@ export function buildNativeComponent (render, options, config) {
         this.mounted.forEach(v => v.call(this.vm))
       }, 0)
     }
-    componentWillUpdate () {
+    UNSAFE_componentWillUpdate () {
       this.beforeUpdate.forEach(v => v.call(this.vm))
     }
     componentDidUpdate () {
@@ -148,7 +148,7 @@ export function buildNativeComponent (render, options, config) {
     componentWillUnmount () {
       this.beforeDestroy.forEach(v => v.call(this.vm))
     }
-    componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps (nextProps) {
       this.vm._props && Object.assign(this.vm._props, nextProps)
       this.vm.$slots = getSlots(nextProps.children)
     }

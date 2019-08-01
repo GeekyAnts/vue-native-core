@@ -2779,7 +2779,7 @@ function buildComponent (render, options, config) {
       return vm
     };
 
-    ReactVueComponent.prototype.componentWillMount = function componentWillMount () {
+    ReactVueComponent.prototype.UNSAFE_componentWillMount = function UNSAFE_componentWillMount () {
       var this$1 = this;
 
       this.vm = this.buildVM(options);
@@ -2798,7 +2798,7 @@ function buildComponent (render, options, config) {
 
       this.vm.$nextTick(function () { return this$1.mounted.forEach(function (v) { return v.call(this$1.vm); }); });
     };
-    ReactVueComponent.prototype.componentWillUpdate = function componentWillUpdate () {
+    ReactVueComponent.prototype.UNSAFE_componentWillUpdate = function UNSAFE_componentWillUpdate () {
       var this$1 = this;
 
       this.beforeUpdate.forEach(function (v) { return v.call(this$1.vm); });
@@ -2813,7 +2813,7 @@ function buildComponent (render, options, config) {
 
       this.beforeDestroy.forEach(function (v) { return v.call(this$1.vm); });
     };
-    ReactVueComponent.prototype.componentWillReceiveProps = function componentWillReceiveProps (nextProps) {
+    ReactVueComponent.prototype.UNSAFE_componentWillReceiveProps = function UNSAFE_componentWillReceiveProps (nextProps) {
       this.vm._props && Object.assign(this.vm._props, nextProps);
       this.vm.$slots = getSlots(nextProps.children);
     };
@@ -3030,13 +3030,13 @@ function buildDirective(Component, createElement) {
         props: handleProps(stateProps, props[COMMON.directive.tag])
       });
     };
-    Directive.prototype.componentWillMount = function componentWillMount () {
+    Directive.prototype.UNSAFE_componentWillMount = function UNSAFE_componentWillMount () {
       this.buildInHandle(this.props);
     };
     Directive.prototype.componentDidMount = function componentDidMount () {
       this.setDirectiveLifeCycle(this.props);
     };
-    Directive.prototype.componentWillReceiveProps = function componentWillReceiveProps (nextProps) {
+    Directive.prototype.UNSAFE_componentWillReceiveProps = function UNSAFE_componentWillReceiveProps (nextProps) {
       this.buildInHandle(nextProps);
       this.setDirectiveLifeCycle(nextProps, this.props);
     };
@@ -3301,12 +3301,12 @@ function buildWebEmptyComponent (Component, createElement) {
       };
       return stateProps
     };
-    EmptyComponent.prototype.componentWillMount = function componentWillMount () {
+    EmptyComponent.prototype.UNSAFE_componentWillMount = function UNSAFE_componentWillMount () {
       this.setState({
         props: this.buildStateProps(this.props)
       });
     };
-    EmptyComponent.prototype.componentWillReceiveProps = function componentWillReceiveProps (nextProps) {
+    EmptyComponent.prototype.UNSAFE_componentWillReceiveProps = function UNSAFE_componentWillReceiveProps (nextProps) {
       this.setState({
         props: this.buildStateProps(nextProps)
       });
@@ -3720,7 +3720,7 @@ function buildWebTransition(Component, createElement) {
       }
     };
 
-    Transition.prototype.componentWillMount = function componentWillMount () {
+    Transition.prototype.UNSAFE_componentWillMount = function UNSAFE_componentWillMount () {
       this.transitionResolved = resolveTransition(this.props);
       this.isAppear = true;
       var state = this.resolveData(this.props);
@@ -3733,7 +3733,7 @@ function buildWebTransition(Component, createElement) {
       });
     };
 
-    Transition.prototype.componentWillReceiveProps = function componentWillReceiveProps (nextProps) {
+    Transition.prototype.UNSAFE_componentWillReceiveProps = function UNSAFE_componentWillReceiveProps (nextProps) {
       var this$1 = this;
 
       this.transitionResolved = resolveTransition(nextProps);
@@ -3912,10 +3912,10 @@ function buildInputComponent(Component, createElement) {
         props: stateProps
       });
     };
-    Input.prototype.componentWillMount = function componentWillMount () {
+    Input.prototype.UNSAFE_componentWillMount = function UNSAFE_componentWillMount () {
       this.setStateProps(this.props);
     };
-    Input.prototype.componentWillReceiveProps = function componentWillReceiveProps (nextProps) {
+    Input.prototype.UNSAFE_componentWillReceiveProps = function UNSAFE_componentWillReceiveProps (nextProps) {
       this.setStateProps(nextProps);
     };
     Input.prototype.render = function render () {
@@ -4053,7 +4053,7 @@ function buildNativeComponent (render, options, config) {
       return vm
     };
 
-    ReactVueComponent.prototype.componentWillMount = function componentWillMount () {
+    ReactVueComponent.prototype.UNSAFE_componentWillMount = function UNSAFE_componentWillMount () {
       var this$1 = this;
 
       this.vm = this.buildVM(options);
@@ -4074,7 +4074,7 @@ function buildNativeComponent (render, options, config) {
         this$1.mounted.forEach(function (v) { return v.call(this$1.vm); });
       }, 0);
     };
-    ReactVueComponent.prototype.componentWillUpdate = function componentWillUpdate () {
+    ReactVueComponent.prototype.UNSAFE_componentWillUpdate = function UNSAFE_componentWillUpdate () {
       var this$1 = this;
 
       this.beforeUpdate.forEach(function (v) { return v.call(this$1.vm); });
@@ -4089,7 +4089,7 @@ function buildNativeComponent (render, options, config) {
 
       this.beforeDestroy.forEach(function (v) { return v.call(this$1.vm); });
     };
-    ReactVueComponent.prototype.componentWillReceiveProps = function componentWillReceiveProps (nextProps) {
+    ReactVueComponent.prototype.UNSAFE_componentWillReceiveProps = function UNSAFE_componentWillReceiveProps (nextProps) {
       this.vm._props && Object.assign(this.vm._props, nextProps);
       this.vm.$slots = getSlots(nextProps.children);
     };

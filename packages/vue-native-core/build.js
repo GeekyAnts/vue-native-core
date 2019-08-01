@@ -3929,7 +3929,7 @@ function mixinLifecycleEvents (target) {
 }
 
 var lifecycleMixin = {
-  componentWillMount: function componentWillMount () {
+  UNSAFE_componentWillMount: function UNSAFE_componentWillMount () {
     var cb = this.forceUpdate.bind(this);
     var render = this.render.bind(this);
     var watcher = new Watcher({ _watchers: [] }, render, cb, { lazy: true });
