@@ -1,24 +1,19 @@
 // const fs = require('fs');
-const compiler = require('vue-native-template-compiler');
-const cssParse = require('css-parse');
-const beautify = require('js-beautify').js_beautify;
-const constants = require('../util/constants');
-const addvm = require('../util/addvm');
-const parseCss = require('../util/parseCss');
-var sourceMap = require('source-map');
-var hash = require('hash-sum');
-var path = require('path');
-var lineNumber = require('line-number');
-const parse5 = require('parse5');
+import * as compiler from 'vue-native-template-compiler';
+import cssParse from 'css-parse';
+import { js_beautify as beautify } from 'js-beautify';
+import sourceMap from 'source-map';
+import hash from 'hash-sum';
+import path from 'path';
+import lineNumber from 'line-number';
+import parse5 from 'parse5';
+
+import constants from './util/constants';
+import { addvm } from './util/addvm';
+import { parseCss } from './util/parseCss';
+
 const filePath = 'test.js';
 var splitRE = /\r?\n/g;
-
-// the watch reference node-watch, there may be some changes in the future
-// const watch = require('../util/watch');
-
-// const walk = require('../util/walk');
-
-// const FILTER = /\.vue$/;
 
 const DEFAULT_OUTPUT = {
   template: {
@@ -28,28 +23,9 @@ const DEFAULT_OUTPUT = {
   script: `const ${constants.SCRIPT_OPTIONS} = {}`
 };
 
-// walk('./', {
-//   filter:  FILTER
-// }, function (name) {
-//   compileVueToRn(name);
-// });
-
-// watch('./', {
-//   recursive: true,
-//   filter:  FILTER
-// }, function (evt, name) {
-//   if (evt === 'update') {
-//     compileVueToRn(name);
-//   } else if (evt === 'remove') {
-//     remove(name);
-//   }
-// });
-
-function compileVueToRn(resource) {
+export function compileVueToRn(resource) {
   const code = resource.toString();
   const cparsed = compiler.parseComponent(code, { pad: 'line' });
-
-  // console.log(cparsed);
 
   let output = '';
   let mappings = '';
@@ -235,12 +211,6 @@ function compileVueToRn(resource) {
   // beautiful
   // output = beautify(output, { indent_size: 2 });
   return { output, mappings: mappings ? mappings.toJSON() : null };
-
-  // fs.writeFile(name.replace(FILTER, '.js'), output, function(err) {
-  //   if (err) {
-  //     throw err;
-  //   }
-  // });
 }
 
 // function remove(name) {
@@ -286,5 +256,3 @@ function traverse(ast, nodes = []) {
     });
   }
 }
-
-module.exports = compileVueToRn;

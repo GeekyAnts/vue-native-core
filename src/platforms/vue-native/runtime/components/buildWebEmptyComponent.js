@@ -23,12 +23,12 @@ export function buildWebEmptyComponent (Component, createElement) {
       }
       return stateProps
     }
-    componentWillMount () {
+    UNSAFE_componentWillMount () {
       this.setState({
         props: this.buildStateProps(this.props)
       })
     }
-    componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps (nextProps) {
       this.setState({
         props: this.buildStateProps(nextProps)
       })

@@ -16,11 +16,6 @@ if (process.argv[2]) {
   builds = builds.filter(b => {
     return filters.some(f => b.dest.indexOf(f) > -1)
   })
-} else {
-  // filter out weex builds by default
-  builds = builds.filter(b => {
-    return b.dest.indexOf('weex') === -1
-  })
 }
 
 build(builds)
@@ -42,24 +37,27 @@ function build (builds) {
 
 function buildEntry (config) {
   const isProd = /min\.js$/.test(config.dest)
-  return rollup.rollup(config).then(bundle => {
-    const code = bundle.generate(config).code
-    if (isProd) {
-      var minified = (config.banner ? config.banner + '\n' : '') + uglify.minify(code, {
-        fromString: true,
-        output: {
-          screw_ie8: true,
-          ascii_only: true
-        },
-        compress: {
-          pure_funcs: ['makeMap']
-        }
-      }).code
-      return write(config.dest, minified, true)
-    } else {
-      return write(config.dest, code)
-    }
-  })
+  const output = config.output
+  const { file, banner } = output
+  return rollup.rollup(config)
+    .then(bundle => bundle.generate(output))
+    .then(({ output: [{ code }] }) => {
+      if (isProd) {
+        const minified = (banner ? banner + '\n' : '') + uglify.minify(code, {
+          fromString: true,
+          output: {
+            screw_ie8: true,
+            ascii_only: true
+          },
+          compress: {
+            pure_funcs: ['makeMap']
+          }
+        }).code
+        return write(file, minified, true)
+      } else {
+        return write(file, code)
+      }
+    })
 }
 
 function write (dest, code, zip) {

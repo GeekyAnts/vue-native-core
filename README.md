@@ -36,14 +36,16 @@ $ vue-native init <projectName>
 ## NOTE: 
 
 ```
+'AlertIOS',
+'AsyncStorage',
+'ImageStore',
+'ListView',
+'MaskedViewIOS',
 'NetInfo',
-  'AsyncStorage',
-  'AlertIOS',
-  'WebView',
-  'ViewPagerAndroid',
-  'ListView',
-  'SwipeableListView',
-  'Slider'
+'Slider',
+'SwipeableListView',
+'ViewPagerAndroid',
+'WebView',
 ``` 
 The above modules are set to be removed from future core react-native. 
 Hence these modules can no longer be imported from vue-native.

@@ -41,7 +41,7 @@ function mixinLifecycleEvents (target) {
 }
 
 const lifecycleMixin = {
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     const cb = this.forceUpdate.bind(this)
     const render = this.render.bind(this)
     const watcher = new Watcher({ _watchers: [] }, render, cb, { lazy: true })

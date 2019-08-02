@@ -18,12 +18,6 @@
     "url": "https://github.com/GeekyAnts/vue-native-core/issues"
   },
   "homepage": "https://github.com/GeekyAnts/vue-native-core#readme",
-  "dependencies": {
-    "he": "^1.1.0",
-    "de-indent": "^1.0.2",
-    "change-case": "^3.0.1",
-    "prop-types": "^15.5.10"
-  },
   "peerDependencies": {
     "react": "*"
   }

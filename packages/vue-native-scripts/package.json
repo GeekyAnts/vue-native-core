@@ -14,17 +14,20 @@
     "babel-traverse": "^6.26.0",
     "cross-spawn": "^5.1.0",
     "css-parse": "^2.0.0",
-    "fs-extra": "^3.0.1",
     "hash-sum": "^1.0.2",
     "js-beautify": "^1.6.14",
     "line-number": "^0.1.0",
-    "node-watch": "^0.5.4",
     "parse5": "^5.0.0",
-    "vue-native-template-compiler": "^0.0.13",
-    "walk": "^2.3.9"
+    "path": "^0.12.7",
+    "semver": "^6.2.0",
+    "source-map": "^0.7.3",
+    "vue-native-template-compiler": "^0.0.13"
   },
-  "devDependencies": {
-    "eslint": "^4.0.0"
+  "peerDependencies": {
+    "react-native": "*",
+    "metro": "*",
+    "metro-bundler": "*",
+    "metro-react-native-babel-transformer": "*"
   },
   "bugs": {
     "url": "https://github.com/GeekyAnts/vue-native-core/issues"
