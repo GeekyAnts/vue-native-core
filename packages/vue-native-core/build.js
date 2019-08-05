@@ -3877,7 +3877,7 @@ Object.defineProperty(Vue.prototype, '$isServer', {
   get: isServerRendering
 });
 
-Vue.version = '0.0.8';
+Vue.version = '0.1.0';
 
 /**
  * Reference to mobx https://github.com/mobxjs/mobx-react-vue/blob/master/src/observer.js
