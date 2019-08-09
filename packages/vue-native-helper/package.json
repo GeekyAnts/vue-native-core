@@ -1,7 +1,7 @@
 {
   "name": "vue-native-helper",
   "version": "0.1.0",
-  "description": "react vue render helper",
+  "description": "Helper library with utilities for vue-native-core",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/GeekyAnts/vue-native-core#readme",
   "peerDependencies": {
-    "react": "*"
+    "react": "^16.3.0"
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "vue-native-scripts",
   "version": "0.1.0",
-  "description": "Compile Vue component to React Native",
+  "description": "Compile Vue Native components to React Native",
   "main": "index.js",
   "scripts": {},
   "bin": {
@@ -21,13 +21,13 @@
     "path": "^0.12.7",
     "semver": "^6.2.0",
     "source-map": "^0.7.3",
-    "vue-native-template-compiler": "^0.0.13"
+    "vue-native-template-compiler": "^0.1.0"
   },
   "peerDependencies": {
-    "react-native": "*",
-    "metro": "*",
+    "react-native": "^0.59.0",
+    "metro": "^0.51.0",
     "metro-bundler": "*",
-    "metro-react-native-babel-transformer": "*"
+    "metro-react-native-babel-transformer": "^0.51.0"
   },
   "bugs": {
     "url": "https://github.com/GeekyAnts/vue-native-core/issues"
