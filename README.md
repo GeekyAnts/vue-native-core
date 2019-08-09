@@ -11,7 +11,6 @@ Vue Native is a framework to build cross platform native mobile apps using JavaS
 
 - **The simplicity of Vue.js.** Incrementally build user interfaces with the familiar syntax of HTML and CSS in single file components.
 - **Seamless interop with React Native.** Use core React Native components with Vue.js syntax out of the box to develop mobile apps on both iOS and Android.
-- **A vast ecosystem** of React and React Native libraries.
 
 ## Contents
 - [Documentation](#documentation)
