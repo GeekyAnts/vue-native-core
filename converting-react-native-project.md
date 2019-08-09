@@ -1,14 +1,4 @@
-# vue-native-scripts
-
-> This package is auto-generated. For pull requests please work with [src/platforms/vue-native/scripts/index.js](https://github.com/GeekyAnts/vue-native-core/tree/develop/src/platforms/vue-native/scripts).
-
-Compile and transform Vue components to React Native.
-
-Find the `vue-native-core` repository [here](https://github.com/GeekyAnts/vue-native-core).
-
-For the official documentation, visit [this](https://vue-native.io/docs/installation.html) website.
-
-## Usage
+## Setting up a React Native project for Vue Native
 
 [Vue Native CLI](https://github.com/GeekyAnts/vue-native-cli) is the recommended way to setup a new Vue Native project. However, if you wish to setup a project from scratch, use the following steps after setting up a React Native / Expo project.
 

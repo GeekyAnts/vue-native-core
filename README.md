@@ -1,55 +1,78 @@
-# Vue Native: Read more at [vue-native.io](https://vue-native.io)
+# Vue Native
+
 [![Backers on Open Collective](https://opencollective.com/vue-native-core/backers/badge.svg)](#backers)
  [![Sponsors on Open Collective](https://opencollective.com/vue-native-core/sponsors/badge.svg)](#sponsors) 
 
-### Start with the Vue Native CLI
+Visit our website at [vue-native.io](https://vue-native.io) or read the official documentation [here](https://vue-native.io/docs/installation.html).
 
-The Vue Native CLI is used to generate a `Vue Native` app, which is a React Native API wrapper. This means that with Vue Native, you can do anything that could be done with React Native.
+## Build native mobile apps using Vue
 
-The Vue Native CLI generates a simple single page application (SPA) using [expo-cli](https://github.com/expo/expo-cli) and
-[vue-native-core](https://github.com/GeekyAnts/vue-native-core).
+Vue Native is a framework to build cross platform native mobile apps using JavaScript. It is a wrapper around the APIs of React Native. So, with Vue Native, you can do everything that you can do with React Native. With Vue Native, you get
 
-## Installation Prerequisites
+- **The simplicity of Vue.js.** Incrementally build user interfaces with the familiar syntax of HTML and CSS in single file components.
+- **Seamless interop with React Native.** Use core React Native components with Vue.js syntax out of the box to develop mobile apps on both iOS and Android.
 
-You should have expo-cli or react-native-cli installed as a global dependency
+## Contents
+- [Documentation](#documentation)
+- [Installation](#installation)
+- [Project setup with Vue Native CLI](#project-setup-with-vue-native-cli)
+- [Using Vue Native with a pre-existing React Native or Expo project](#using-vue-native-in-a-react-native-project)
+- [Deprecated React Native modules](#react-native-components-that-cant-be-used-out-of-the-box)
+- [Contributors](#contributors)
+- [Backers](#backers)
+- [Sponsors](#sponsors)
+- [License](#license)
+- [Special thanks](#credits-to-react-vue)
 
+## Documentation
+
+You can find the full documentation for Vue Native [on this website](https://vue-native.io/docs/installation.html). It covers installation and setup, component basics, routing, testing, the internal API and more.
+
+The source for the Vue Native documentation and website is hosted on a separate repo, [here](https://github.com/GeekyAnts/vue-native-website)
+
+## Installation
+
+To install Vue Native's official CLI, run
 ```
-For React Native ClI => npm install react-native-cli -g
+$ npm install vue-native-cli -g
 ```
 
-```
-For CRNA => npm install expo-cli -g
-```
+To use the CLI, you must have either [expo-cli](https://github.com/expo/expo-cli) or [react-native-cli](https://github.com/react-native-community/cli) installed globally.
 
-## Installation:
+## Project setup with Vue Native CLI
 
-```
-$ npm install -g vue-native-cli
-```
+The Vue Native CLI can be used to easily generate a fully configured Vue Native app. It wraps `expo-cli` and `react-native-cli` to generate a simple single page application (SPA) after installing and configuring dependencies from [vue-native-core](https://github.com/GeekyAnts/vue-native-core).
 
-Generate [CRNA + Vue App](https://github.com/GeekyAnts/vue-native-core)
+You should have either expo-cli or react-native-cli installed as a global dependency. Refer to the [installation guide](https://vue-native.io/docs/installation.html) for details on project setup. The GitHub repository for Vue Native CLI is hosted [here](https://github.com/GeekyAnts/vue-native-cli).
 
+With the CLI, generating a Vue Native project is as easy as running the command
 ```
 $ vue-native init <projectName>
 ```
 
-## NOTE: 
+## Using Vue Native in a React Native project
 
-```
-'AlertIOS',
-'AsyncStorage',
-'ImageStore',
-'ListView',
-'MaskedViewIOS',
-'NetInfo',
-'Slider',
-'SwipeableListView',
-'ViewPagerAndroid',
-'WebView',
-``` 
-The above modules are set to be removed from future core react-native. 
-Hence these modules can no longer be imported from vue-native.
-[[Further Instructions](https://facebook.github.io/react-native/blog/2019/03/12/releasing-react-native-059#lean-core-is-underway)]
+It is possible to integrate Vue Native into a pre-existing React Native project. You can find instructions to do this [here](converting-react-native-project.md).
+
+These instructions can also be used to set up a Vue Native project from scratch.
+
+## React Native components that can't be used out of the box
+
+The following modules are set to be removed from React Native in the future.
+Hence these modules are no longer made available with Vue Native.
+- AlertIOS
+- AsyncStorage
+- ImageStore
+- ListView
+- MaskedViewIOS
+- NetInfo
+- Slider
+- SwipeableListView
+- ViewPagerAndroid
+- WebView
+
+If you still wish to use them, you can import them explicitly from `react-native` (until they are removed) or from their individual forked packages.
+For more information, refer to [this page](https://facebook.github.io/react-native/blog/2019/03/12/releasing-react-native-059#lean-core-is-underway).
 
 ## Contributors
 
