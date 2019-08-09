@@ -505,21 +505,26 @@ if (reactNativeMinorVersion >= 59) {
 }
 
 function sourceMapAstInPlace(tsMap, babelAst) {
-  var tsConsumer = new sourceMap.SourceMapConsumer(tsMap);
-  traverse$1.cheap(babelAst, function (node) {
-    if (node.loc) {
-      var originalStart = tsConsumer.originalPositionFor(node.loc.start);
-      if (originalStart.line) {
-        node.loc.start.line = originalStart.line;
-        node.loc.start.column = originalStart.column;
-      }
-      var originalEnd = tsConsumer.originalPositionFor(node.loc.end);
-      if (originalEnd.line) {
-        node.loc.end.line = originalEnd.line;
-        node.loc.end.column = originalEnd.column;
-      }
+  return sourceMap.SourceMapConsumer.with(
+    tsMap,
+    null,
+    function (consumer) {
+      traverse$1.cheap(babelAst, function (node) {
+        if (node.loc) {
+          var originalStart = consumer.originalPositionFor(node.loc.start);
+          if (originalStart.line) {
+            node.loc.start.line = originalStart.line;
+            node.loc.start.column = originalStart.column;
+          }
+          var originalEnd = consumer.originalPositionFor(node.loc.end);
+          if (originalEnd.line) {
+            node.loc.end.line = originalEnd.line;
+            node.loc.end.column = originalEnd.column;
+          }
+        }
+      });
     }
-  });
+  );
 }
 
 function transform(ref) {
