@@ -40,15 +40,4 @@ eventsMixin(Vue)
 // lifecycleMixin(Vue)
 // renderMixin(Vue)
 
-/**
- * react-vue change
- */
-Vue.prototype.$nextTick = function (fn) {
-  return nextTick(fn, this)
-}
-
-Vue.prototype.$destroy = function (fn) {
-  // nothing
-}
-
 export default Vue
