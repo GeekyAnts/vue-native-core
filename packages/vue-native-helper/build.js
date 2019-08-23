@@ -4088,6 +4088,7 @@ function buildNativeComponent (render, options, config) {
       var this$1 = this;
 
       this.beforeDestroy.forEach(function (v) { return v.call(this$1.vm); });
+      this.vm.$destroy();
     };
     ReactVueComponent.prototype.UNSAFE_componentWillReceiveProps = function UNSAFE_componentWillReceiveProps (nextProps) {
       this.vm._props && Object.assign(this.vm._props, nextProps);
