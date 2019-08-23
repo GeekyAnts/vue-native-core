@@ -147,6 +147,7 @@ export function buildNativeComponent (render, options, config) {
     }
     componentWillUnmount () {
       this.beforeDestroy.forEach(v => v.call(this.vm))
+      this.vm.$destroy()
     }
     UNSAFE_componentWillReceiveProps (nextProps) {
       this.vm._props && Object.assign(this.vm._props, nextProps)
