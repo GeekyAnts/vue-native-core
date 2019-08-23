@@ -145,7 +145,7 @@ class RenderGenerator extends BaseGenerator {
    * @param {Object} ast
    */
   genText(ast) {
-    const text = transformSpecialNewlines(ast.text);
+    const text = transformSpecialNewlines(ast.text).replace(/[ \t\n]+/g, " ");
     return JSON.stringify(text);
   }
 

@@ -3272,7 +3272,7 @@ var RenderGenerator = /*@__PURE__*/(function (BaseGenerator) {
    * @param {Object} ast
    */
   RenderGenerator.prototype.genText = function genText (ast) {
-    var text = transformSpecialNewlines(ast.text);
+    var text = transformSpecialNewlines(ast.text).replace(/[ \t\n]+/g, " ");
     return JSON.stringify(text);
   };
 
