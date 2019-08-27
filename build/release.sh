@@ -1,23 +1,11 @@
 set -e
 
 # check if np is installed
-# if not, prompt the user to install it
 np_version=$(np --version)
-if [[ $? -eq 0 ]]; then
-  echo "Using np version: " $np_version
-else
-  echo "np is not installed"
-  read -e -p "Install globally? (Executes: npm install -global np) [y/n]" REPLY
-  if [[ $REPLY =~ ^(y|yes)$ ]]; then
-    npm install -global np
-  elif [[ $REPLY =~ ^(n|no)$ ]]; then
-    echo "Exiting..."
-    exit 1
-  fi
-fi
+echo "Using np:" $np_version
 
 # get the version number from the user
-read -e -p "Enter the new version" VERSION
+read -e -p "Enter the new Vue Native version: " VERSION
 if [[ -z $VERSION ]]; then
   echo "No version entered. Exiting..."
   exit 0
