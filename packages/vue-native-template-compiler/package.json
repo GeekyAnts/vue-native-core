@@ -1,6 +1,6 @@
 {
   "name": "vue-native-template-compiler",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Vue Native template compiler, dependency of vue-native-scripts. It can also be used as a stand-alone compiler",
   "main": "index.js",
   "repository": {

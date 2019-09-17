@@ -3860,7 +3860,7 @@ Object.defineProperty(Vue.prototype, '$isServer', {
   get: isServerRendering
 });
 
-Vue.version = '0.1.3';
+Vue.version = '0.1.4';
 
 // 
 
