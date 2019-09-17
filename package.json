@@ -1,6 +1,6 @@
 {
   "name": "vue-native-core",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Create mobile apps using vuejs",
   "main": "dist/vue.runtime.esm.js",
   "module": "dist/vue.runtime.esm.js",
