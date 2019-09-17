@@ -52,7 +52,7 @@ const builds = {
     entry: resolve("vue-native/compiler.js"),
     dest: resolve("packages/vue-native-template-compiler/build.js"),
     format: "cjs",
-    external: ["change-case", "he", "de-indent"],
+    external: ["change-case", "he", "de-indent", "lodash"],
   }
 };
 

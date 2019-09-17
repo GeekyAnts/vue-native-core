@@ -8,6 +8,8 @@ import { cached, no, camelize } from 'shared/util'
 import { genAssignmentCode } from '../directives/model'
 import { isIE, isEdge, isServerRendering, isNative } from 'core/util/env'
 
+import ReactNativeRenderGenerator from 'vue-native/compiler/codegen/NativeRenderGenerator.js'
+
 import {
   addProp,
   addAttr,
@@ -549,7 +551,7 @@ export function processAttrs (el, options, customSlot = false) {
         ) {
           // Add Attribute in parent element
           //
-          var renderer = new ReactNativeRenderGenerator(el, options);
+          const renderer = new ReactNativeRenderGenerator(el, options);
           let customRenderer = renderer.generateRender();
           let customImport = renderer.generateImport();
           customRenderer = customRenderer.replace(
