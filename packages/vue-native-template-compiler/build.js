@@ -7,6 +7,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var deindent = _interopDefault(require('de-indent'));
 var he = require('he');
 var changeCase = _interopDefault(require('change-case'));
+var _ = _interopDefault(require('lodash'));
 
 /*  */
 
@@ -1008,9 +1009,6 @@ var isServerRendering = function () {
   return _isServer;
 };
 
-// detect devtools
-var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
-
 /* istanbul ignore next */
 function isNative(Ctor) {
   return typeof Ctor === "function" && /native code/.test(Ctor.toString());
@@ -1120,787 +1118,6 @@ var nextTick = (function() {
 })();
 /* istanbul ignore if */
 if (typeof Set !== "undefined" && isNative(Set)) ;
-
-/*  */
-
-function baseWarn (msg) {
-  console.error(("[Vue compiler]: " + msg));
-}
-
-function pluckModuleFunction (
-  modules,
-  key
-) {
-  return modules
-    ? modules.map(function (m) { return m[key]; }).filter(function (_) { return _; })
-    : []
-}
-
-function addProp (el, name, value) {
-  (el.props || (el.props = [])).push({ name: name, value: value });
-}
-
-function addAttr (el, name, value) {
-  (el.attrs || (el.attrs = [])).push({ name: name, value: value });
-}
-
-function addDirective (
-  el,
-  name,
-  rawName,
-  value,
-  arg,
-  modifiers
-) {
-  (el.directives || (el.directives = [])).push({ name: name, rawName: rawName, value: value, arg: arg, modifiers: modifiers });
-}
-
-function addHandler (
-  el,
-  name,
-  value,
-  modifiers,
-  important,
-  warn
-) {
-  // warn prevent and passive modifier
-  /* istanbul ignore if */
-  if (
-    process.env.NODE_ENV !== 'production' && warn &&
-    modifiers && modifiers.prevent && modifiers.passive
-  ) {
-    warn(
-      'passive and prevent can\'t be used together. ' +
-      'Passive handler can\'t prevent default event.'
-    );
-  }
-  // check capture modifier
-  if (modifiers && modifiers.capture) {
-    delete modifiers.capture;
-    name = '!' + name; // mark the event as captured
-  }
-  if (modifiers && modifiers.once) {
-    delete modifiers.once;
-    name = '~' + name; // mark the event as once
-  }
-  /* istanbul ignore if */
-  if (modifiers && modifiers.passive) {
-    delete modifiers.passive;
-    name = '&' + name; // mark the event as passive
-  }
-  var events;
-  if (modifiers && modifiers.native) {
-    delete modifiers.native;
-    events = el.nativeEvents || (el.nativeEvents = {});
-  } else {
-    events = el.events || (el.events = {});
-  }
-  var newHandler = { value: value, modifiers: modifiers };
-  var handlers = events[name];
-  /* istanbul ignore if */
-  if (Array.isArray(handlers)) {
-    important ? handlers.unshift(newHandler) : handlers.push(newHandler);
-  } else if (handlers) {
-    events[name] = important ? [newHandler, handlers] : [handlers, newHandler];
-  } else {
-    events[name] = newHandler;
-  }
-}
-
-function getBindingAttr (
-  el,
-  name,
-  getStatic
-) {
-  var dynamicValue =
-    getAndRemoveAttr(el, ':' + name) ||
-    getAndRemoveAttr(el, 'v-bind:' + name);
-  if (dynamicValue != null) {
-    return parseFilters(dynamicValue)
-  } else if (getStatic !== false) {
-    var staticValue = getAndRemoveAttr(el, name);
-    if (staticValue != null) {
-      return JSON.stringify(staticValue)
-    }
-  }
-}
-
-function getAndRemoveAttr (el, name) {
-  var val;
-  if ((val = el.attrsMap[name]) != null) {
-    var list = el.attrsList;
-    for (var i = 0, l = list.length; i < l; i++) {
-      if (list[i].name === name) {
-        list.splice(i, 1);
-        break
-      }
-    }
-  }
-  return val
-}
-
-/*  */
-
-var onRE = /^@|^v-on:/;
-var dirRE = /^v-|^@|^:/;
-var forAliasRE = /(.*?)\s+(?:in|of)\s+(.*)/;
-var forIteratorRE = /\((\{[^}]*\}|[^,]*),([^,]*)(?:,([^,]*))?\)/;
-
-var argRE = /:(.*)$/;
-var bindRE = /^:|^v-bind:/;
-var modifierRE = /\.[^.]+/g;
-var  splitRE$1 = /\r?\n/g;
-
-var decodeHTMLCached = cached(he.decode);
-
-// configurable state
-var warn$1;
-var delimiters;
-var transforms;
-var preTransforms;
-var postTransforms;
-var platformIsPreTag;
-var platformMustUseProp;
-var platformGetTagNamespace;
-
-/**
- * Convert HTML string to AST.
- */
-function parse (
-  template,
-  options
-) {
-  warn$1 = options.warn || baseWarn;
-  platformGetTagNamespace = options.getTagNamespace || no;
-  platformMustUseProp = options.mustUseProp || no;
-  platformIsPreTag = options.isPreTag || no;
-  preTransforms = pluckModuleFunction(options.modules, 'preTransformNode');
-  transforms = pluckModuleFunction(options.modules, 'transformNode');
-  postTransforms = pluckModuleFunction(options.modules, 'postTransformNode');
-  delimiters = options.delimiters;
-
-  var stack = [];
-  var preserveWhitespace = options.preserveWhitespace !== false;
-  var root;
-  var currentParent;
-  var inVPre = false;
-  var inPre = false;
-  var warned = false;
-
-  function warnOnce (msg) {
-    if (!warned) {
-      warned = true;
-      warn$1(msg);
-    }
-  }
-
-  function endPre (element) {
-    // check pre state
-    if (element.pre) {
-      inVPre = false;
-    }
-    if (platformIsPreTag(element.tag)) {
-      inPre = false;
-    }
-  }
-
-  parseHTML(template, {
-    warn: warn$1,
-    expectHTML: options.expectHTML,
-    isUnaryTag: options.isUnaryTag,
-    canBeLeftOpenTag: options.canBeLeftOpenTag,
-    shouldDecodeNewlines: options.shouldDecodeNewlines,
-    start: function start (tag, attrs, unary) {
-      // check namespace.
-      // inherit parent ns if there is one
-      var ns = (currentParent && currentParent.ns) || platformGetTagNamespace(tag);
-
-      // handle IE svg bug
-      /* istanbul ignore if */
-      if (isIE && ns === 'svg') {
-        attrs = guardIESVGBug(attrs);
-      }
-
-      var element = {
-        type: 1,
-        tag: tag,
-        attrsList: attrs,
-        attrsMap: makeAttrsMap(attrs),
-        parent: currentParent,
-        children: []
-      };
-      if (ns) {
-        element.ns = ns;
-      }
-
-      if (isForbiddenTag(element) && !isServerRendering()) {
-        element.forbidden = true;
-        process.env.NODE_ENV !== 'production' && warn$1(
-          'Templates should only be responsible for mapping the state to the ' +
-          'UI. Avoid placing tags with side-effects in your templates, such as ' +
-          "<" + tag + ">" + ', as they will not be parsed.'
-        );
-      }
-
-      // apply pre-transforms
-      for (var i = 0; i < preTransforms.length; i++) {
-        preTransforms[i](element, options);
-      }
-
-      if (!inVPre) {
-        processPre(element);
-        if (element.pre) {
-          inVPre = true;
-        }
-      }
-      if (platformIsPreTag(element.tag)) {
-        inPre = true;
-      }
-      if (inVPre) {
-        processRawAttrs(element);
-      } else {
-        processFor(element);
-        processIf(element);
-        processOnce(element);
-        processKey(element);
-
-        // determine whether this is a plain element after
-        // removing structural attributes
-        element.plain = !element.key && !attrs.length;
-
-        processRef(element);
-        processSlot(element);
-        processComponent(element);
-        for (var i$1 = 0; i$1 < transforms.length; i$1++) {
-          transforms[i$1](element, options);
-        }
-        processAttrs(element);
-      }
-
-      function checkRootConstraints (el) {
-        if (process.env.NODE_ENV !== 'production') {
-          if (el.tag === 'slot' || el.tag === 'template') {
-            warnOnce(
-              "Cannot use <" + (el.tag) + "> as component root element because it may " +
-              'contain multiple nodes.'
-            );
-          }
-          if (el.attrsMap.hasOwnProperty('v-for')) {
-            warnOnce(
-              'Cannot use v-for on stateful component root element because ' +
-              'it renders multiple elements.'
-            );
-          }
-        }
-      }
-
-      // tree management
-      if (!root) {
-        root = element;
-        checkRootConstraints(root);
-      } else if (!stack.length) {
-        // allow root elements with v-if, v-else-if and v-else
-        if (root.if && (element.elseif || element.else)) {
-          checkRootConstraints(element);
-          addIfCondition(root, {
-            exp: element.elseif,
-            block: element
-          });
-        } else if (process.env.NODE_ENV !== 'production') {
-          warnOnce(
-            "Component template should contain exactly one root element. " +
-            "If you are using v-if on multiple elements, " +
-            "use v-else-if to chain them instead."
-          );
-        }
-      }
-      if (currentParent && !element.forbidden) {
-        if (element.elseif || element.else) {
-          processIfConditions(element, currentParent);
-        } else if (element.slotScope) { // scoped slot
-          currentParent.plain = false;
-          var name = element.slotTarget || '"default"'
-          ;(currentParent.scopedSlots || (currentParent.scopedSlots = {}))[name] = element;
-        } else {
-          currentParent.children.push(element);
-          element.parent = currentParent;
-        }
-      }
-      if (!unary) {
-        currentParent = element;
-        stack.push(element);
-      } else {
-        endPre(element);
-      }
-      // apply post-transforms
-      for (var i$2 = 0; i$2 < postTransforms.length; i$2++) {
-        postTransforms[i$2](element, options);
-      }
-    },
-
-    end: function end () {
-      // remove trailing whitespace
-      var element = stack[stack.length - 1];
-      var lastNode = element.children[element.children.length - 1];
-      if (lastNode && lastNode.type === 3 && lastNode.text === ' ' && !inPre) {
-        element.children.pop();
-      }
-      // pop stack
-      stack.length -= 1;
-      currentParent = stack[stack.length - 1];
-      endPre(element);
-    },
-
-    chars: function chars (text) {
-      if (!currentParent) {
-        if (process.env.NODE_ENV !== 'production') {
-          if (text === template) {
-            warnOnce(
-              'Component template requires a root element, rather than just text.'
-            );
-          } else if ((text = text.trim())) {
-            warnOnce(
-              ("text \"" + text + "\" outside root element will be ignored.")
-            );
-          }
-        }
-        return
-      }
-      // IE textarea placeholder bug
-      /* istanbul ignore if */
-      if (isIE &&
-          currentParent.tag === 'textarea' &&
-          currentParent.attrsMap.placeholder === text) {
-        return
-      }
-      var children = currentParent.children;
-      text = inPre || text.trim()
-        ? decodeHTMLCached(text)
-        // only preserve whitespace if its not right after a starting tag
-        : preserveWhitespace && children.length ? ' ' : '';
-      if (text) {
-        var expression;
-        if (!inVPre && text !== ' ' && (expression = parseText(text, delimiters))) {
-          children.push({
-            type: 2,
-            expression: expression,
-            text: text
-          });
-        } else if (text !== ' ' || !children.length || children[children.length - 1].text !== ' ') {
-          children.push({
-            type: 3,
-            text: text
-          });
-        }
-      }
-    }
-  });
-  return root
-}
-
-function processPre (el) {
-  if (getAndRemoveAttr(el, 'v-pre') != null) {
-    el.pre = true;
-  }
-}
-
-function processRawAttrs (el) {
-  var l = el.attrsList.length;
-  if (l) {
-    var attrs = el.attrs = new Array(l);
-    for (var i = 0; i < l; i++) {
-      attrs[i] = {
-        name: el.attrsList[i].name,
-        value: JSON.stringify(el.attrsList[i].value)
-      };
-    }
-  } else if (!el.pre) {
-    // non root node in pre blocks with no attributes
-    el.plain = true;
-  }
-}
-
-function processKey (el) {
-  var exp = getBindingAttr(el, 'key');
-  if (exp) {
-    if (process.env.NODE_ENV !== 'production' && el.tag === 'template') {
-      warn$1("<template> cannot be keyed. Place the key on real elements instead.");
-    }
-    el.key = exp;
-  }
-}
-
-function processRef (el) {
-  var ref = getBindingAttr(el, 'ref');
-  if (ref) {
-    el.ref = ref;
-    el.refInFor = checkInFor(el);
-  }
-}
-
-function processFor (el) {
-  var exp;
-  if ((exp = getAndRemoveAttr(el, 'v-for'))) {
-    var inMatch = exp.match(forAliasRE);
-    if (!inMatch) {
-      process.env.NODE_ENV !== 'production' && warn$1(
-        ("Invalid v-for expression: " + exp)
-      );
-      return
-    }
-    el.for = inMatch[2].trim();
-    var alias = inMatch[1].trim();
-    var iteratorMatch = alias.match(forIteratorRE);
-    if (iteratorMatch) {
-      el.alias = iteratorMatch[1].trim();
-      el.iterator1 = iteratorMatch[2].trim();
-      if (iteratorMatch[3]) {
-        el.iterator2 = iteratorMatch[3].trim();
-      }
-    } else {
-      el.alias = alias;
-    }
-  }
-}
-
-function processIf (el) {
-  var exp = getAndRemoveAttr(el, 'v-if');
-  if (exp) {
-    el.if = exp;
-    addIfCondition(el, {
-      exp: exp,
-      block: el
-    });
-  } else {
-    if (getAndRemoveAttr(el, 'v-else') != null) {
-      el.else = true;
-    }
-    var elseif = getAndRemoveAttr(el, 'v-else-if');
-    if (elseif) {
-      el.elseif = elseif;
-    }
-  }
-}
-
-function processIfConditions (el, parent) {
-  var prev = findPrevElement(parent.children);
-  if (prev && prev.if) {
-    addIfCondition(prev, {
-      exp: el.elseif,
-      block: el
-    });
-  } else if (process.env.NODE_ENV !== 'production') {
-    warn$1(
-      "v-" + (el.elseif ? ('else-if="' + el.elseif + '"') : 'else') + " " +
-      "used on element <" + (el.tag) + "> without corresponding v-if."
-    );
-  }
-}
-
-function findPrevElement (children) {
-  var i = children.length;
-  while (i--) {
-    if (children[i].type === 1) {
-      return children[i]
-    } else {
-      if (process.env.NODE_ENV !== 'production' && children[i].text !== ' ') {
-        warn$1(
-          "text \"" + (children[i].text.trim()) + "\" between v-if and v-else(-if) " +
-          "will be ignored."
-        );
-      }
-      children.pop();
-    }
-  }
-}
-
-function addIfCondition (el, condition) {
-  if (!el.ifConditions) {
-    el.ifConditions = [];
-  }
-  el.ifConditions.push(condition);
-}
-
-function processOnce (el) {
-  var once = getAndRemoveAttr(el, 'v-once');
-  if (once != null) {
-    el.once = true;
-  }
-}
-
-function processSlot (el) {
-  if (el.tag === 'slot') {
-    el.slotName = getBindingAttr(el, 'name');
-    if (process.env.NODE_ENV !== 'production' && el.key) {
-      warn$1(
-        "`key` does not work on <slot> because slots are abstract outlets " +
-        "and can possibly expand into multiple elements. " +
-        "Use the key on a wrapping element instead."
-      );
-    }
-  } else {
-    var slotTarget = getBindingAttr(el, 'slot');
-    if (slotTarget) {
-      el.slotTarget = slotTarget === '""' ? '"default"' : slotTarget;
-    }
-    if (el.tag === 'template') {
-      el.slotScope = getAndRemoveAttr(el, 'scope');
-    }
-  }
-}
-
-function processComponent (el) {
-  var binding;
-  if ((binding = getBindingAttr(el, 'is'))) {
-    el.component = binding;
-  }
-  if (getAndRemoveAttr(el, 'inline-template') != null) {
-    el.inlineTemplate = true;
-  }
-}
-
-function processAttrs (el, options, customSlot) {
-  if ( customSlot === void 0 ) customSlot = false;
-
-  var list = el.attrsList;
-  var i, l, name, rawName, value, modifiers, isProp;
-  for (i = 0, l = list.length; i < l; i++) {
-    name = rawName = list[i].name;
-    value = list[i].value;
-    if (dirRE.test(name)) {
-      // mark element as dynamic
-      el.hasBindings = true;
-      // modifiers
-      modifiers = parseModifiers(name);
-      if (modifiers) {
-        name = name.replace(modifierRE, '');
-      }
-      if (bindRE.test(name)) { // v-bind
-        name = name.replace(bindRE, '');
-        value = parseFilters(value);
-        isProp = false;
-        if (modifiers) {
-          if (modifiers.prop) {
-            isProp = true;
-            name = camelize(name);
-            if (name === 'innerHtml') { name = 'innerHTML'; }
-          }
-          if (modifiers.camel) {
-            name = camelize(name);
-          }
-          if (modifiers.sync) {
-            addHandler(
-              el,
-              ("update:" + (camelize(name))),
-              genAssignmentCode(value, "$event")
-            );
-          }
-        }
-        if (isProp || platformMustUseProp(el.tag, el.attrsMap.type, name)) {
-          addProp(el, name, value);
-        } else {
-          addAttr(el, name, value);
-        }
-      } else if (onRE.test(name)) { // v-on
-        name = name.replace(onRE, '');
-        addHandler(el, name, value, modifiers, false, warn$1);
-        //Check if its expression or function
-        //
-        if (isNative) {
-          var camelCaseName = "on-" + name;
-          camelCaseName = camelCaseName.replace(/-([a-z])/g, function(g) {
-            return g[1].toUpperCase();
-          });
-          addAttr(el, camelCaseName, ("() => " + value));
-        }
-      } else { // normal directives
-        name = name.replace(dirRE, '');
-        // parse arg
-        var argMatch = name.match(argRE);
-        var arg = argMatch && argMatch[1];
-        if (arg) {
-          name = name.slice(0, -(arg.length + 1));
-        }
-        if (isNative) {
-          addHandler(el, name, value, modifiers, false, warn$1);
-          if (name === "model") {
-            addAttr(el, "value", value);
-            var detectOnChange = false;
-            el.attrs.forEach(function (attr) {
-              if (attr.name === "on-change") {
-                detectOnChange = true;
-              }
-            });
-            if (!detectOnChange) {
-              if (el.tag !== "switch") {
-                addAttr(
-                  el,
-                  "on-change",
-                  ("(value) => " + value + "=value.nativeEvent.text")
-                );
-              } else {
-                addAttr(el, "on-value-change", ("(value) => " + value + "=value"));
-              }
-            }
-          }
-        } else {
-          addDirective(el, name, rawName, value, arg, modifiers);
-        }
-        if (process.env.NODE_ENV !== 'production' && name === 'model') {
-          checkForAliasModel(el, value);
-        }
-      }
-    } else {
-      // literal attribute
-      if (process.env.NODE_ENV !== 'production') {
-        var expression = parseText(value, delimiters);
-        if (expression) {
-          warn$1(
-            name + "=\"" + value + "\": " +
-            'Interpolation inside attributes has been removed. ' +
-            'Use v-bind or the colon shorthand instead. For example, ' +
-            'instead of <div id="{{ val }}">, use <div :id="val">.'
-          );
-        }
-      }
-      if (name === "to") {
-        value = value.replace(/\//, "");
-        addAttr(el, "on-press", ("() => " + ("navigation") + ".navigate('" + value + "')"));
-      } else {
-        if (
-          (name === "render-prop-fn" || name === "render-prop") &&
-          customSlot
-        ) {
-          // Add Attribute in parent element
-          //
-          var renderer = new ReactNativeRenderGenerator(el, options);
-          var customRenderer = renderer.generateRender();
-          var customImport = renderer.generateImport();
-          customRenderer = customRenderer.replace(
-            /render \(vm\)/,
-            "render (slotProps)"
-          );
-
-          if (name === "render-prop") {
-            customRenderer = "(" + customRenderer + ")()";
-          } else {
-            // Support for args
-            customRenderer = customRenderer.replace(
-              /render \(slotProps\)/,
-              "render (args)"
-            );
-            if (
-              el.attrsMap["arguments"] &&
-              typeof el.attrsMap["arguments"] === "string"
-            ) {
-              var customArguments = el.attrsMap["arguments"].split(",");
-              customRenderer = customRenderer.replace(
-                /render \(args\)/,
-                ("render (" + (el.attrsMap["arguments"]) + ")")
-              );
-              // Replace each instance of the argument
-              //
-              customArguments.forEach(function (argument) {
-                var reg = new RegExp("vm[" + argument + "]", "g");
-                customRenderer = customRenderer.replace(reg, argument);
-              });
-            } else {
-              customRenderer = customRenderer.replace(/vm\(args\)/g, "args");
-            }
-          }
-          addAttr(el.parent, value, ("" + customRenderer));
-          var vueNativeCoreImport = customImport.split(splitRE$1);
-          if (vueNativeCoreImport && vueNativeCoreImport[0]) {
-            var imports = vueNativeCoreImport[0];
-            imports = imports.replace(/import \{/g, "");
-            imports = imports.replace(/\} from 'vue-native-helper'/g, "");
-            return imports.split(",").map(function(item) {
-              return item.trim();
-            });
-          }
-        } else {
-          addAttr(el, name, JSON.stringify(value));
-        }
-      }
-    }
-  }
-}
-
-function checkInFor (el) {
-  var parent = el;
-  while (parent) {
-    if (parent.for !== undefined) {
-      return true
-    }
-    parent = parent.parent;
-  }
-  return false
-}
-
-function parseModifiers (name) {
-  var match = name.match(modifierRE);
-  if (match) {
-    var ret = {};
-    match.forEach(function (m) { ret[m.slice(1)] = true; });
-    return ret
-  }
-}
-
-function makeAttrsMap (attrs) {
-  var map = {};
-  for (var i = 0, l = attrs.length; i < l; i++) {
-    if (
-      process.env.NODE_ENV !== 'production' &&
-      map[attrs[i].name] && !isIE && !isEdge
-    ) {
-      warn$1('duplicate attribute: ' + attrs[i].name);
-    }
-    map[attrs[i].name] = attrs[i].value;
-  }
-  return map
-}
-
-function isForbiddenTag (el) {
-  return (
-    el.tag === 'style' ||
-    (el.tag === 'script' && (
-      !el.attrsMap.type ||
-      el.attrsMap.type === 'text/javascript'
-    ))
-  )
-}
-
-var ieNSBug = /^xmlns:NS\d+/;
-var ieNSPrefix = /^NS\d+:/;
-
-/* istanbul ignore next */
-function guardIESVGBug (attrs) {
-  var res = [];
-  for (var i = 0; i < attrs.length; i++) {
-    var attr = attrs[i];
-    if (!ieNSBug.test(attr.name)) {
-      attr.name = attr.name.replace(ieNSPrefix, '');
-      res.push(attr);
-    }
-  }
-  return res
-}
-
-function checkForAliasModel (el, value) {
-  var _el = el;
-  while (_el) {
-    if (_el.for && _el.alias === value) {
-      warn$1(
-        "<" + (el.tag) + " v-model=\"" + value + "\">: " +
-        "You are binding v-model directly to a v-for iteration alias. " +
-        "This will not be able to modify the v-for source array because " +
-        "writing to the alias is like modifying a function local variable. " +
-        "Consider using an array of objects and use v-model on an object property instead."
-      );
-    }
-    _el = _el.parent;
-  }
-}
 
 var CREATE_ELEMENT = "createElement";
 var COMPONENT = "Component";
@@ -3873,6 +3090,1009 @@ function parseStyleText (cssText) {
   return res
 }
 
+var ReactNativeRenderGenerator = /*@__PURE__*/(function (RenderGenerator) {
+  function ReactNativeRenderGenerator (ast, options) {
+    RenderGenerator.call(this, ast, options);
+    this.isNative = true;
+  }
+
+  if ( RenderGenerator ) ReactNativeRenderGenerator.__proto__ = RenderGenerator;
+  ReactNativeRenderGenerator.prototype = Object.create( RenderGenerator && RenderGenerator.prototype );
+  ReactNativeRenderGenerator.prototype.constructor = ReactNativeRenderGenerator;
+
+  /**
+   * override
+   */
+  ReactNativeRenderGenerator.prototype.genTag = function genTag (ast) {
+    var tag = ast.tag;
+
+    if (isBuildInTag(tag)) {
+      tag = "" + tag;
+    } else {
+      var c = tag.split(':').map(function (v) { return ("['" + (capitalize(camelize(v))) + "']"); }).join('');
+      tag = "vm.$options.components" + c;
+    }
+
+    return tag
+  };
+
+  /**
+   * override
+   * gen text expression
+   * @param {Object} ast
+   */
+  ReactNativeRenderGenerator.prototype.genTextExpression = function genTextExpression (ast) {
+    var code = RenderGenerator.prototype.genTextExpression.call(this, ast);
+    code = code
+      .replace(/^"\\n\s*/, '"')
+      .replace(/\\n\s*"$/, '"');
+    return code
+  };
+
+  /**
+   * override
+   * gen text
+   * @param {Object} ast
+   */
+  ReactNativeRenderGenerator.prototype.genText = function genText (ast) {
+    var code = RenderGenerator.prototype.genText.call(this, ast);
+    code = code
+      .replace(/^"\\n\s*/, '"')
+      .replace(/\\n\s*"$/, '"');
+    return code
+  };
+
+  /**
+   * override
+   */
+  ReactNativeRenderGenerator.prototype.genProps = function genProps (ast) {
+    var code = [];
+    ast.attrs = ast.attrs || [];
+    if (ast.slotTarget !== undefined) {
+      this.genSlotTarget(ast);
+    }
+    if (ast.ref || ast.parent === undefined) {
+      var ref = this.genRef(ast);
+      if (ref) {
+        code.push(ref);
+      }
+    }
+    if (ast.key !== undefined) {
+      var key = this.genKey(ast);
+      if (key) {
+        code.push(key);
+      }
+    }
+    if (Array.isArray(ast.attrs)) {
+      var props = ast.attrs
+        .filter(function (v) {
+          return v.name !== 'class' && v.name !== 'style' && v.name !== 'v-pre'
+        })
+        .map(function (v) {
+          var name = v.name;
+          name = camelize(name);
+          return (name + ": " + (v.value))
+        });
+      code = code.concat(props);
+    }
+
+    var styleProps = this.genNativeStyleProps(ast);
+    if (styleProps) {
+      code.push(styleProps);
+    }
+    var eventHandler = this.genEventHandler(ast);
+    if (eventHandler) {
+      code.push(eventHandler);
+    }
+    var nativeEventHandler = this.genNativeEventHandler(ast);
+    if (nativeEventHandler) {
+      code.push(nativeEventHandler);
+    }
+
+    return code
+  };
+
+  ReactNativeRenderGenerator.prototype.genTemplate = function genTemplate (ast) {
+    if (ast.parent === undefined) {
+      return this.genElement(ast.children[0]);
+    } else {
+      if (ast.children.length > 1) {
+        ast.tag = 'view';
+        return this.genElement(ast);
+      } else {
+        return this.genElement(ast.children[0]);
+      }
+    }
+  };
+
+  ReactNativeRenderGenerator.prototype.genEventHandler = function genEventHandler (ast) {
+    var code = '';
+    if (ast.events) {
+      if (isReservedTag(ast.tag) || isBuildInTag(ast.tag)) {
+          code = genHandlers(ast.events, this.vueConfig);
+      } else {
+        code = genCustomEventHandlers(ast.events, this.vueConfig);
+      }
+    }
+    return code
+  };
+
+  ReactNativeRenderGenerator.prototype.genNativeEventHandler = function genNativeEventHandler (ast) {
+    var code = '';
+    if (ast.nativeEvents && !isReservedTag(ast.tag)) {
+      code = HELPER_HEADER + "nativeEvents: {" + (genHandlers(ast.nativeEvents, this.vueConfig)) + "}";
+    }
+    return code
+  };
+
+  // merge style & class
+  ReactNativeRenderGenerator.prototype.genNativeStyleProps = function genNativeStyleProps (ast) {
+    var classProps = this.genClassProps(ast);
+
+    var styleProps = this.genStyleProps(ast);
+
+    // merge style and class props into style
+    return ("style: " + (NATIVE.mergeStyleAndClass.name) + "(" + classProps + ", " + styleProps + ")")
+  };
+
+  /**
+   * gen style props
+   * @param {Object} ast
+   */
+  ReactNativeRenderGenerator.prototype.genStyleProps = function genStyleProps (ast) {
+    var styleAttrsValue = ast.attrs.filter(function (v) { return v.name === 'style'; }).map(function (v) { return v.value; });
+    var show = ast.directives && ast.directives.filter(function (v) { return v.name === 'show'; })[0];
+    var topParent = this.isAstTopParent(ast);
+    if (styleAttrsValue.length === 0 && !show && !topParent) {
+      return
+    }
+    var staticStyle, dynamicStyle, showStyle;
+    styleAttrsValue.forEach(function (v) {
+      if (/^".*"$/.test(v)) {
+        staticStyle = v.trim().replace(/;*"$/, ';"');
+      } else {
+        dynamicStyle = v;
+      }
+    });
+    if (staticStyle) {
+      try {
+        staticStyle = JSON.stringify(parseStyleText(staticStyle));
+      } catch (e) {}
+    }
+    if (show) {
+      showStyle = "{display: " + (show.value) + " ? '' : 'none'}";
+    }
+    return ((NATIVE.bindStyle.name) + "(" + dynamicStyle + ", " + staticStyle + ", " + showStyle + ")")
+  };
+
+  /**
+   * gen class props
+   * @param {Object} ast
+   */
+  ReactNativeRenderGenerator.prototype.genClassProps = function genClassProps (ast) {
+    var topParent = this.isAstTopParent(ast);
+    var classAttrsValue = ast.attrs.filter(function (v) { return v.name === 'class'; }).map(function (v) { return v.value; });
+    if (classAttrsValue.length === 0 && !topParent) {
+      return
+    }
+    var staticClass, dynamicClass;
+    classAttrsValue.forEach(function (v) {
+      if (/^".*"$/.test(v) || /^'.*'$/.test(v)) {
+        staticClass = v.trim(); // .replace(/^"(.*)"$/, '$1')
+      } else {
+        dynamicClass = v;
+      }
+    });
+    var objCode = '{';
+    if (staticClass) {
+      objCode += "staticClass: " + staticClass + ",";
+    }
+    if (dynamicClass) {
+      objCode += "dynamicClass: " + dynamicClass + ",";
+    }
+    if (topParent) {
+      objCode += "parentClass: this.props.style,";
+    }
+    objCode = (objCode.replace(/,$/, '')) + "}";
+    return ((NATIVE.bindClass.name) + ".call(this, " + objCode + ")")
+  };
+
+  ReactNativeRenderGenerator.prototype.isAstTopParent = function isAstTopParent (ast) {
+    if (ast.parent === undefined) {
+      return true
+    }
+    if (ast.parent.tag === 'template' || ast.parent.tag === 'transition' || ast.parent.originTag === 'transition') {
+      if (ast.parent.parent === undefined) {
+        return true
+      }
+    }
+    return false
+  };
+
+  return ReactNativeRenderGenerator;
+}(RenderGenerator));
+
+/*  */
+
+function baseWarn (msg) {
+  console.error(("[Vue compiler]: " + msg));
+}
+
+function pluckModuleFunction (
+  modules,
+  key
+) {
+  return modules
+    ? modules.map(function (m) { return m[key]; }).filter(function (_) { return _; })
+    : []
+}
+
+function addProp (el, name, value) {
+  (el.props || (el.props = [])).push({ name: name, value: value });
+}
+
+function addAttr (el, name, value) {
+  (el.attrs || (el.attrs = [])).push({ name: name, value: value });
+}
+
+function addDirective (
+  el,
+  name,
+  rawName,
+  value,
+  arg,
+  modifiers
+) {
+  (el.directives || (el.directives = [])).push({ name: name, rawName: rawName, value: value, arg: arg, modifiers: modifiers });
+}
+
+function addHandler (
+  el,
+  name,
+  value,
+  modifiers,
+  important,
+  warn
+) {
+  // warn prevent and passive modifier
+  /* istanbul ignore if */
+  if (
+    process.env.NODE_ENV !== 'production' && warn &&
+    modifiers && modifiers.prevent && modifiers.passive
+  ) {
+    warn(
+      'passive and prevent can\'t be used together. ' +
+      'Passive handler can\'t prevent default event.'
+    );
+  }
+  // check capture modifier
+  if (modifiers && modifiers.capture) {
+    delete modifiers.capture;
+    name = '!' + name; // mark the event as captured
+  }
+  if (modifiers && modifiers.once) {
+    delete modifiers.once;
+    name = '~' + name; // mark the event as once
+  }
+  /* istanbul ignore if */
+  if (modifiers && modifiers.passive) {
+    delete modifiers.passive;
+    name = '&' + name; // mark the event as passive
+  }
+  var events;
+  if (modifiers && modifiers.native) {
+    delete modifiers.native;
+    events = el.nativeEvents || (el.nativeEvents = {});
+  } else {
+    events = el.events || (el.events = {});
+  }
+  var newHandler = { value: value, modifiers: modifiers };
+  var handlers = events[name];
+  /* istanbul ignore if */
+  if (Array.isArray(handlers)) {
+    important ? handlers.unshift(newHandler) : handlers.push(newHandler);
+  } else if (handlers) {
+    events[name] = important ? [newHandler, handlers] : [handlers, newHandler];
+  } else {
+    events[name] = newHandler;
+  }
+}
+
+function getBindingAttr (
+  el,
+  name,
+  getStatic
+) {
+  var dynamicValue =
+    getAndRemoveAttr(el, ':' + name) ||
+    getAndRemoveAttr(el, 'v-bind:' + name);
+  if (dynamicValue != null) {
+    return parseFilters(dynamicValue)
+  } else if (getStatic !== false) {
+    var staticValue = getAndRemoveAttr(el, name);
+    if (staticValue != null) {
+      return JSON.stringify(staticValue)
+    }
+  }
+}
+
+function getAndRemoveAttr (el, name) {
+  var val;
+  if ((val = el.attrsMap[name]) != null) {
+    var list = el.attrsList;
+    for (var i = 0, l = list.length; i < l; i++) {
+      if (list[i].name === name) {
+        list.splice(i, 1);
+        break
+      }
+    }
+  }
+  return val
+}
+
+/*  */
+
+var onRE = /^@|^v-on:/;
+var dirRE = /^v-|^@|^:/;
+var forAliasRE = /(.*?)\s+(?:in|of)\s+(.*)/;
+var forIteratorRE = /\((\{[^}]*\}|[^,]*),([^,]*)(?:,([^,]*))?\)/;
+
+var argRE = /:(.*)$/;
+var bindRE = /^:|^v-bind:/;
+var modifierRE = /\.[^.]+/g;
+var  splitRE$1 = /\r?\n/g;
+
+var decodeHTMLCached = cached(he.decode);
+
+// configurable state
+var warn$1;
+var delimiters;
+var transforms;
+var preTransforms;
+var postTransforms;
+var platformIsPreTag;
+var platformMustUseProp;
+var platformGetTagNamespace;
+
+/**
+ * Convert HTML string to AST.
+ */
+function parse (
+  template,
+  options
+) {
+  warn$1 = options.warn || baseWarn;
+  platformGetTagNamespace = options.getTagNamespace || no;
+  platformMustUseProp = options.mustUseProp || no;
+  platformIsPreTag = options.isPreTag || no;
+  preTransforms = pluckModuleFunction(options.modules, 'preTransformNode');
+  transforms = pluckModuleFunction(options.modules, 'transformNode');
+  postTransforms = pluckModuleFunction(options.modules, 'postTransformNode');
+  delimiters = options.delimiters;
+
+  var stack = [];
+  var preserveWhitespace = options.preserveWhitespace !== false;
+  var root;
+  var currentParent;
+  var inVPre = false;
+  var inPre = false;
+  var warned = false;
+
+  function warnOnce (msg) {
+    if (!warned) {
+      warned = true;
+      warn$1(msg);
+    }
+  }
+
+  function endPre (element) {
+    // check pre state
+    if (element.pre) {
+      inVPre = false;
+    }
+    if (platformIsPreTag(element.tag)) {
+      inPre = false;
+    }
+  }
+
+  parseHTML(template, {
+    warn: warn$1,
+    expectHTML: options.expectHTML,
+    isUnaryTag: options.isUnaryTag,
+    canBeLeftOpenTag: options.canBeLeftOpenTag,
+    shouldDecodeNewlines: options.shouldDecodeNewlines,
+    start: function start (tag, attrs, unary) {
+      // check namespace.
+      // inherit parent ns if there is one
+      var ns = (currentParent && currentParent.ns) || platformGetTagNamespace(tag);
+
+      // handle IE svg bug
+      /* istanbul ignore if */
+      if (isIE && ns === 'svg') {
+        attrs = guardIESVGBug(attrs);
+      }
+
+      var element = {
+        type: 1,
+        tag: tag,
+        attrsList: attrs,
+        attrsMap: makeAttrsMap(attrs),
+        parent: currentParent,
+        children: []
+      };
+      if (ns) {
+        element.ns = ns;
+      }
+
+      if (isForbiddenTag(element) && !isServerRendering()) {
+        element.forbidden = true;
+        process.env.NODE_ENV !== 'production' && warn$1(
+          'Templates should only be responsible for mapping the state to the ' +
+          'UI. Avoid placing tags with side-effects in your templates, such as ' +
+          "<" + tag + ">" + ', as they will not be parsed.'
+        );
+      }
+
+      // apply pre-transforms
+      for (var i = 0; i < preTransforms.length; i++) {
+        preTransforms[i](element, options);
+      }
+
+      if (!inVPre) {
+        processPre(element);
+        if (element.pre) {
+          inVPre = true;
+        }
+      }
+      if (platformIsPreTag(element.tag)) {
+        inPre = true;
+      }
+      if (inVPre) {
+        processRawAttrs(element);
+      } else {
+        processFor(element);
+        processIf(element);
+        processOnce(element);
+        processKey(element);
+
+        // determine whether this is a plain element after
+        // removing structural attributes
+        element.plain = !element.key && !attrs.length;
+
+        processRef(element);
+        processSlot(element);
+        processComponent(element);
+        for (var i$1 = 0; i$1 < transforms.length; i$1++) {
+          transforms[i$1](element, options);
+        }
+        processAttrs(element);
+      }
+
+      function checkRootConstraints (el) {
+        if (process.env.NODE_ENV !== 'production') {
+          if (el.tag === 'slot' || el.tag === 'template') {
+            warnOnce(
+              "Cannot use <" + (el.tag) + "> as component root element because it may " +
+              'contain multiple nodes.'
+            );
+          }
+          if (el.attrsMap.hasOwnProperty('v-for')) {
+            warnOnce(
+              'Cannot use v-for on stateful component root element because ' +
+              'it renders multiple elements.'
+            );
+          }
+        }
+      }
+
+      // tree management
+      if (!root) {
+        root = element;
+        checkRootConstraints(root);
+      } else if (!stack.length) {
+        // allow root elements with v-if, v-else-if and v-else
+        if (root.if && (element.elseif || element.else)) {
+          checkRootConstraints(element);
+          addIfCondition(root, {
+            exp: element.elseif,
+            block: element
+          });
+        } else if (process.env.NODE_ENV !== 'production') {
+          warnOnce(
+            "Component template should contain exactly one root element. " +
+            "If you are using v-if on multiple elements, " +
+            "use v-else-if to chain them instead."
+          );
+        }
+      }
+      if (currentParent && !element.forbidden) {
+        if (element.elseif || element.else) {
+          processIfConditions(element, currentParent);
+        } else if (element.slotScope) { // scoped slot
+          currentParent.plain = false;
+          var name = element.slotTarget || '"default"'
+          ;(currentParent.scopedSlots || (currentParent.scopedSlots = {}))[name] = element;
+        } else {
+          currentParent.children.push(element);
+          element.parent = currentParent;
+        }
+      }
+      if (!unary) {
+        currentParent = element;
+        stack.push(element);
+      } else {
+        endPre(element);
+      }
+      // apply post-transforms
+      for (var i$2 = 0; i$2 < postTransforms.length; i$2++) {
+        postTransforms[i$2](element, options);
+      }
+    },
+
+    end: function end () {
+      // remove trailing whitespace
+      var element = stack[stack.length - 1];
+      var lastNode = element.children[element.children.length - 1];
+      if (lastNode && lastNode.type === 3 && lastNode.text === ' ' && !inPre) {
+        element.children.pop();
+      }
+      // pop stack
+      stack.length -= 1;
+      currentParent = stack[stack.length - 1];
+      endPre(element);
+    },
+
+    chars: function chars (text) {
+      if (!currentParent) {
+        if (process.env.NODE_ENV !== 'production') {
+          if (text === template) {
+            warnOnce(
+              'Component template requires a root element, rather than just text.'
+            );
+          } else if ((text = text.trim())) {
+            warnOnce(
+              ("text \"" + text + "\" outside root element will be ignored.")
+            );
+          }
+        }
+        return
+      }
+      // IE textarea placeholder bug
+      /* istanbul ignore if */
+      if (isIE &&
+          currentParent.tag === 'textarea' &&
+          currentParent.attrsMap.placeholder === text) {
+        return
+      }
+      var children = currentParent.children;
+      text = inPre || text.trim()
+        ? decodeHTMLCached(text)
+        // only preserve whitespace if its not right after a starting tag
+        : preserveWhitespace && children.length ? ' ' : '';
+      if (text) {
+        var expression;
+        if (!inVPre && text !== ' ' && (expression = parseText(text, delimiters))) {
+          children.push({
+            type: 2,
+            expression: expression,
+            text: text
+          });
+        } else if (text !== ' ' || !children.length || children[children.length - 1].text !== ' ') {
+          children.push({
+            type: 3,
+            text: text
+          });
+        }
+      }
+    }
+  });
+  return root
+}
+
+function processPre (el) {
+  if (getAndRemoveAttr(el, 'v-pre') != null) {
+    el.pre = true;
+  }
+}
+
+function processRawAttrs (el) {
+  var l = el.attrsList.length;
+  if (l) {
+    var attrs = el.attrs = new Array(l);
+    for (var i = 0; i < l; i++) {
+      attrs[i] = {
+        name: el.attrsList[i].name,
+        value: JSON.stringify(el.attrsList[i].value)
+      };
+    }
+  } else if (!el.pre) {
+    // non root node in pre blocks with no attributes
+    el.plain = true;
+  }
+}
+
+function processKey (el) {
+  var exp = getBindingAttr(el, 'key');
+  if (exp) {
+    if (process.env.NODE_ENV !== 'production' && el.tag === 'template') {
+      warn$1("<template> cannot be keyed. Place the key on real elements instead.");
+    }
+    el.key = exp;
+  }
+}
+
+function processRef (el) {
+  var ref = getBindingAttr(el, 'ref');
+  if (ref) {
+    el.ref = ref;
+    el.refInFor = checkInFor(el);
+  }
+}
+
+function processFor (el) {
+  var exp;
+  if ((exp = getAndRemoveAttr(el, 'v-for'))) {
+    var inMatch = exp.match(forAliasRE);
+    if (!inMatch) {
+      process.env.NODE_ENV !== 'production' && warn$1(
+        ("Invalid v-for expression: " + exp)
+      );
+      return
+    }
+    el.for = inMatch[2].trim();
+    var alias = inMatch[1].trim();
+    var iteratorMatch = alias.match(forIteratorRE);
+    if (iteratorMatch) {
+      el.alias = iteratorMatch[1].trim();
+      el.iterator1 = iteratorMatch[2].trim();
+      if (iteratorMatch[3]) {
+        el.iterator2 = iteratorMatch[3].trim();
+      }
+    } else {
+      el.alias = alias;
+    }
+  }
+}
+
+function processIf (el) {
+  var exp = getAndRemoveAttr(el, 'v-if');
+  if (exp) {
+    el.if = exp;
+    addIfCondition(el, {
+      exp: exp,
+      block: el
+    });
+  } else {
+    if (getAndRemoveAttr(el, 'v-else') != null) {
+      el.else = true;
+    }
+    var elseif = getAndRemoveAttr(el, 'v-else-if');
+    if (elseif) {
+      el.elseif = elseif;
+    }
+  }
+}
+
+function processIfConditions (el, parent) {
+  var prev = findPrevElement(parent.children);
+  if (prev && prev.if) {
+    addIfCondition(prev, {
+      exp: el.elseif,
+      block: el
+    });
+  } else if (process.env.NODE_ENV !== 'production') {
+    warn$1(
+      "v-" + (el.elseif ? ('else-if="' + el.elseif + '"') : 'else') + " " +
+      "used on element <" + (el.tag) + "> without corresponding v-if."
+    );
+  }
+}
+
+function findPrevElement (children) {
+  var i = children.length;
+  while (i--) {
+    if (children[i].type === 1) {
+      return children[i]
+    } else {
+      if (process.env.NODE_ENV !== 'production' && children[i].text !== ' ') {
+        warn$1(
+          "text \"" + (children[i].text.trim()) + "\" between v-if and v-else(-if) " +
+          "will be ignored."
+        );
+      }
+      children.pop();
+    }
+  }
+}
+
+function addIfCondition (el, condition) {
+  if (!el.ifConditions) {
+    el.ifConditions = [];
+  }
+  el.ifConditions.push(condition);
+}
+
+function processOnce (el) {
+  var once = getAndRemoveAttr(el, 'v-once');
+  if (once != null) {
+    el.once = true;
+  }
+}
+
+function processSlot (el) {
+  if (el.tag === 'slot') {
+    el.slotName = getBindingAttr(el, 'name');
+    if (process.env.NODE_ENV !== 'production' && el.key) {
+      warn$1(
+        "`key` does not work on <slot> because slots are abstract outlets " +
+        "and can possibly expand into multiple elements. " +
+        "Use the key on a wrapping element instead."
+      );
+    }
+  } else {
+    var slotTarget = getBindingAttr(el, 'slot');
+    if (slotTarget) {
+      el.slotTarget = slotTarget === '""' ? '"default"' : slotTarget;
+    }
+    if (el.tag === 'template') {
+      el.slotScope = getAndRemoveAttr(el, 'scope');
+    }
+  }
+}
+
+function processComponent (el) {
+  var binding;
+  if ((binding = getBindingAttr(el, 'is'))) {
+    el.component = binding;
+  }
+  if (getAndRemoveAttr(el, 'inline-template') != null) {
+    el.inlineTemplate = true;
+  }
+}
+
+function processAttrs (el, options, customSlot) {
+  if ( customSlot === void 0 ) customSlot = false;
+
+  var list = el.attrsList;
+  var i, l, name, rawName, value, modifiers, isProp;
+  for (i = 0, l = list.length; i < l; i++) {
+    name = rawName = list[i].name;
+    value = list[i].value;
+    if (dirRE.test(name)) {
+      // mark element as dynamic
+      el.hasBindings = true;
+      // modifiers
+      modifiers = parseModifiers(name);
+      if (modifiers) {
+        name = name.replace(modifierRE, '');
+      }
+      if (bindRE.test(name)) { // v-bind
+        name = name.replace(bindRE, '');
+        value = parseFilters(value);
+        isProp = false;
+        if (modifiers) {
+          if (modifiers.prop) {
+            isProp = true;
+            name = camelize(name);
+            if (name === 'innerHtml') { name = 'innerHTML'; }
+          }
+          if (modifiers.camel) {
+            name = camelize(name);
+          }
+          if (modifiers.sync) {
+            addHandler(
+              el,
+              ("update:" + (camelize(name))),
+              genAssignmentCode(value, "$event")
+            );
+          }
+        }
+        if (isProp || platformMustUseProp(el.tag, el.attrsMap.type, name)) {
+          addProp(el, name, value);
+        } else {
+          addAttr(el, name, value);
+        }
+      } else if (onRE.test(name)) { // v-on
+        name = name.replace(onRE, '');
+        addHandler(el, name, value, modifiers, false, warn$1);
+        //Check if its expression or function
+        //
+        if (isNative) {
+          var camelCaseName = "on-" + name;
+          camelCaseName = camelCaseName.replace(/-([a-z])/g, function(g) {
+            return g[1].toUpperCase();
+          });
+          addAttr(el, camelCaseName, ("() => " + value));
+        }
+      } else { // normal directives
+        name = name.replace(dirRE, '');
+        // parse arg
+        var argMatch = name.match(argRE);
+        var arg = argMatch && argMatch[1];
+        if (arg) {
+          name = name.slice(0, -(arg.length + 1));
+        }
+        if (isNative) {
+          addHandler(el, name, value, modifiers, false, warn$1);
+          if (name === "model") {
+            addAttr(el, "value", value);
+            var detectOnChange = false;
+            el.attrs.forEach(function (attr) {
+              if (attr.name === "on-change") {
+                detectOnChange = true;
+              }
+            });
+            if (!detectOnChange) {
+              if (el.tag !== "switch") {
+                addAttr(
+                  el,
+                  "on-change",
+                  ("(value) => " + value + "=value.nativeEvent.text")
+                );
+              } else {
+                addAttr(el, "on-value-change", ("(value) => " + value + "=value"));
+              }
+            }
+          }
+        } else {
+          addDirective(el, name, rawName, value, arg, modifiers);
+        }
+        if (process.env.NODE_ENV !== 'production' && name === 'model') {
+          checkForAliasModel(el, value);
+        }
+      }
+    } else {
+      // literal attribute
+      if (process.env.NODE_ENV !== 'production') {
+        var expression = parseText(value, delimiters);
+        if (expression) {
+          warn$1(
+            name + "=\"" + value + "\": " +
+            'Interpolation inside attributes has been removed. ' +
+            'Use v-bind or the colon shorthand instead. For example, ' +
+            'instead of <div id="{{ val }}">, use <div :id="val">.'
+          );
+        }
+      }
+      if (name === "to") {
+        value = value.replace(/\//, "");
+        addAttr(el, "on-press", ("() => " + ("navigation") + ".navigate('" + value + "')"));
+      } else {
+        if (
+          (name === "render-prop-fn" || name === "render-prop") &&
+          customSlot
+        ) {
+          // Add Attribute in parent element
+          //
+          var renderer = new ReactNativeRenderGenerator(el, options);
+          var customRenderer = renderer.generateRender();
+          var customImport = renderer.generateImport();
+          customRenderer = customRenderer.replace(
+            /render \(vm\)/,
+            "render (slotProps)"
+          );
+
+          if (name === "render-prop") {
+            customRenderer = "(" + customRenderer + ")()";
+          } else {
+            // Support for args
+            customRenderer = customRenderer.replace(
+              /render \(slotProps\)/,
+              "render (args)"
+            );
+            if (
+              el.attrsMap["arguments"] &&
+              typeof el.attrsMap["arguments"] === "string"
+            ) {
+              var customArguments = el.attrsMap["arguments"].split(",");
+              customRenderer = customRenderer.replace(
+                /render \(args\)/,
+                ("render (" + (el.attrsMap["arguments"]) + ")")
+              );
+              // Replace each instance of the argument
+              //
+              customArguments.forEach(function (argument) {
+                var reg = new RegExp("vm[" + argument + "]", "g");
+                customRenderer = customRenderer.replace(reg, argument);
+              });
+            } else {
+              customRenderer = customRenderer.replace(/vm\(args\)/g, "args");
+            }
+          }
+          addAttr(el.parent, value, ("" + customRenderer));
+          var vueNativeCoreImport = customImport.split(splitRE$1);
+          if (vueNativeCoreImport && vueNativeCoreImport[0]) {
+            var imports = vueNativeCoreImport[0];
+            imports = imports.replace(/import \{/g, "");
+            imports = imports.replace(/\} from 'vue-native-helper'/g, "");
+            return imports.split(",").map(function(item) {
+              return item.trim();
+            });
+          }
+        } else {
+          addAttr(el, name, JSON.stringify(value));
+        }
+      }
+    }
+  }
+}
+
+function checkInFor (el) {
+  var parent = el;
+  while (parent) {
+    if (parent.for !== undefined) {
+      return true
+    }
+    parent = parent.parent;
+  }
+  return false
+}
+
+function parseModifiers (name) {
+  var match = name.match(modifierRE);
+  if (match) {
+    var ret = {};
+    match.forEach(function (m) { ret[m.slice(1)] = true; });
+    return ret
+  }
+}
+
+function makeAttrsMap (attrs) {
+  var map = {};
+  for (var i = 0, l = attrs.length; i < l; i++) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      map[attrs[i].name] && !isIE && !isEdge
+    ) {
+      warn$1('duplicate attribute: ' + attrs[i].name);
+    }
+    map[attrs[i].name] = attrs[i].value;
+  }
+  return map
+}
+
+function isForbiddenTag (el) {
+  return (
+    el.tag === 'style' ||
+    (el.tag === 'script' && (
+      !el.attrsMap.type ||
+      el.attrsMap.type === 'text/javascript'
+    ))
+  )
+}
+
+var ieNSBug = /^xmlns:NS\d+/;
+var ieNSPrefix = /^NS\d+:/;
+
+/* istanbul ignore next */
+function guardIESVGBug (attrs) {
+  var res = [];
+  for (var i = 0; i < attrs.length; i++) {
+    var attr = attrs[i];
+    if (!ieNSBug.test(attr.name)) {
+      attr.name = attr.name.replace(ieNSPrefix, '');
+      res.push(attr);
+    }
+  }
+  return res
+}
+
+function checkForAliasModel (el, value) {
+  var _el = el;
+  while (_el) {
+    if (_el.for && _el.alias === value) {
+      warn$1(
+        "<" + (el.tag) + " v-model=\"" + value + "\">: " +
+        "You are binding v-model directly to a v-for iteration alias. " +
+        "This will not be able to modify the v-for source array because " +
+        "writing to the alias is like modifying a function local variable. " +
+        "Consider using an array of objects and use v-model on an object property instead."
+      );
+    }
+    _el = _el.parent;
+  }
+}
+
 /*  */
 
 // in some cases, the event used has to be determined at runtime
@@ -4386,228 +4606,6 @@ var ReactWebRenderGenerator = /*@__PURE__*/(function (RenderGenerator) {
   return ReactWebRenderGenerator;
 }(RenderGenerator));
 
-var ReactNativeRenderGenerator$1 = /*@__PURE__*/(function (RenderGenerator) {
-  function ReactNativeRenderGenerator (ast, options) {
-    RenderGenerator.call(this, ast, options);
-    this.isNative = true;
-  }
-
-  if ( RenderGenerator ) ReactNativeRenderGenerator.__proto__ = RenderGenerator;
-  ReactNativeRenderGenerator.prototype = Object.create( RenderGenerator && RenderGenerator.prototype );
-  ReactNativeRenderGenerator.prototype.constructor = ReactNativeRenderGenerator;
-
-  /**
-   * override
-   */
-  ReactNativeRenderGenerator.prototype.genTag = function genTag (ast) {
-    var tag = ast.tag;
-
-    if (isBuildInTag(tag)) {
-      tag = "" + tag;
-    } else {
-      var c = tag.split(':').map(function (v) { return ("['" + (capitalize(camelize(v))) + "']"); }).join('');
-      tag = "vm.$options.components" + c;
-    }
-
-    return tag
-  };
-
-  /**
-   * override
-   * gen text expression
-   * @param {Object} ast
-   */
-  ReactNativeRenderGenerator.prototype.genTextExpression = function genTextExpression (ast) {
-    var code = RenderGenerator.prototype.genTextExpression.call(this, ast);
-    code = code
-      .replace(/^"\\n\s*/, '"')
-      .replace(/\\n\s*"$/, '"');
-    return code
-  };
-
-  /**
-   * override
-   * gen text
-   * @param {Object} ast
-   */
-  ReactNativeRenderGenerator.prototype.genText = function genText (ast) {
-    var code = RenderGenerator.prototype.genText.call(this, ast);
-    code = code
-      .replace(/^"\\n\s*/, '"')
-      .replace(/\\n\s*"$/, '"');
-    return code
-  };
-
-  /**
-   * override
-   */
-  ReactNativeRenderGenerator.prototype.genProps = function genProps (ast) {
-    var code = [];
-    ast.attrs = ast.attrs || [];
-    if (ast.slotTarget !== undefined) {
-      this.genSlotTarget(ast);
-    }
-    if (ast.ref || ast.parent === undefined) {
-      var ref = this.genRef(ast);
-      if (ref) {
-        code.push(ref);
-      }
-    }
-    if (ast.key !== undefined) {
-      var key = this.genKey(ast);
-      if (key) {
-        code.push(key);
-      }
-    }
-    if (Array.isArray(ast.attrs)) {
-      var props = ast.attrs
-        .filter(function (v) {
-          return v.name !== 'class' && v.name !== 'style' && v.name !== 'v-pre'
-        })
-        .map(function (v) {
-          var name = v.name;
-          name = camelize(name);
-          return (name + ": " + (v.value))
-        });
-      code = code.concat(props);
-    }
-
-    var styleProps = this.genNativeStyleProps(ast);
-    if (styleProps) {
-      code.push(styleProps);
-    }
-    var eventHandler = this.genEventHandler(ast);
-    if (eventHandler) {
-      code.push(eventHandler);
-    }
-    var nativeEventHandler = this.genNativeEventHandler(ast);
-    if (nativeEventHandler) {
-      code.push(nativeEventHandler);
-    }
-
-    return code
-  };
-
-  ReactNativeRenderGenerator.prototype.genTemplate = function genTemplate (ast) {
-    if (ast.parent === undefined) {
-      return this.genElement(ast.children[0]);
-    } else {
-      if (ast.children.length > 1) {
-        ast.tag = 'view';
-        return this.genElement(ast);
-      } else {
-        return this.genElement(ast.children[0]);
-      }
-    }
-  };
-
-  ReactNativeRenderGenerator.prototype.genEventHandler = function genEventHandler (ast) {
-    var code = '';
-    if (ast.events) {
-      if (isReservedTag(ast.tag) || isBuildInTag(ast.tag)) {
-          code = genHandlers(ast.events, this.vueConfig);
-      } else {
-        code = genCustomEventHandlers(ast.events, this.vueConfig);
-      }
-    }
-    return code
-  };
-
-  ReactNativeRenderGenerator.prototype.genNativeEventHandler = function genNativeEventHandler (ast) {
-    var code = '';
-    if (ast.nativeEvents && !isReservedTag(ast.tag)) {
-      code = HELPER_HEADER + "nativeEvents: {" + (genHandlers(ast.nativeEvents, this.vueConfig)) + "}";
-    }
-    return code
-  };
-
-  // merge style & class
-  ReactNativeRenderGenerator.prototype.genNativeStyleProps = function genNativeStyleProps (ast) {
-    var classProps = this.genClassProps(ast);
-
-    var styleProps = this.genStyleProps(ast);
-
-    // merge style and class props into style
-    return ("style: " + (NATIVE.mergeStyleAndClass.name) + "(" + classProps + ", " + styleProps + ")")
-  };
-
-  /**
-   * gen style props
-   * @param {Object} ast
-   */
-  ReactNativeRenderGenerator.prototype.genStyleProps = function genStyleProps (ast) {
-    var styleAttrsValue = ast.attrs.filter(function (v) { return v.name === 'style'; }).map(function (v) { return v.value; });
-    var show = ast.directives && ast.directives.filter(function (v) { return v.name === 'show'; })[0];
-    var topParent = this.isAstTopParent(ast);
-    if (styleAttrsValue.length === 0 && !show && !topParent) {
-      return
-    }
-    var staticStyle, dynamicStyle, showStyle;
-    styleAttrsValue.forEach(function (v) {
-      if (/^".*"$/.test(v)) {
-        staticStyle = v.trim().replace(/;*"$/, ';"');
-      } else {
-        dynamicStyle = v;
-      }
-    });
-    if (staticStyle) {
-      try {
-        staticStyle = JSON.stringify(parseStyleText(staticStyle));
-      } catch (e) {}
-    }
-    if (show) {
-      showStyle = "{display: " + (show.value) + " ? '' : 'none'}";
-    }
-    return ((NATIVE.bindStyle.name) + "(" + dynamicStyle + ", " + staticStyle + ", " + showStyle + ")")
-  };
-
-  /**
-   * gen class props
-   * @param {Object} ast
-   */
-  ReactNativeRenderGenerator.prototype.genClassProps = function genClassProps (ast) {
-    var topParent = this.isAstTopParent(ast);
-    var classAttrsValue = ast.attrs.filter(function (v) { return v.name === 'class'; }).map(function (v) { return v.value; });
-    if (classAttrsValue.length === 0 && !topParent) {
-      return
-    }
-    var staticClass, dynamicClass;
-    classAttrsValue.forEach(function (v) {
-      if (/^".*"$/.test(v) || /^'.*'$/.test(v)) {
-        staticClass = v.trim(); // .replace(/^"(.*)"$/, '$1')
-      } else {
-        dynamicClass = v;
-      }
-    });
-    var objCode = '{';
-    if (staticClass) {
-      objCode += "staticClass: " + staticClass + ",";
-    }
-    if (dynamicClass) {
-      objCode += "dynamicClass: " + dynamicClass + ",";
-    }
-    if (topParent) {
-      objCode += "parentClass: this.props.style,";
-    }
-    objCode = (objCode.replace(/,$/, '')) + "}";
-    return ((NATIVE.bindClass.name) + ".call(this, " + objCode + ")")
-  };
-
-  ReactNativeRenderGenerator.prototype.isAstTopParent = function isAstTopParent (ast) {
-    if (ast.parent === undefined) {
-      return true
-    }
-    if (ast.parent.tag === 'template' || ast.parent.tag === 'transition' || ast.parent.originTag === 'transition') {
-      if (ast.parent.parent === undefined) {
-        return true
-      }
-    }
-    return false
-  };
-
-  return ReactNativeRenderGenerator;
-}(RenderGenerator));
-
 var baseOptions = {
   expectHTML: true,
   isPreTag: isPreTag,
@@ -4650,7 +4648,7 @@ function nativeCompiler(template, options) {
     var importObj = { imports: [] };
     traverse(ast, options, importObj);
     var imports = importObj.imports;
-    var renderer = new ReactNativeRenderGenerator$1(ast, options);
+    var renderer = new ReactNativeRenderGenerator(ast, options);
     importCode = renderer.generateImport();
     renderCode = renderer.generateRender();
     // Remove extra commas

@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import { parse, processAttrs } from "compiler/parser/index";
 
 import { NativeRenderGenerator } from "vue-native/compiler/codegen/index";

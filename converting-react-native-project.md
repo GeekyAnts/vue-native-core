@@ -45,6 +45,29 @@ module.exports = (async () => {
 })();
 ```
 
+#### NOTE to Expo users:
+
+The `app.json` file must be modified to allow `.vue` files to be recognised.
+
+```diff
+{
+  "expo": {
+    "sdkVersion": "34.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    ...
+    "packagerOpts": {
++     "sourceExts": ["js", "json", "ts", "tsx", "vue"],
+      "config": "metro.config.js"
+    }
+  }
+}
+```
+
+
 The `babelTransformPath` property above takes the path to the transformer you wish to use. In our case, we need to create a `vueTransformerPlugin.js` file to the project's root and specify supported extensions:
 
 ```js

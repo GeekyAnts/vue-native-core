@@ -547,9 +547,6 @@ var isServerRendering = function () {
   return _isServer;
 };
 
-// detect devtools
-var devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
-
 /* istanbul ignore next */
 function isNative(Ctor) {
   return typeof Ctor === "function" && /native code/.test(Ctor.toString());
