@@ -19,7 +19,7 @@ export function createRenderer (options?: Object = {}): {
     modules,
     // user can provide server-side implementations for custom directives
     // when creating the renderer.
-    directives: Object.assign(baseDirectives, options.directives)
+    directives: Object.assign(baseDirectives, options.directives),
   }))
 }
 

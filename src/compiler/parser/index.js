@@ -18,7 +18,7 @@ import {
   addDirective,
   getBindingAttr,
   getAndRemoveAttr,
-  pluckModuleFunction
+  pluckModuleFunction,
 } from '../helpers'
 
 export const onRE = /^@|^v-on:/
@@ -29,7 +29,7 @@ export const forIteratorRE = /\((\{[^}]*\}|[^,]*),([^,]*)(?:,([^,]*))?\)/
 const argRE = /:(.*)$/
 const bindRE = /^:|^v-bind:/
 const modifierRE = /\.[^.]+/g
-const  splitRE = /\r?\n/g;
+const  splitRE = /\r?\n/g
 
 const decodeHTMLCached = cached(decode)
 
@@ -107,7 +107,7 @@ export function parse (
         attrsList: attrs,
         attrsMap: makeAttrsMap(attrs),
         parent: currentParent,
-        children: []
+        children: [],
       }
       if (ns) {
         element.ns = ns
@@ -184,7 +184,7 @@ export function parse (
           checkRootConstraints(element)
           addIfCondition(root, {
             exp: element.elseif,
-            block: element
+            block: element,
           })
         } else if (process.env.NODE_ENV !== 'production') {
           warnOnce(
@@ -264,16 +264,16 @@ export function parse (
           children.push({
             type: 2,
             expression,
-            text
+            text,
           })
         } else if (text !== ' ' || !children.length || children[children.length - 1].text !== ' ') {
           children.push({
             type: 3,
-            text
+            text,
           })
         }
       }
-    }
+    },
   })
   return root
 }
@@ -291,7 +291,7 @@ function processRawAttrs (el) {
     for (let i = 0; i < l; i++) {
       attrs[i] = {
         name: el.attrsList[i].name,
-        value: JSON.stringify(el.attrsList[i].value)
+        value: JSON.stringify(el.attrsList[i].value),
       }
     }
   } else if (!el.pre) {
@@ -349,7 +349,7 @@ function processIf (el) {
     el.if = exp
     addIfCondition(el, {
       exp: exp,
-      block: el
+      block: el,
     })
   } else {
     if (getAndRemoveAttr(el, 'v-else') != null) {
@@ -367,7 +367,7 @@ function processIfConditions (el, parent) {
   if (prev && prev.if) {
     addIfCondition(prev, {
       exp: el.elseif,
-      block: el
+      block: el,
     })
   } else if (process.env.NODE_ENV !== 'production') {
     warn(
@@ -485,11 +485,11 @@ export function processAttrs (el, options, customSlot = false) {
         //Check if its expression or function
         //
         if (isNative) {
-          let camelCaseName = "on-" + name;
+          let camelCaseName = "on-" + name
           camelCaseName = camelCaseName.replace(/-([a-z])/g, function(g) {
-            return g[1].toUpperCase();
-          });
-          addAttr(el, camelCaseName, `() => ${value}`);
+            return g[1].toUpperCase()
+          })
+          addAttr(el, camelCaseName, `() => ${value}`)
         }
       } else { // normal directives
         name = name.replace(dirRE, '')
@@ -500,29 +500,29 @@ export function processAttrs (el, options, customSlot = false) {
           name = name.slice(0, -(arg.length + 1))
         }
         if (isNative) {
-          addHandler(el, name, value, modifiers, false, warn);
+          addHandler(el, name, value, modifiers, false, warn)
           if (name === "model") {
-            addAttr(el, "value", value);
-            let detectOnChange = false;
+            addAttr(el, "value", value)
+            let detectOnChange = false
             el.attrs.forEach(attr => {
               if (attr.name === "on-change") {
-                detectOnChange = true;
+                detectOnChange = true
               }
-            });
+            })
             if (!detectOnChange) {
               if (el.tag !== "switch") {
                 addAttr(
                   el,
                   "on-change",
                   `(value) => ${value}=value.nativeEvent.text`
-                );
+                )
               } else {
-                addAttr(el, "on-value-change", `(value) => ${value}=value`);
+                addAttr(el, "on-value-change", `(value) => ${value}=value`)
               }
             }
           }
         } else {
-          addDirective(el, name, rawName, value, arg, modifiers);
+          addDirective(el, name, rawName, value, arg, modifiers)
         }
         if (process.env.NODE_ENV !== 'production' && name === 'model') {
           checkForAliasModel(el, value)
@@ -542,8 +542,8 @@ export function processAttrs (el, options, customSlot = false) {
         }
       }
       if (name === "to") {
-        value = value.replace(/\//, "");
-        addAttr(el, "on-press", `() => ${"navigation"}.navigate('${value}')`);
+        value = value.replace(/\//, "")
+        addAttr(el, "on-press", `() => ${"navigation"}.navigate('${value}')`)
       } else {
         if (
           (name === "render-prop-fn" || name === "render-prop") &&
@@ -551,53 +551,53 @@ export function processAttrs (el, options, customSlot = false) {
         ) {
           // Add Attribute in parent element
           //
-          const renderer = new ReactNativeRenderGenerator(el, options);
-          let customRenderer = renderer.generateRender();
-          let customImport = renderer.generateImport();
+          const renderer = new ReactNativeRenderGenerator(el, options)
+          let customRenderer = renderer.generateRender()
+          let customImport = renderer.generateImport()
           customRenderer = customRenderer.replace(
             /render \(vm\)/,
             "render (slotProps)"
-          );
+          )
 
           if (name === "render-prop") {
-            customRenderer = "(" + customRenderer + ")()";
+            customRenderer = "(" + customRenderer + ")()"
           } else {
             // Support for args
             customRenderer = customRenderer.replace(
               /render \(slotProps\)/,
               "render (args)"
-            );
+            )
             if (
               el.attrsMap["arguments"] &&
               typeof el.attrsMap["arguments"] === "string"
             ) {
-              let customArguments = el.attrsMap["arguments"].split(",");
+              let customArguments = el.attrsMap["arguments"].split(",")
               customRenderer = customRenderer.replace(
                 /render \(args\)/,
                 `render (${el.attrsMap["arguments"]})`
-              );
+              )
               // Replace each instance of the argument
               //
               customArguments.forEach(argument => {
-                let reg = new RegExp("vm[" + argument + "]", "g");
-                customRenderer = customRenderer.replace(reg, argument);
-              });
+                let reg = new RegExp("vm[" + argument + "]", "g")
+                customRenderer = customRenderer.replace(reg, argument)
+              })
             } else {
-              customRenderer = customRenderer.replace(/vm\(args\)/g, "args");
+              customRenderer = customRenderer.replace(/vm\(args\)/g, "args")
             }
           }
-          addAttr(el.parent, value, `${customRenderer}`);
-          let vueNativeCoreImport = customImport.split(splitRE);
+          addAttr(el.parent, value, `${customRenderer}`)
+          let vueNativeCoreImport = customImport.split(splitRE)
           if (vueNativeCoreImport && vueNativeCoreImport[0]) {
-            let imports = vueNativeCoreImport[0];
-            imports = imports.replace(/import \{/g, "");
-            imports = imports.replace(/\} from 'vue-native-helper'/g, "");
+            let imports = vueNativeCoreImport[0]
+            imports = imports.replace(/import \{/g, "")
+            imports = imports.replace(/\} from 'vue-native-helper'/g, "")
             return imports.split(",").map(function(item) {
-              return item.trim();
-            });
+              return item.trim()
+            })
           }
         } else {
-          addAttr(el, name, JSON.stringify(value));
+          addAttr(el, name, JSON.stringify(value))
         }
       }
     }

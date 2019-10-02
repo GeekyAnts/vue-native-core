@@ -16,7 +16,7 @@ function createContext (context) {
     clearTimeout,
     clearInterval,
     clearImmediate,
-    __VUE_SSR_CONTEXT__: context
+    __VUE_SSR_CONTEXT__: context,
   }
   sandbox.global = sandbox
   return sandbox
@@ -34,7 +34,7 @@ function compileModule (files, basedir) {
     const wrapper = NativeModule.wrap(code)
     const script = new vm.Script(wrapper, {
       filename,
-      displayErrors: true
+      displayErrors: true,
     })
     compiledScripts[filename] = script
     return script

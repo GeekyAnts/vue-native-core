@@ -6,7 +6,7 @@ import { set } from '../observer/index'
 
 import {
   ASSET_TYPES,
-  LIFECYCLE_HOOKS
+  LIFECYCLE_HOOKS,
 } from 'shared/constants'
 
 import {
@@ -15,7 +15,7 @@ import {
   camelize,
   capitalize,
   isBuiltInTag,
-  isPlainObject
+  isPlainObject,
 } from 'shared/util'
 
 /**

@@ -6,7 +6,7 @@ import {
   isDef,
   isUndef,
   hyphenate,
-  formatComponentName
+  formatComponentName,
 } from 'core/util/index'
 
 export function extractPropsFromVNodeData (

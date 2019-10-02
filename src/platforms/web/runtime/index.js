@@ -12,7 +12,7 @@ import {
   isReservedTag,
   isReservedAttr,
   getTagNamespace,
-  isUnknownElement
+  isUnknownElement,
 } from 'web/util/index'
 
 import { patch } from './patch'

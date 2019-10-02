@@ -7,5 +7,5 @@ export default [
   klass,
   style,
   props,
-  append
+  append,
 ]

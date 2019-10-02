@@ -9,7 +9,7 @@ import {
   isDef,
   isUndef,
   isObject,
-  toNumber
+  toNumber,
 } from 'shared/util'
 
 import {
@@ -17,7 +17,7 @@ import {
   resolveTransition,
   whenTransitionEnds,
   addTransitionClass,
-  removeTransitionClass
+  removeTransitionClass,
 } from '../transition-util'
 
 export function enter (vnode: VNodeWithData, toggleDisplay: ?() => void) {
@@ -56,7 +56,7 @@ export function enter (vnode: VNodeWithData, toggleDisplay: ?() => void) {
     appear,
     afterAppear,
     appearCancelled,
-    duration
+    duration,
   } = (data: any)
 
   // activeInstance will always be the <transition> component managing this
@@ -200,7 +200,7 @@ export function leave (vnode: VNodeWithData, rm: Function) {
     afterLeave,
     leaveCancelled,
     delayLeave,
-    duration
+    duration,
   } = (data: any)
 
   const expectsCSS = css !== false && !isIE9
@@ -334,5 +334,5 @@ export default inBrowser ? {
     } else {
       rm()
     }
-  }
+  },
 } : {}

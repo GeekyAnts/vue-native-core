@@ -32,5 +32,5 @@ export const propsToAttrMap = {
   acceptCharset: 'accept-charset',
   className: 'class',
   htmlFor: 'for',
-  httpEquiv: 'http-equiv'
+  httpEquiv: 'http-equiv',
 }

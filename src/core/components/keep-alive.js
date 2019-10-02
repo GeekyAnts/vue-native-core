@@ -47,7 +47,7 @@ export default {
 
   props: {
     include: patternTypes,
-    exclude: patternTypes
+    exclude: patternTypes,
   },
 
   created () {
@@ -66,7 +66,7 @@ export default {
     },
     exclude (val: string | RegExp) {
       pruneCache(this.cache, this._vnode, name => !matches(val, name))
-    }
+    },
   },
 
   render () {
@@ -94,5 +94,5 @@ export default {
       vnode.data.keepAlive = true
     }
     return vnode
-  }
+  },
 }

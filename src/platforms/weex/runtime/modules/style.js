@@ -64,5 +64,5 @@ function toObject (arr) {
 
 export default {
   create: createStyle,
-  update: updateStyle
+  update: updateStyle,
 }

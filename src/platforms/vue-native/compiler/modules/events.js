@@ -1,6 +1,6 @@
 import changeCase from 'change-case'
 import {
-  COMMON
+  COMMON,
 } from '../config'
 
 const fnExpRE = /^\s*([\w$_]+|\([^)]*?\))\s*=>|^function\s*\(/
@@ -26,7 +26,7 @@ let keyCodes = {
   left: 37,
   right: 39,
   down: 40,
-  'delete': [8, 46]
+  'delete': [8, 46],
 }
 
 // #4868: modifiers that prevent the execution of the listener
@@ -44,7 +44,7 @@ const modifierCode = {
   meta: genGuard(`!$event.metaKey`),
   left: genGuard(`'button' in $event && $event.button !== 0`),
   middle: genGuard(`'button' in $event && $event.button !== 1`),
-  right: genGuard(`'button' in $event && $event.button !== 2`)
+  right: genGuard(`'button' in $event && $event.button !== 2`),
 }
 
 function genHandlers (
@@ -273,5 +273,5 @@ function genFilterCode (key) {
 export {
   genHandlers,
   genCustomEventHandlers,
-  genTransitionEventHandlers
+  genTransitionEventHandlers,
 }

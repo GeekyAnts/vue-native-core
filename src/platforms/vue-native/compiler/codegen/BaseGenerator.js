@@ -1,13 +1,13 @@
 import {
   COMMON,
   WEB,
-  NATIVE
+  NATIVE,
 } from '../config'
 import {
-  specialObserver
+  specialObserver,
 } from '../helpers'
 import {
-  RENDER_HELPER_MODULE_NAME
+  RENDER_HELPER_MODULE_NAME,
 } from '../constants'
 
 class BaseGenerator {

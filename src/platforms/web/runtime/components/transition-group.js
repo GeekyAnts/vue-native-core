@@ -20,12 +20,12 @@ import {
   getTransitionInfo,
   transitionEndEvent,
   addTransitionClass,
-  removeTransitionClass
+  removeTransitionClass,
 } from '../transition-util'
 
 const props = extend({
   tag: String,
-  moveClass: String
+  moveClass: String,
 }, transitionProps)
 
 delete props.mode
@@ -145,8 +145,8 @@ export default {
       const info: Object = getTransitionInfo(clone)
       this.$el.removeChild(clone)
       return (this._hasMove = info.hasTransform)
-    }
-  }
+    },
+  },
 }
 
 function callPendingCbs (c: VNode) {

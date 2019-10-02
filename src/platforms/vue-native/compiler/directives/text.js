@@ -3,7 +3,7 @@ export default function text (ast) {
   const directive = ast.directives.filter(v => v.name === 'text')[0]
   children.push({
     type: 2,
-    text: `{{ ${directive.value} }}`
+    text: `{{ ${directive.value} }}`,
   })
   ast.children = children
 }

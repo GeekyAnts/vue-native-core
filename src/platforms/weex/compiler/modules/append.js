@@ -17,5 +17,5 @@ function genData (el: ASTElement): string {
 export default {
   staticKeys: ['appendAsTree'],
   preTransformNode,
-  genData
+  genData,
 }

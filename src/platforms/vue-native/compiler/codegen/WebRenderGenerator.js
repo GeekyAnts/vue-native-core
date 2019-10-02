@@ -1,29 +1,29 @@
 import { baseWarn } from 'compiler/helpers'
 import {
   camelize,
-  capitalize
+  capitalize,
 } from 'shared/util'
 import RenderGenerator from './RenderGenerator'
 import {
-  WEB
+  WEB,
 } from '../config'
 import {
-  HELPER_HEADER
+  HELPER_HEADER,
 } from '../constants'
 import {
   genHandlers,
   genCustomEventHandlers,
-  genTransitionEventHandlers
+  genTransitionEventHandlers,
 } from '../modules/events'
 import parseStyleText from '../modules/style'
 import {
   model as genModelDirectives,
   html as genHtmlDirectives,
-  text as genTextDirectives
+  text as genTextDirectives,
 } from '../directives/index'
 import {
   isReservedTag,
-  isBuildInTag
+  isBuildInTag,
 } from '../util/index'
 
 class ReactWebRenderGenerator extends RenderGenerator {
@@ -42,7 +42,7 @@ class ReactWebRenderGenerator extends RenderGenerator {
       // Add support for react-router
       //
       if (tag === "router-link") {
-        tag = "touchable-opacity";
+        tag = "touchable-opacity"
       }
       tag = `vm.$options.components['${capitalize(camelize(tag))}']`
     }
@@ -100,7 +100,7 @@ class ReactWebRenderGenerator extends RenderGenerator {
     ast.attrs = ast.attrs || []
     const obj = {
       name: WEB.transition.collection,
-      value: ''
+      value: '',
     }
     const arr = []
     let i = 0
@@ -165,7 +165,7 @@ class ReactWebRenderGenerator extends RenderGenerator {
     const node = {
       tag: 'span',
       children: ast.children,
-      parent: ast.parent
+      parent: ast.parent,
     }
     return this.genElement(node)
   }
@@ -174,7 +174,7 @@ class ReactWebRenderGenerator extends RenderGenerator {
     ast.attrs = ast.attrs || []
     const obj = {
       name: WEB.transitionGroup.collection,
-      value: ''
+      value: '',
     }
     const arr = []
     ast.children.forEach((v1, i1) => {
@@ -291,7 +291,7 @@ class ReactWebRenderGenerator extends RenderGenerator {
     ast.attrs = ast.attrs || []
     ast.attrs.push({
       name: WEB.inputComponent.tag,
-      value: `'${ast.tag}'`
+      value: `'${ast.tag}'`,
     })
     ast.tag = WEB.inputComponent.component
     return this.genElement(ast)

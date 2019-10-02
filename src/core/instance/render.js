@@ -8,13 +8,13 @@ import {
   looseEqual,
   emptyObject,
   handleError,
-  looseIndexOf
+  looseIndexOf,
 } from '../util/index'
 
 import VNode, {
   cloneVNodes,
   createTextVNode,
-  createEmptyVNode
+  createEmptyVNode,
 } from '../vdom/vnode'
 
 import { createElement } from '../vdom/create-element'
@@ -56,7 +56,7 @@ export function renderMixin (Vue: Class<Component>) {
     const {
       render,
       staticRenderFns,
-      _parentVnode
+      _parentVnode,
     } = vm.$options
 
     if (vm._isMounted) {

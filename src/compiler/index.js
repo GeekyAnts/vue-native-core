@@ -17,7 +17,7 @@ function baseCompile (
   return {
     ast,
     render: code.render,
-    staticRenderFns: code.staticRenderFns
+    staticRenderFns: code.staticRenderFns,
   }
 }
 
@@ -154,6 +154,6 @@ export function createCompiler (baseOptions: CompilerOptions) {
 
   return {
     compile,
-    compileToFunctions
+    compileToFunctions,
   }
 }

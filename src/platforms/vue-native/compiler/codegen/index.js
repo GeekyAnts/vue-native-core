@@ -3,5 +3,5 @@ import NativeRenderGenerator from './NativeRenderGenerator'
 
 export {
   WebRenderGenerator,
-  NativeRenderGenerator
+  NativeRenderGenerator,
 }

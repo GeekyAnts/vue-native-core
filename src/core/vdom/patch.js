@@ -24,7 +24,7 @@ import {
   isUndef,
   isTrue,
   makeMap,
-  isPrimitive
+  isPrimitive,
 } from '../util/index'
 
 export const emptyNode = new VNode('', {}, [])

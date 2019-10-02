@@ -58,7 +58,7 @@ const lifecycleMixin = {
       return true
     }
     return isObjectShallowModified(this.props, nextProps)
-  }
+  },
 }
 
 function patch (target, funcName) {

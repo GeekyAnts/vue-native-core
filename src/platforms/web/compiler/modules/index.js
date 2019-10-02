@@ -3,5 +3,5 @@ import style from './style'
 
 export default [
   klass,
-  style
+  style,
 ]

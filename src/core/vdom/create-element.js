@@ -10,12 +10,12 @@ import {
   isUndef,
   isTrue,
   isPrimitive,
-  resolveAsset
+  resolveAsset,
 } from '../util/index'
 
 import {
   normalizeChildren,
-  simpleNormalizeChildren
+  simpleNormalizeChildren,
 } from './helpers/index'
 
 const SIMPLE_NORMALIZE = 1

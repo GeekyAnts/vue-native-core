@@ -4,7 +4,7 @@ import { isJS } from './util'
 export default class VueSSRClientPlugin {
   constructor (options = {}) {
     this.options = Object.assign({
-      filename: 'vue-ssr-client-manifest.json'
+      filename: 'vue-ssr-client-manifest.json',
     }, options)
   }
 
@@ -29,7 +29,7 @@ export default class VueSSRClientPlugin {
         all: allFiles,
         initial: initialFiles,
         async: asyncFiles,
-        modules: { /* [identifier: string]: Array<index: number> */ }
+        modules: { /* [identifier: string]: Array<index: number> */ },
       }
 
       const assetModules = stats.modules.filter(m => m.assets.length)
@@ -58,7 +58,7 @@ export default class VueSSRClientPlugin {
       const json = JSON.stringify(manifest, null, 2)
       compilation.assets[this.options.filename] = {
         source: () => json,
-        size: () => json.length
+        size: () => json.length,
       }
       cb()
     })

@@ -61,7 +61,7 @@ export default {
         trigger(el, 'change')
       }
     }
-  }
+  },
 }
 
 function setSelected (el, binding, vm) {

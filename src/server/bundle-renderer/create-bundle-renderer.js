@@ -130,7 +130,7 @@ export function createBundleRendererCreator (createRenderer: () => Renderer) {
         })
 
         return res
-      }
+      },
     }
   }
 }

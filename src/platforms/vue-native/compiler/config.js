@@ -2,137 +2,137 @@ import {
   TAB_INDENT,
   CREATE_ELEMENT,
   HELPER_HEADER,
-  COMPONENT
+  COMPONENT,
 } from './constants'
 
 const COMMON = {
   'createElement': {
     name: `${HELPER_HEADER}${CREATE_ELEMENT}`,
-    alias: CREATE_ELEMENT
+    alias: CREATE_ELEMENT,
   },
   'component': {
     name: `${HELPER_HEADER}${COMPONENT}`,
-    alias: COMPONENT
+    alias: COMPONENT,
   },
   'renderSlot': {
     name: `${HELPER_HEADER}renderSlot`,
     value: `${HELPER_HEADER}slotSet`,
     defaultSlot: `${HELPER_HEADER}defaultSlot`,
     slotTag: `${HELPER_HEADER}slotTag`,
-    alias: 'renderSlot'
+    alias: 'renderSlot',
   },
   'template': {
     name: `${HELPER_HEADER}template`,
     type: `${HELPER_HEADER}template`,
-    alias: 'template'
+    alias: 'template',
   },
   'renderList': {
     name: `${HELPER_HEADER}renderList`,
-    alias: 'renderList'
+    alias: 'renderList',
   },
   'toNumber': {
     name: `${HELPER_HEADER}toNumber`,
-    alias: 'toNumber'
+    alias: 'toNumber',
   },
   'checkKeyCodes': {
     name: `${HELPER_HEADER}checkKeyCodes`,
-    alias: 'checkKeyCodes'
+    alias: 'checkKeyCodes',
   },
   'looseEqual': {
     name: `${HELPER_HEADER}looseEqual`,
-    alias: 'looseEqual'
+    alias: 'looseEqual',
   },
   'looseIndexOf': {
     name: `${HELPER_HEADER}looseIndexOf`,
-    alias: 'looseIndexOf'
+    alias: 'looseIndexOf',
   },
   'toString': {
     name: `${HELPER_HEADER}toString`,
-    alias: '_toString'
+    alias: '_toString',
   },
   'resolveFilter': {
     name: `${HELPER_HEADER}resolveFilter`,
-    alias: 'resolveFilter'
+    alias: 'resolveFilter',
   },
   'event': {
     name: `${HELPER_HEADER}event`,
-    alias: 'event'
+    alias: 'event',
   },
   'directive': {
     name: `${HELPER_HEADER}buildDirective`,
     alias: 'buildDirective',
     component: `${HELPER_HEADER}directiveComponent`,
     tag: `${HELPER_HEADER}directiveTag`,
-    context: `${HELPER_HEADER}directiveContext`
+    context: `${HELPER_HEADER}directiveContext`,
   },
   'dynamicComponent': {
     name: `${HELPER_HEADER}dynamicComponent`,
-    alias: 'dynamicComponent'
+    alias: 'dynamicComponent',
   },
   'setRef': {
-    name: `${HELPER_HEADER}setRef`
+    name: `${HELPER_HEADER}setRef`,
   },
   'customEvent': {
-    name: `${HELPER_HEADER}customEvent`
+    name: `${HELPER_HEADER}customEvent`,
   },
   'handleProps': {
     name: `${HELPER_HEADER}handleProps`,
-    alias: 'handleProps'
+    alias: 'handleProps',
   },
   'mergeProps': {
     name: `${HELPER_HEADER}mergeProps`,
-    alias: 'mergeProps'
-  }
+    alias: 'mergeProps',
+  },
 }
 
 const WEB = {
   'bindClass': {
     name: `${HELPER_HEADER}bindClass`,
-    alias: `bindWebClass`
+    alias: `bindWebClass`,
   },
   'bindStyle': {
     name: `${HELPER_HEADER}bindStyle`,
-    alias: `bindWebStyle`
+    alias: `bindWebStyle`,
   },
   'emptyComponent': {
     name: `${HELPER_HEADER}buildEmptyComponent`,
     alias: 'buildWebEmptyComponent',
-    component: `${HELPER_HEADER}EmptyComponent`
+    component: `${HELPER_HEADER}EmptyComponent`,
   },
   'inputComponent': {
     name: `${HELPER_HEADER}buildInputComponent`,
     alias: 'buildWebInputComponent',
     tag: `${HELPER_HEADER}inputComponentTag`,
-    component: `${HELPER_HEADER}InputComponent`
+    component: `${HELPER_HEADER}InputComponent`,
   },
   'transition': {
     name: `${HELPER_HEADER}transition`,
     alias: `buildWebTransition`,
     component: `${HELPER_HEADER}transitionComponent`,
-    collection: `${HELPER_HEADER}transitionCollection`
+    collection: `${HELPER_HEADER}transitionCollection`,
   },
   // unfinished
   'transitionGroup': {
     name: `${HELPER_HEADER}transitionGroup`,
     alias: `buildWebTransitionGroup`,
     component: `${HELPER_HEADER}transitionGroupComponent`,
-    collection: `${HELPER_HEADER}transitionGroupCollection`
-  }
+    collection: `${HELPER_HEADER}transitionGroupCollection`,
+  },
 }
 
 const NATIVE = {
   'bindClass': {
     name: `${HELPER_HEADER}bindClass`,
-    alias: `bindNativeClass`
+    alias: `bindNativeClass`,
   },
   'bindStyle': {
     name: `${HELPER_HEADER}bindStyle`,
-    alias: `bindNativeStyle`
+    alias: `bindNativeStyle`,
   },
   'mergeStyleAndClass': {
     name: HELPER_HEADER + "mergeNativeStyleAndNativeClass",
-    alias: "mergeNativeStyleAndNativeClass"
-  }
+    alias: "mergeNativeStyleAndNativeClass",
+  },
 }
 
 export {
@@ -140,5 +140,5 @@ export {
   WEB,
   NATIVE,
   TAB_INDENT,
-  CREATE_ELEMENT
+  CREATE_ELEMENT,
 }

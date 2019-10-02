@@ -9,7 +9,7 @@ import {
   hasProto,
   hasOwn,
   warn,
-  isServerRendering
+  isServerRendering,
 } from '../util/index'
 
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
@@ -22,7 +22,7 @@ const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
  */
 export const observerState = {
   shouldConvert: true,
-  isSettingProps: false
+  isSettingProps: false,
 }
 
 /**
@@ -179,7 +179,7 @@ export function defineReactive (
       }
       childOb = observe(newVal)
       dep.notify()
-    }
+    },
   })
 }
 
@@ -198,7 +198,7 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
     target[key] = val
     return val
   }
-  const ob = (target : any).__ob__
+  const ob = (target: any).__ob__
   if (target._isVue || (ob && ob.vmCount)) {
     process.env.NODE_ENV !== 'production' && warn(
       'Avoid adding reactive properties to a Vue instance or its root $data ' +
@@ -223,7 +223,7 @@ export function del (target: Array<any> | Object, key: any) {
     target.splice(key, 1)
     return
   }
-  const ob = (target : any).__ob__
+  const ob = (target: any).__ob__
   if (target._isVue || (ob && ob.vmCount)) {
     process.env.NODE_ENV !== 'production' && warn(
       'Avoid deleting properties on a Vue instance or its root $data ' +

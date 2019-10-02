@@ -86,7 +86,7 @@ export class RenderContext {
         const { buffer, bufferIndex, componentBuffer, key } = lastState
         const result = {
           html: buffer[bufferIndex],
-          components: componentBuffer[bufferIndex]
+          components: componentBuffer[bufferIndex],
         }
         this.cache.set(key, result)
         if (bufferIndex === 0) {

@@ -28,7 +28,7 @@ const autoCssTransition: (name: string) => Object = cached(name => {
     enterActiveClass: `${name}-enter-active`,
     leaveClass: `${name}-leave`,
     leaveToClass: `${name}-leave-to`,
-    leaveActiveClass: `${name}-leave-active`
+    leaveActiveClass: `${name}-leave-active`,
   }
 })
 
@@ -158,7 +158,7 @@ export function getTransitionInfo (el: Element, expectedType?: ?string): {
     type,
     timeout,
     propCount,
-    hasTransform
+    hasTransform,
   }
 }
 

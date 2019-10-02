@@ -10,12 +10,12 @@ import {
   isDef,
   isUndef,
   isTrue,
-  isObject
+  isObject,
 } from '../util/index'
 
 import {
   resolveAsyncComponent,
-  extractPropsFromVNodeData
+  extractPropsFromVNodeData,
 } from './helpers/index'
 
 import {
@@ -23,7 +23,7 @@ import {
   activeInstance,
   updateChildComponent,
   activateChildComponent,
-  deactivateChildComponent
+  deactivateChildComponent,
 } from '../instance/lifecycle'
 
 // hooks to be invoked on component VNodes during patch
@@ -90,7 +90,7 @@ const componentVNodeHooks = {
         deactivateChildComponent(componentInstance, true /* direct */)
       }
     }
-  }
+  },
 }
 
 const hooksToMerge = Object.keys(componentVNodeHooks)
@@ -192,7 +192,7 @@ export function createComponentInstanceForVnode (
     _parentListeners: vnodeComponentOptions.listeners,
     _renderChildren: vnodeComponentOptions.children,
     _parentElm: parentElm || null,
-    _refElm: refElm || null
+    _refElm: refElm || null,
   }
   // check inline-template render functions
   const inlineTemplate = vnode.data.inlineTemplate

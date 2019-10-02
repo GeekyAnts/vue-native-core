@@ -5,7 +5,7 @@ import { parseText } from 'compiler/parser/text-parser'
 import {
   getAndRemoveAttr,
   getBindingAttr,
-  baseWarn
+  baseWarn,
 } from 'compiler/helpers'
 
 type StaticStyleResult = {
@@ -78,5 +78,5 @@ function parseStaticStyle (staticStyle: ?string, options: CompilerOptions): Stat
 export default {
   staticKeys: ['staticStyle'],
   transformNode,
-  genData
+  genData,
 }

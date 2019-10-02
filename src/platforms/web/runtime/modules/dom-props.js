@@ -79,5 +79,5 @@ function isInputChanged (elm: any, newVal: string): boolean {
 
 export default {
   create: updateDOMProps,
-  update: updateDOMProps
+  update: updateDOMProps,
 }

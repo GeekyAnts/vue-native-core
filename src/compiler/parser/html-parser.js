@@ -21,7 +21,7 @@ const singleAttrValues = [
   // attr value, single quotes
   /'([^']*)'+/.source,
   // attr value, no quotes
-  /([^\s"'=<>`]+)/.source
+  /([^\s"'=<>`]+)/.source,
 ]
 const attribute = new RegExp(
   '^\\s*' + singleAttrIdentifier.source +
@@ -54,7 +54,7 @@ const decodingMap = {
   '&gt;': '>',
   '&quot;': '"',
   '&amp;': '&',
-  '&#10;': '\n'
+  '&#10;': '\n',
 }
 const encodedAttr = /&(?:lt|gt|quot|amp);/g
 const encodedAttrWithNewLines = /&(?:lt|gt|quot|amp|#10);/g
@@ -192,7 +192,7 @@ export function parseHTML (html, options) {
       const match = {
         tagName: start[1],
         attrs: [],
-        start: index
+        start: index,
       }
       advance(start[0].length)
       let end, attr
@@ -250,7 +250,7 @@ export function parseHTML (html, options) {
         value: decodeAttr(
           value,
           options.shouldDecodeNewlines
-        )
+        ),
       }
     }
 

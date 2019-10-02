@@ -4,13 +4,13 @@ import { escape } from 'he'
 
 import {
   isDef,
-  isUndef
+  isUndef,
 } from 'shared/util'
 
 import {
   isBooleanAttr,
   isEnumeratedAttr,
-  isFalsyAttrValue
+  isFalsyAttrValue,
 } from 'web/util/attrs'
 
 export default function renderAttrs (node: VNodeWithData): string {

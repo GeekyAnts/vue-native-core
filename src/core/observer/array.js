@@ -18,7 +18,7 @@ export const arrayMethods = Object.create(arrayProto)
   'unshift',
   'splice',
   'sort',
-  'reverse'
+  'reverse',
 ]
 .forEach(function (method) {
   // cache original method

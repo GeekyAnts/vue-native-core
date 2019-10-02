@@ -10,7 +10,7 @@
 
 var NS = {
   xlink: 'http://www.w3.org/1999/xlink',
-  xml: 'http://www.w3.org/XML/1998/namespace'
+  xml: 'http://www.w3.org/XML/1998/namespace',
 }
 
 // We use attributes for everything SVG so let's avoid some duplication and run
@@ -269,7 +269,7 @@ var ATTRS = {
   y2: 0,
   yChannelSelector: 'yChannelSelector',
   z: 0,
-  zoomAndPan: 'zoomAndPan'
+  zoomAndPan: 'zoomAndPan',
 }
 
 var SVGDOMPropertyConfig = {
@@ -284,9 +284,9 @@ var SVGDOMPropertyConfig = {
     xlinkType: NS.xlink,
     xmlBase: NS.xml,
     xmlLang: NS.xml,
-    xmlSpace: NS.xml
+    xmlSpace: NS.xml,
   },
-  DOMAttributeNames: {}
+  DOMAttributeNames: {},
 }
 
 Object.keys(ATTRS).forEach(function (key) {

@@ -1,5 +1,5 @@
 import {
-  isUnaryTag
+  isUnaryTag,
 } from './util/index'
 
 export function specialObserver (obj, cb) {
@@ -12,7 +12,7 @@ export function specialObserver (obj, cb) {
         get () {
           cb && cb(obj)
           return val
-        }
+        },
       })
     } else {
       specialObserver(val, cb)

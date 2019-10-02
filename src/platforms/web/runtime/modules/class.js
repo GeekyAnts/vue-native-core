@@ -2,13 +2,13 @@
 
 import {
   isDef,
-  isUndef
+  isUndef,
 } from 'shared/util'
 
 import {
   concat,
   stringifyClass,
-  genClassForVnode
+  genClassForVnode,
 } from 'web/util/index'
 
 function updateClass (oldVnode: any, vnode: any) {
@@ -44,5 +44,5 @@ function updateClass (oldVnode: any, vnode: any) {
 
 export default {
   create: updateClass,
-  update: updateClass
+  update: updateClass,
 }

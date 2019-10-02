@@ -148,7 +148,7 @@ function assertType (value: any, type: Function): {
   }
   return {
     valid,
-    expectedType
+    expectedType,
   }
 }
 

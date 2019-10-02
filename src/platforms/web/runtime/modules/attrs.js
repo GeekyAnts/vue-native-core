@@ -5,7 +5,7 @@ import { isIE9 } from 'core/util/env'
 import {
   extend,
   isDef,
-  isUndef
+  isUndef,
 } from 'shared/util'
 
 import {
@@ -14,7 +14,7 @@ import {
   getXlinkProp,
   isBooleanAttr,
   isEnumeratedAttr,
-  isFalsyAttrValue
+  isFalsyAttrValue,
 } from 'web/util/index'
 
 function updateAttrs (oldVnode: VNodeWithData, vnode: VNodeWithData) {
@@ -81,5 +81,5 @@ function setAttr (el: Element, key: string, value: any) {
 
 export default {
   create: updateAttrs,
-  update: updateAttrs
+  update: updateAttrs,
 }

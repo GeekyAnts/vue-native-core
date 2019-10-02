@@ -3,7 +3,7 @@ import { transitionProps, extractTransitionData } from './transition'
 
 const props = extend({
   tag: String,
-  moveClass: String
+  moveClass: String,
 }, transitionProps)
 
 delete props.mode
@@ -132,8 +132,8 @@ export default {
     getMoveData (context, moveClass) {
       const stylesheet = context.$options.style || {}
       return stylesheet['@TRANSITION'] && stylesheet['@TRANSITION'][moveClass]
-    }
-  }
+    },
+  },
 }
 
 // function callPendingCbs (c) {

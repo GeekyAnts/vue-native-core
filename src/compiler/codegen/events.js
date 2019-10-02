@@ -13,7 +13,7 @@ const keyCodes: { [key: string]: number | Array<number> } = {
   left: 37,
   right: 39,
   down: 40,
-  'delete': [8, 46]
+  'delete': [8, 46],
 }
 
 // #4868: modifiers that prevent the execution of the listener
@@ -31,7 +31,7 @@ const modifierCode: { [key: string]: string } = {
   meta: genGuard(`!$event.metaKey`),
   left: genGuard(`'button' in $event && $event.button !== 0`),
   middle: genGuard(`'button' in $event && $event.button !== 1`),
-  right: genGuard(`'button' in $event && $event.button !== 2`)
+  right: genGuard(`'button' in $event && $event.button !== 2`),
 }
 
 export function genHandlers (

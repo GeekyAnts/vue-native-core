@@ -4,7 +4,7 @@ import { parseText } from 'compiler/parser/text-parser'
 import {
   getAndRemoveAttr,
   getBindingAttr,
-  baseWarn
+  baseWarn,
 } from 'compiler/helpers'
 
 type StaticClassResult = {
@@ -69,5 +69,5 @@ function parseStaticClass (staticClass: ?string, options: CompilerOptions): Stat
 export default {
   staticKeys: ['staticClass'],
   transformNode,
-  genData
+  genData,
 }

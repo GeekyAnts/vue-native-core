@@ -1,9 +1,9 @@
 import {
-  buildInputComponent
+  buildInputComponent,
 } from './buildInputComponent'
 
 const buildWebInputComponent = buildInputComponent
 
 export {
-  buildWebInputComponent
+  buildWebInputComponent,
 }

@@ -134,7 +134,7 @@ function renderComponentWithCache (node, isRoot, key, context) {
     key,
     buffer,
     bufferIndex,
-    componentBuffer
+    componentBuffer,
   })
   renderComponentInner(node, isRoot, context)
 }
@@ -153,7 +153,7 @@ function renderComponentInner (node, isRoot, context) {
   childNode.parent = node
   context.renderStates.push({
     type: 'Component',
-    prevActive
+    prevActive,
   })
   renderNode(childNode, isRoot, context)
 }
@@ -177,7 +177,7 @@ function renderElement (el, isRoot, context) {
       type: 'Element',
       rendered: 0,
       total: children.length,
-      endTag, children
+      endTag, children,
     })
     write(startTag, next)
   }
@@ -277,7 +277,7 @@ export function createRenderFunction (
       userContext,
       write, done, renderNode,
       isUnaryTag, modules, directives,
-      cache
+      cache,
     })
     normalizeRender(component)
     renderNode(component._render(), true, context)

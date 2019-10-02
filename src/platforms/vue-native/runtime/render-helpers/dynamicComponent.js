@@ -1,5 +1,5 @@
 import {
-  pascalCaseTag
+  pascalCaseTag,
 } from '../components/util.js'
 
 export function dynamicComponent (vm, name) {

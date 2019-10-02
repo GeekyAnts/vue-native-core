@@ -5,5 +5,5 @@ import text from './text'
 export {
 	model,
 	html,
-	text
+	text,
 }

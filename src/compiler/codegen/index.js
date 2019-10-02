@@ -42,7 +42,7 @@ export function generate (
   onceCount = prevOnceCount
   return {
     render: `with(this){return ${code}}`,
-    staticRenderFns: currentStaticRenderFns
+    staticRenderFns: currentStaticRenderFns,
   }
 }
 

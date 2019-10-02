@@ -11,7 +11,7 @@ const renderer = {
   TextNode,
   instances,
   modules,
-  components
+  components,
 }
 
 /**
@@ -77,7 +77,7 @@ export function createInstance (
 
   const instance = instances[instanceId] = {
     instanceId, config, data,
-    document, callbacks, callbackId
+    document, callbacks, callbackId,
   }
 
   // Prepare native module getter and HTML5 Timer APIs.
@@ -88,7 +88,7 @@ export function createInstance (
   const weexInstanceVar = {
     config,
     document,
-    requireModule: moduleGetter
+    requireModule: moduleGetter,
   }
   Object.freeze(weexInstanceVar)
 
@@ -267,7 +267,7 @@ function createVueModuleInstance (instanceId, moduleGetter) {
         // record instance by id
         instance.app = this
       }
-    }
+    },
   })
 
   /**
@@ -343,7 +343,7 @@ function getInstanceTimer (instanceId, moduleGetter) {
     },
     clearInterval: (n) => {
       timer.clearInterval(n)
-    }
+    },
   }
   return timerAPIs
 }

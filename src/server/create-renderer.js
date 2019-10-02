@@ -38,14 +38,14 @@ export function createRenderer ({
   inject,
   cache,
   shouldPreload,
-  clientManifest
+  clientManifest,
 }: RenderOptions = {}): Renderer {
   const render = createRenderFunction(modules, directives, isUnaryTag, cache)
   const templateRenderer = new TemplateRenderer({
     template,
     inject,
     shouldPreload,
-    clientManifest
+    clientManifest,
   })
 
   return {
@@ -98,6 +98,6 @@ export function createRenderer ({
         renderStream.pipe(templateStream)
         return templateStream
       }
-    }
+    },
   }
 }

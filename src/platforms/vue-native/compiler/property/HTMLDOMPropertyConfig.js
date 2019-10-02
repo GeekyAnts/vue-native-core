@@ -195,13 +195,13 @@ var HTMLDOMPropertyConfig = {
     // as an alternative to the sandbox attribute on IE<10
     security: 0,
     // IE-only attribute that controls focus behavior
-    unselectable: 0
+    unselectable: 0,
   },
   DOMAttributeNames: {
     acceptCharset: 'accept-charset',
     className: 'class',
     htmlFor: 'for',
-    httpEquiv: 'http-equiv'
+    httpEquiv: 'http-equiv',
   },
   DOMPropertyNames: {},
   DOMMutationMethods: {
@@ -226,8 +226,8 @@ var HTMLDOMPropertyConfig = {
         // this function again when focus is lost.
         node.setAttribute('value', '' + value)
       }
-    }
-  }
+    },
+  },
 }
 
 export default HTMLDOMPropertyConfig

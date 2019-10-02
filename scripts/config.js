@@ -1,11 +1,11 @@
-const path = require("path");
-const buble = require("rollup-plugin-buble");
-const alias = require("rollup-plugin-alias");
-const replace = require("rollup-plugin-replace");
-const flow = require("rollup-plugin-flow-no-whitespace");
+const path = require("path")
+const buble = require("rollup-plugin-buble")
+const alias = require("rollup-plugin-alias")
+const replace = require("rollup-plugin-replace")
+const flow = require("rollup-plugin-flow-no-whitespace")
 const version =
   process.env.VERSION
-  || require("../packages/vue-native-core/package.json").version;
+  || require("../packages/vue-native-core/package.json").version
 
 const banner =
   "/*!\n" +
@@ -16,17 +16,17 @@ const banner =
   new Date().getFullYear() +
   " Evan You\n" +
   " * Released under the MIT License.\n" +
-  " */";
+  " */"
 
-const aliases = require("./alias");
+const aliases = require("./alias")
 const resolve = p => {
-  const base = p.split("/")[0];
+  const base = p.split("/")[0]
   if (aliases[base]) {
-    return path.resolve(aliases[base], p.slice(base.length + 1));
+    return path.resolve(aliases[base], p.slice(base.length + 1))
   } else {
-    return path.resolve(__dirname, "../", p);
+    return path.resolve(__dirname, "../", p)
   }
-};
+}
 
 const builds = {
   "vue-native-core": {
@@ -53,8 +53,8 @@ const builds = {
     dest: resolve("packages/vue-native-template-compiler/build.js"),
     format: "cjs",
     external: ["change-case", "he", "de-indent", "lodash"],
-  }
-};
+  },
+}
 
 function genConfig(opts) {
   const config = {
@@ -68,34 +68,34 @@ function genConfig(opts) {
     external: opts.external,
     plugins: [
       replace({
-        __VERSION__: version
+        __VERSION__: version,
       }),
       flow(),
       buble(),
-      alias(Object.assign({}, aliases, opts.alias))
+      alias(Object.assign({}, aliases, opts.alias)),
     ].concat(opts.plugins || []),
     onwarn: (msg, warn) => {
       if (!/Circular/.test(msg)) {
         warn(msg)
       }
     },
-  };
+  }
 
   if (opts.env) {
     config.plugins.push(
       replace({
-        "process.env.NODE_ENV": JSON.stringify(opts.env)
+        "process.env.NODE_ENV": JSON.stringify(opts.env),
       })
-    );
+    )
   }
 
-  return config;
+  return config
 }
 
 if (process.env.TARGET) {
-  module.exports = genConfig(builds[process.env.TARGET]);
+  module.exports = genConfig(builds[process.env.TARGET])
 } else {
-  exports.getBuild = name => genConfig(builds[name]);
+  exports.getBuild = name => genConfig(builds[name])
   exports.getAllBuilds = () =>
-    Object.keys(builds).map(name => genConfig(builds[name]));
+    Object.keys(builds).map(name => genConfig(builds[name]))
 }

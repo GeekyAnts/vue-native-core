@@ -2,7 +2,7 @@ import RenderGenerator from './RenderGenerator'
 
 import {
   camelize,
-  capitalize
+  capitalize,
 } from 'shared/util'
 
 import {
@@ -10,16 +10,16 @@ import {
   genCustomEventHandlers,
 } from '../modules/events'
 import {
-  NATIVE
+  NATIVE,
 } from '../config'
 import parseStyleText from '../modules/style'
 import {
   isReservedTag,
-  isBuildInTag
+  isBuildInTag,
 } from '../util/index'
 
 import {
-  HELPER_HEADER
+  HELPER_HEADER,
 } from '../constants'
 
 class ReactNativeRenderGenerator extends RenderGenerator {
@@ -122,13 +122,13 @@ class ReactNativeRenderGenerator extends RenderGenerator {
 
   genTemplate(ast) {
     if (ast.parent === undefined) {
-      return this.genElement(ast.children[0]);
+      return this.genElement(ast.children[0])
     } else {
       if (ast.children.length > 1) {
-        ast.tag = 'view';
-        return this.genElement(ast);
+        ast.tag = 'view'
+        return this.genElement(ast)
       } else {
-        return this.genElement(ast.children[0]);
+        return this.genElement(ast.children[0])
       }
     }
   }

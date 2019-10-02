@@ -14,7 +14,7 @@ export default {
   },
   destroy (vnode: VNodeWithData) {
     registerRef(vnode, true)
-  }
+  },
 }
 
 export function registerRef (vnode: VNodeWithData, isRemoval: ?boolean) {

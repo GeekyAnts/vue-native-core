@@ -47,11 +47,11 @@ function buildEntry (config) {
           fromString: true,
           output: {
             screw_ie8: true,
-            ascii_only: true
+            ascii_only: true,
           },
           compress: {
-            pure_funcs: ['makeMap']
-          }
+            pure_funcs: ['makeMap'],
+          },
         }).code
         return write(file, minified, true)
       } else {

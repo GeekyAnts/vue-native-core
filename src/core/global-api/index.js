@@ -14,7 +14,7 @@ import {
   extend,
   nextTick,
   mergeOptions,
-  defineReactive
+  defineReactive,
 } from '../util/index'
 
 export function initGlobalAPI (Vue: GlobalAPI) {
@@ -37,7 +37,7 @@ export function initGlobalAPI (Vue: GlobalAPI) {
     warn,
     extend,
     mergeOptions,
-    defineReactive
+    defineReactive,
   }
 
   Vue.set = set

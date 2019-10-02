@@ -8,7 +8,7 @@ export { bindWebClass } from './bindWebClass'
 export { bindNativeClass } from './bindNativeClass'
 export { bindWebStyle } from './bindWebStyle'
 export { bindNativeStyle } from './bindNativeStyle'
-export { mergeNativeStyleAndNativeClass } from './mergeNativeStyleAndNativeClass';
+export { mergeNativeStyleAndNativeClass } from './mergeNativeStyleAndNativeClass'
 export { checkKeyCodes } from './checkKeyCodes'
 export { template } from './template'
 export { event } from './event'

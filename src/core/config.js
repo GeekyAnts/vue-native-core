@@ -3,7 +3,7 @@
 import {
   no,
   noop,
-  identity
+  identity,
 } from 'shared/util'
 
 import { LIFECYCLE_HOOKS } from 'shared/constants'
@@ -109,5 +109,5 @@ export default ({
   /**
    * Exposed for legacy reasons
    */
-  _lifecycleHooks: LIFECYCLE_HOOKS
+  _lifecycleHooks: LIFECYCLE_HOOKS,
 }: Config)

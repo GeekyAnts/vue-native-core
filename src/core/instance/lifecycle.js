@@ -13,7 +13,7 @@ import {
   remove,
   handleError,
   emptyObject,
-  validateProp
+  validateProp,
 } from '../util/index'
 
 export let activeInstance: any = null

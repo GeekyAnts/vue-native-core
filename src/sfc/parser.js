@@ -24,7 +24,7 @@ export function parseComponent (
     template: null,
     script: null,
     styles: [],
-    customBlocks: []
+    customBlocks: [],
   }
   let depth = 0
   let currentBlock: ?(SFCBlock | SFCCustomBlock) = null
@@ -44,7 +44,7 @@ export function parseComponent (
         attrs: attrs.reduce((cumulated, { name, value }) => {
           cumulated[name] = value || true
           return cumulated
-        }, Object.create(null))
+        }, Object.create(null)),
       }
       if (isSpecialTag(tag)) {
         checkAttrs(currentBlock, attrs)
@@ -109,7 +109,7 @@ export function parseComponent (
 
   parseHTML(content, {
     start,
-    end
+    end,
   })
 
   return sfc

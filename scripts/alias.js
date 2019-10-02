@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require("path")
 
 module.exports = {
   vue: path.resolve(__dirname, "../src/platforms/web/runtime-with-compiler"),
@@ -10,5 +10,5 @@ module.exports = {
   "vue-native": path.resolve(__dirname, "../src/platforms/vue-native"),
   server: path.resolve(__dirname, "../src/server"),
   entries: path.resolve(__dirname, "../src/entries"),
-  sfc: path.resolve(__dirname, "../src/sfc")
-};
+  sfc: path.resolve(__dirname, "../src/sfc"),
+}

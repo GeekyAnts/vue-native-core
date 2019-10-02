@@ -6,7 +6,7 @@ import { resolveTransition } from 'web/runtime/transition-util'
 export default {
   create: enter,
   activate: enter,
-  remove: leave
+  remove: leave,
 }
 
 function enter (_, vnode) {
@@ -42,7 +42,7 @@ function enter (_, vnode) {
     beforeAppear,
     appear,
     afterAppear,
-    appearCancelled
+    appearCancelled,
   } = data
 
   let context = activeInstance
@@ -107,7 +107,7 @@ function enter (_, vnode) {
         styles: endState,
         duration: transitionProperties.duration || 0,
         delay: transitionProperties.delay || 0,
-        timingFunction: transitionProperties.timingFunction || 'linear'
+        timingFunction: transitionProperties.timingFunction || 'linear',
       }, userWantsControl ? noop : cb)
     } else if (!userWantsControl) {
       cb()
@@ -154,7 +154,7 @@ function leave (vnode, rm) {
     leave,
     afterLeave,
     leaveCancelled,
-    delayLeave
+    delayLeave,
   } = data
 
   const userWantsControl =
@@ -201,7 +201,7 @@ function leave (vnode, rm) {
 
     if (startState) {
       animation.transition(el.ref, {
-        styles: startState
+        styles: startState,
       }, next)
     } else {
       next()
@@ -212,7 +212,7 @@ function leave (vnode, rm) {
         styles: endState,
         duration: transitionProperties.duration || 0,
         delay: transitionProperties.delay || 0,
-        timingFunction: transitionProperties.timingFunction || 'linear'
+        timingFunction: transitionProperties.timingFunction || 'linear',
       }, userWantsControl ? noop : cb)
     }
 

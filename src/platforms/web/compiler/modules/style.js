@@ -5,7 +5,7 @@ import { parseStyleText } from 'web/util/style'
 import {
   getAndRemoveAttr,
   getBindingAttr,
-  baseWarn
+  baseWarn,
 } from 'compiler/helpers'
 
 function transformNode (el: ASTElement, options: CompilerOptions) {
@@ -47,5 +47,5 @@ function genData (el: ASTElement): string {
 export default {
   staticKeys: ['staticStyle'],
   transformNode,
-  genData
+  genData,
 }

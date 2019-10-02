@@ -9,5 +9,5 @@ export default [
   klass,
   events,
   style,
-  transition
+  transition,
 ]

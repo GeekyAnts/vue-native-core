@@ -9,7 +9,7 @@ import {
   del,
   observe,
   observerState,
-  defineReactive
+  defineReactive,
 } from '../observer/index'
 
 import {
@@ -20,14 +20,14 @@ import {
   isReserved,
   handleError,
   validateProp,
-  isPlainObject
+  isPlainObject,
 } from '../util/index'
 
 const sharedPropertyDefinition = {
   enumerable: true,
   configurable: true,
   get: noop,
-  set: noop
+  set: noop,
 }
 
 export function proxy (target: Object, sourceKey: string, key: string) {
@@ -57,7 +57,7 @@ export function initState (vm: Component) {
 const isReservedProp = {
   key: 1,
   ref: 1,
-  slot: 1
+  slot: 1,
 }
 
 function initProps (vm: Component, propsOptions: Object) {

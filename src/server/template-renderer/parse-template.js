@@ -3,7 +3,7 @@
 const compile = require('lodash.template')
 const compileOptions = {
   escape: /{{[^{]([\s\S]+?)[^}]}}/g,
-  interpolate: /{{{([\s\S]+?)}}}/g
+  interpolate: /{{{([\s\S]+?)}}}/g,
 }
 
 export type ParsedTemplate = {
@@ -37,6 +37,6 @@ export function parseTemplate (
   return {
     head: compile(template.slice(0, i), compileOptions),
     neck: compile(template.slice(i, j), compileOptions),
-    tail: compile(template.slice(j + contentPlaceholder.length), compileOptions)
+    tail: compile(template.slice(j + contentPlaceholder.length), compileOptions),
   }
 }

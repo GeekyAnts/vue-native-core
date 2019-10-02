@@ -14,12 +14,12 @@ export const deprecatedPackages = [
   'SwipeableListView',
   'ViewPagerAndroid',
   'WebView',
-];
+]
 
 export const ASSET_TYPES = [
   'component',
   'directive',
-  'filter'
+  'filter',
 ]
 
 export const LIFECYCLE_HOOKS = [
@@ -32,5 +32,5 @@ export const LIFECYCLE_HOOKS = [
   'beforeDestroy',
   'destroyed',
   'activated',
-  'deactivated'
+  'deactivated',
 ]

@@ -8,7 +8,7 @@ import { resolveSlots } from '../instance/render-helpers/resolve-slots'
 import {
   isDef,
   camelize,
-  validateProp
+  validateProp,
 } from '../util/index'
 
 export function createFunctionalComponent (
@@ -39,7 +39,7 @@ export function createFunctionalComponent (
     parent: context,
     listeners: data.on || {},
     injections: resolveInject(Ctor.options.inject, context),
-    slots: () => resolveSlots(children, context)
+    slots: () => resolveSlots(children, context),
   })
   if (vnode instanceof VNode) {
     vnode.functionalContext = context

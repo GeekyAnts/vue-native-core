@@ -9,7 +9,7 @@ import {
   isObject,
   parsePath,
   _Set as Set,
-  handleError
+  handleError,
 } from '../util/index'
 
 let uid = 0

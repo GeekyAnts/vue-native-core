@@ -18,7 +18,7 @@ export function def (obj: Object, key: string, val: any, enumerable?: boolean) {
     value: val,
     enumerable: !!enumerable,
     writable: true,
-    configurable: true
+    configurable: true,
   })
 }
 

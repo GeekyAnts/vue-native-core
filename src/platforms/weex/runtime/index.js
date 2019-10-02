@@ -10,7 +10,7 @@ import {
   query,
   mustUseProp,
   isReservedTag,
-  isUnknownElement
+  isUnknownElement,
 } from 'weex/util/index'
 
 // install platform specific utils

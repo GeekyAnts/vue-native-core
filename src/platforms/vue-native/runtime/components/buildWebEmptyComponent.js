@@ -4,7 +4,7 @@ export function buildWebEmptyComponent (Component, createElement) {
       super(props)
       this._ref = null
       this.state = {
-        props: {}
+        props: {},
       }
     }
     setRef (ref) {
@@ -25,12 +25,12 @@ export function buildWebEmptyComponent (Component, createElement) {
     }
     UNSAFE_componentWillMount () {
       this.setState({
-        props: this.buildStateProps(this.props)
+        props: this.buildStateProps(this.props),
       })
     }
     UNSAFE_componentWillReceiveProps (nextProps) {
       this.setState({
-        props: this.buildStateProps(nextProps)
+        props: this.buildStateProps(nextProps),
       })
     }
     unwrap (wrapper) {
@@ -51,7 +51,7 @@ export function buildWebEmptyComponent (Component, createElement) {
     }
     render () {
       const {
-        tag, children
+        tag, children,
       } = this.state.props
       return createElement(tag || 'view', this.state.props, children)
     }

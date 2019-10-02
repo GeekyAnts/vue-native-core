@@ -6,7 +6,7 @@ import {
   isDef,
   isUndef,
   isTrue,
-  isObject
+  isObject,
 } from 'core/util/index'
 
 function ensureCtor (comp, base) {

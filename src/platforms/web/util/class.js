@@ -28,7 +28,7 @@ function mergeClassData (child: VNodeData, parent: VNodeData): {
     staticClass: concat(child.staticClass, parent.staticClass),
     class: isDef(child.class)
       ? [child.class, parent.class]
-      : parent.class
+      : parent.class,
   }
 }
 

@@ -19,7 +19,7 @@ const normalizeEvent = cached((name: string): {
     name,
     once,
     capture,
-    passive
+    passive,
   }
 })
 

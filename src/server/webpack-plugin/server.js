@@ -3,7 +3,7 @@ import { validate, isJS } from './util'
 export default class VueSSRServerPlugin {
   constructor (options = {}) {
     this.options = Object.assign({
-      filename: 'vue-ssr-server-bundle.json'
+      filename: 'vue-ssr-server-bundle.json',
     }, options)
   }
 
@@ -32,7 +32,7 @@ export default class VueSSRServerPlugin {
       const bundle = {
         entry,
         files: {},
-        maps: {}
+        maps: {},
       }
 
       stats.assets.forEach(asset => {
@@ -50,7 +50,7 @@ export default class VueSSRServerPlugin {
 
       compilation.assets[filename] = {
         source: () => json,
-        size: () => json.length
+        size: () => json.length,
       }
 
       cb()

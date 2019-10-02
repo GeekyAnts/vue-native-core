@@ -7,7 +7,7 @@ import { callHook, activateChildComponent } from '../instance/lifecycle'
 import {
   warn,
   nextTick,
-  devtools
+  devtools,
 } from '../util/index'
 
 export const MAX_UPDATE_COUNT = 100

@@ -5,7 +5,7 @@ import {
   handleDirectives,
   getSlots,
   pascalCaseTag,
-  filterCustomEvent
+  filterCustomEvent,
 } from './util'
 
 export function buildComponent (render, options, config) {
@@ -33,7 +33,7 @@ export function buildComponent (render, options, config) {
      */
     getChildContext () {
       return {
-        owner: this
+        owner: this,
       }
     }
 
@@ -82,13 +82,13 @@ export function buildComponent (render, options, config) {
       const vueOptions = {
         render: render,
         propsData: this.props,
-        parent: this.context.owner ? this.context.owner.vm : undefined
+        parent: this.context.owner ? this.context.owner.vm : undefined,
       }
 
       const reactVueOptions = {
         reactVueSlots: getSlots(this.props.children),
         reactVueForceUpdate: this.forceUpdate.bind(this),
-        reactVueCustomEvent: filterCustomEvent(this.props)
+        reactVueCustomEvent: filterCustomEvent(this.props),
       }
 
       Object.assign(options, vueOptions, reactVueOptions)
@@ -147,10 +147,10 @@ export function buildComponent (render, options, config) {
     }
   }
   ReactVueComponent.childContextTypes = {
-    owner: PropTypes.object
+    owner: PropTypes.object,
   }
   ReactVueComponent.contextTypes = {
-    owner: PropTypes.object
+    owner: PropTypes.object,
   }
 
   ReactVueComponent.options = options

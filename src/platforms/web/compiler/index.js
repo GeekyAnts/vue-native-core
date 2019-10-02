@@ -11,7 +11,7 @@ import {
   isPreTag,
   mustUseProp,
   isReservedTag,
-  getTagNamespace
+  getTagNamespace,
 } from '../util/index'
 
 export const baseOptions: CompilerOptions = {
@@ -24,7 +24,7 @@ export const baseOptions: CompilerOptions = {
   canBeLeftOpenTag,
   isReservedTag,
   getTagNamespace,
-  staticKeys: genStaticKeys(modules)
+  staticKeys: genStaticKeys(modules),
 }
 
 const { compile, compileToFunctions } = createCompiler(baseOptions)

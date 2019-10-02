@@ -22,7 +22,7 @@ export const transitionProps = {
   appearClass: String,
   appearActiveClass: String,
   appearToClass: String,
-  duration: [Number, String, Object]
+  duration: [Number, String, Object],
 }
 
 // in case the child is also an abstract component, e.g. <keep-alive>
@@ -55,7 +55,7 @@ export function extractTransitionData (comp: Component): Object {
 function placeholder (h: Function, rawChild: VNode): ?VNode {
   if (/\d-keep-alive$/.test(rawChild.tag)) {
     return h('keep-alive', {
-      props: rawChild.componentOptions.propsData
+      props: rawChild.componentOptions.propsData,
     })
   }
 }
@@ -173,5 +173,5 @@ export default {
     }
 
     return rawChild
-  }
+  },
 }

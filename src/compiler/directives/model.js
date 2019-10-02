@@ -26,7 +26,7 @@ export function genComponentModel (
   el.model = {
     value: `(${value})`,
     expression: `"${value}"`,
-    callback: `function (${baseValueExpression}) {${assignment}}`
+    callback: `function (${baseValueExpression}) {${assignment}}`,
   }
 }
 
@@ -72,7 +72,7 @@ export function parseModel (val: string): Object {
   if (val.indexOf('[') < 0 || val.lastIndexOf(']') < len - 1) {
     return {
       exp: val,
-      idx: null
+      idx: null,
     }
   }
 
@@ -88,7 +88,7 @@ export function parseModel (val: string): Object {
 
   return {
     exp: val.substring(0, expressionPos),
-    idx: val.substring(expressionPos + 1, expressionEndPos)
+    idx: val.substring(expressionPos + 1, expressionEndPos),
   }
 }
 

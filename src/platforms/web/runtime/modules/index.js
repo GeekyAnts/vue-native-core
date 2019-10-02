@@ -11,5 +11,5 @@ export default [
   events,
   domProps,
   style,
-  transition
+  transition,
 ]

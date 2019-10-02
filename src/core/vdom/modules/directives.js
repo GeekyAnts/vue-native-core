@@ -9,7 +9,7 @@ export default {
   update: updateDirectives,
   destroy: function unbindDirectives (vnode: VNodeWithData) {
     updateDirectives(vnode, emptyNode)
-  }
+  },
 }
 
 function updateDirectives (oldVnode: VNodeWithData, vnode: VNodeWithData) {

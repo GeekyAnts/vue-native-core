@@ -79,11 +79,11 @@ var topLevelTypes = {
   topTransitionEnd: null,
   topVolumeChange: null,
   topWaiting: null,
-  topWheel: null
+  topWheel: null,
 }
 
 var EventConstants = {
-  topLevelTypes: topLevelTypes
+  topLevelTypes: topLevelTypes,
 }
 
 export default EventConstants

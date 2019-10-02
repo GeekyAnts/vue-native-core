@@ -30,7 +30,7 @@ function rewriteTraceLine (trace: string, mapConsumers: {
   if (m != null && map) {
     const originalPosition = map.originalPositionFor({
       line: Number(m[2]),
-      column: Number(m[3])
+      column: Number(m[3]),
     })
     if (originalPosition.source != null) {
       const { source, line, column } = originalPosition

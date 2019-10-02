@@ -61,5 +61,5 @@ function getStyle (oldClassList: Array<string>, classList: Array<string>, ctx: C
 
 export default {
   create: updateClass,
-  update: updateClass
+  update: updateClass,
 }

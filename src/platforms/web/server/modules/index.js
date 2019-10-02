@@ -7,5 +7,5 @@ export default [
   attrs,
   domProps,
   klass,
-  style
+  style,
 ]
