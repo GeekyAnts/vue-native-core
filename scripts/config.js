@@ -3,6 +3,7 @@ const buble = require("rollup-plugin-buble")
 const alias = require("rollup-plugin-alias")
 const replace = require("rollup-plugin-replace")
 const flow = require("rollup-plugin-flow-no-whitespace")
+const prettier = require("rollup-plugin-prettier")
 const version =
   process.env.VERSION
   || require("../packages/vue-native-core/package.json").version
@@ -73,6 +74,7 @@ function genConfig(opts) {
       flow(),
       buble(),
       alias(Object.assign({}, aliases, opts.alias)),
+      prettier(),
     ].concat(opts.plugins || []),
     onwarn: (msg, warn) => {
       if (!/Circular/.test(msg)) {

@@ -90,6 +90,7 @@
     "rollup-plugin-alias": "^1.5.2",
     "rollup-plugin-buble": "^0.19.8",
     "rollup-plugin-flow-no-whitespace": "^1.0.0",
+    "rollup-plugin-prettier": "^0.6.0",
     "rollup-plugin-replace": "^2.2.0",
     "sass-loader": "^6.0.5",
     "selenium-server": "^2.53.1",
