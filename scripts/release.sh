@@ -42,7 +42,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   # build
   # the build needs to be generated after the version bump
   # because the Vue version comes from packages/vue-native-core/package.json
-  # refer to build/config.js
+  # refer to scripts/config.js
   VERSION=$VERSION npm run build
 
   # commit

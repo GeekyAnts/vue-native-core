@@ -30,14 +30,14 @@
     "types/*.d.ts"
   ],
   "scripts": {
-    "build": "node build/build.js",
+    "build": "node scripts/build.js",
     "test": "npm run test:unit",
     "test:unit": "jest --config ./jest.config.json",
-    "lint": "eslint src build test",
+    "lint": "eslint src scripts test",
     "flow": "flow check",
-    "sauce": "karma start build/karma.sauce.config.js",
-    "release": "bash build/release.sh",
-    "install:hooks": "ln -fs ../../build/git-hooks/pre-commit .git/hooks/pre-commit",
+    "sauce": "karma start scripts/karma.sauce.config.js",
+    "release": "bash scripts/release.sh",
+    "install:hooks": "ln -fs ../../scripts/git-hooks/pre-commit .git/hooks/pre-commit",
     "run-vue": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "postinstall": "opencollective-postinstall"
   },
