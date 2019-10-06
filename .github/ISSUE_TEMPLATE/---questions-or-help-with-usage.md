@@ -1,9 +1,8 @@
 ---
 name: "\U0001F9D0 Questions or help with usage"
 about: Need help with code or Vue Native usage?
-title: ''
+title: 'Question: '
 labels: ''
-assignees: ''
 
 ---
 

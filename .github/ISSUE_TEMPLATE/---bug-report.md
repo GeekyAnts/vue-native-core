@@ -3,7 +3,6 @@ name: "\U0001F41E Bug report"
 about: Spotted a bug in Vue Native?
 title: ''
 labels: ''
-assignees: ''
 
 ---
 
