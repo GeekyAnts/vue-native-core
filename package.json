@@ -30,14 +30,14 @@
     "types/*.d.ts"
   ],
   "scripts": {
-    "build": "node scripts/build.js",
-    "test": "npm run test:unit",
-    "test:unit": "jest --config ./jest.config.json",
+    "postinstall": "opencollective-postinstall",
     "lint": "eslint src scripts",
     "lint:fix": "eslint --fix src scripts",
     "flow": "flow check",
-    "release": "bash scripts/release.sh",
-    "postinstall": "opencollective-postinstall"
+    "test:unit": "jest --config ./jest.config.json",
+    "test": "npm run lint && npm run flow && npm run test:unit",
+    "build": "node scripts/build.js",
+    "release": "bash scripts/release.sh"
   },
   "husky": {
     "hooks": {
