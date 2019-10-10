@@ -7,7 +7,10 @@ import Watcher from 'core/observer/watcher'
 
 export default function observer (componentClass) {
   if (typeof componentClass === 'function' &&
-    (!componentClass.prototype || !componentClass.prototype.render) && !componentClass.isReactClass && !React.Component.isPrototypeOf(componentClass)
+    (!componentClass.prototype || !componentClass.prototype.render) &&
+    !componentClass.isReactClass &&
+    // eslint-disable-next-line no-prototype-builtins
+    !React.Component.isPrototypeOf(componentClass)
   ) {
     class ObserverComponent extends React.Component {
       render () {

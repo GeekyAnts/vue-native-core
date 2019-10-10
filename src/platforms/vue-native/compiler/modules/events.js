@@ -115,10 +115,7 @@ function genCustomEventHandlers (
   return res
 }
 
-function genTransitionEventHandlers (
-  events,
-  options
-) {
+function genTransitionEventHandlers (events) {
   let res = ''
   for (const name in events) {
     const handler = events[name]

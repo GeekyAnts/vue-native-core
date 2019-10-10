@@ -24,5 +24,8 @@
     "no-empty": 0,
     "semi": ["error", "never"],
     "comma-dangle": ["error", "always-multiline"]
+  },
+  "globals": {
+    "__WEEX__": true
   }
 }

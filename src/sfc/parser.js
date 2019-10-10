@@ -80,6 +80,7 @@ export function parseComponent (
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   function end (tag: string, start: number, end: number) {
     if (depth === 1 && currentBlock) {
       currentBlock.end = start

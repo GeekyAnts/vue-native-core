@@ -8,16 +8,16 @@ const version =
   process.env.VERSION
   || require("../packages/vue-native-core/package.json").version
 
-const banner =
-  "/*!\n" +
-  " * Vue.js v" +
-  version +
-  "\n" +
-  " * (c) 2014-" +
-  new Date().getFullYear() +
-  " Evan You\n" +
-  " * Released under the MIT License.\n" +
-  " */"
+// const banner =
+//   "/*!\n" +
+//   " * Vue Native v" +
+//   version +
+//   "\n" +
+//   " * (c) 2018-" +
+//   new Date().getFullYear() +
+//   " GeekyAnts Software Pvt. Ltd.\n" +
+//   " * Released under the MIT License.\n" +
+//   " */"
 
 const aliases = require("./alias")
 const resolve = p => {

@@ -1,5 +1,7 @@
 /* @flow */
 
+/* eslint no-case-declarations: 0 */
+
 import { isUndef } from 'shared/util'
 
 type RenderState = {

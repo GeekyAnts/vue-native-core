@@ -24,13 +24,16 @@ import { resolveFilter } from './render-helpers/resolve-filter'
 import { checkKeyCodes } from './render-helpers/check-keycodes'
 import { bindObjectProps } from './render-helpers/bind-object-props'
 import { renderStatic, markOnce } from './render-helpers/render-static'
-import { resolveSlots, resolveScopedSlots } from './render-helpers/resolve-slots'
+import {
+  // resolveSlots,
+  resolveScopedSlots,
+} from './render-helpers/resolve-slots'
 
 export function initRender (vm: Component) {
   vm._vnode = null // the root of the child tree
   vm._staticTrees = null
-  const parentVnode = vm.$vnode = vm.$options._parentVnode // the placeholder node in parent tree
-  const renderContext = parentVnode && parentVnode.context
+  // const parentVnode = vm.$vnode = vm.$options._parentVnode // the placeholder node in parent tree
+  // const renderContext = parentVnode && parentVnode.context
   /**
    * react-vue change
    */

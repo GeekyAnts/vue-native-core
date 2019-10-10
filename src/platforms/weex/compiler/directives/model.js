@@ -6,7 +6,7 @@ import { genComponentModel, genAssignmentCode } from 'compiler/directives/model'
 export default function model (
   el: ASTElement,
   dir: ASTDirective,
-  _warn: Function
+  _warn: Function // eslint-disable-line no-unused-vars
 ): ?boolean {
   if (el.tag === 'input' || el.tag === 'textarea') {
     genDefaultModel(el, dir.value, dir.modifiers)

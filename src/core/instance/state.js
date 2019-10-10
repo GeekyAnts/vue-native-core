@@ -271,6 +271,7 @@ export function stateMixin (Vue: Class<Component>) {
   const propsDef = {}
   propsDef.get = function () { return this._props }
   if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line no-unused-vars
     dataDef.set = function (newData: Object) {
       warn(
         'Avoid replacing instance root $data. ' +

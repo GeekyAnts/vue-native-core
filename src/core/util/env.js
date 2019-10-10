@@ -1,5 +1,4 @@
 /* @flow */
-/* globals MutationObserver */
 
 import { noop } from "shared/util"
 import { handleError } from "./error"
@@ -160,6 +159,7 @@ export const nextTick = (function() {
       timerFunc()
     }
     if (!cb && typeof Promise !== "undefined") {
+      // eslint-disable-next-line no-unused-vars
       return new Promise((resolve, reject) => {
         _resolve = resolve
       })

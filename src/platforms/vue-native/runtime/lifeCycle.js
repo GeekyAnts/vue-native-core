@@ -3,6 +3,7 @@
 import { remove } from 'core/util/index'
 
 export function lifeCycleMixin (Vue: Class<Component>) {
+  // eslint-disable-next-line no-unused-vars
   Vue.prototype.$destroy = function (fn: Function) {
     const vm: Component = this
     if (vm._isBeingDestroyed) {

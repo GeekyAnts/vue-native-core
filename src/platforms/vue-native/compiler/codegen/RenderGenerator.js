@@ -373,6 +373,7 @@ class RenderGenerator extends BaseGenerator {
     return code
   }
 
+  // eslint-disable-next-line no-unused-vars
   genDirectiveContext(ast) {
     let code = ""
     code += `${COMMON.directive.context}: this`

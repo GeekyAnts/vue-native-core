@@ -9,7 +9,10 @@ import { eventsMixin } from './events'
  * react-vue change
  */
 // import { lifecycleMixin } from './lifecycle'
-import { warn, nextTick } from '../util/index'
+import {
+  warn,
+  // nextTick,
+} from '../util/index'
 
 function Vue (options) {
   if (process.env.NODE_ENV !== 'production' &&

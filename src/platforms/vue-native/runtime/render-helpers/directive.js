@@ -171,7 +171,7 @@ export function directive(Component, createElement) {
     componentWillUnmount() {
       this.directive(null, this.props)
     }
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps) {
       return isObjectShallowModified(this.props, nextProps)
     }
     render() {

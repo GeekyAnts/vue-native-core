@@ -104,7 +104,7 @@ class ReactWebRenderGenerator extends RenderGenerator {
     }
     const arr = []
     let i = 0
-    ast.children.forEach((v1, i1) => {
+    ast.children.forEach((v1) => {
       if (v1.if) {
         const conditionsArr = []
         v1.ifProcessed = true
@@ -177,7 +177,7 @@ class ReactWebRenderGenerator extends RenderGenerator {
       value: '',
     }
     const arr = []
-    ast.children.forEach((v1, i1) => {
+    ast.children.forEach((v1) => {
       if (v1.if) {
         const conditionsArr = []
         v1.ifProcessed = true

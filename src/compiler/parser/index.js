@@ -165,6 +165,7 @@ export function parse (
               'contain multiple nodes.'
             )
           }
+          // eslint-disable-next-line no-prototype-builtins
           if (el.attrsMap.hasOwnProperty('v-for')) {
             warnOnce(
               'Cannot use v-for on stateful component root element because ' +

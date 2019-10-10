@@ -224,6 +224,7 @@ function leave (vnode, rm) {
 }
 
 // determine the target animation style for an entering transition.
+// eslint-disable-next-line no-unused-vars
 function getEnterTargetState (el, stylesheet, startClass, endClass, activeClass, vm) {
   const targetState = {}
   const startState = stylesheet[startClass]

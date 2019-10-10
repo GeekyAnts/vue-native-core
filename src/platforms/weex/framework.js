@@ -61,7 +61,7 @@ export function createInstance (
   appCode = '',
   config = {},
   data,
-  env = {}
+  env = {} // eslint-disable-line no-unused-vars
 ) {
   // Virtual-DOM object.
   const document = new renderer.Document(instanceId, config.bundleUrl)

@@ -91,7 +91,7 @@ export function getSlots(children) {
     children = [children]
   }
   children = children.filter(v => v != null)
-  children.forEach((v, _i) => {
+  children.forEach((v) => {
     if (typeof v === "string" || typeof v === "number" || v === null) {
       slots.default = slots.default || []
       slots.default.push(v)

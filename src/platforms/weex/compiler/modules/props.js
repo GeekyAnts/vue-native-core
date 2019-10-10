@@ -13,6 +13,7 @@ function normalizeKeyName (str: string): string {
   return normalize(str)
 }
 
+// eslint-disable-next-line no-unused-vars
 function transformNode (el: ASTElement, options: CompilerOptions) {
   if (Array.isArray(el.attrsList)) {
     el.attrsList.forEach(attr => {

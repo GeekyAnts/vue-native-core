@@ -22,7 +22,7 @@ export function renderSlot(names, children) {
     }
   })
   names.forEach(v => {
-    children.forEach((_v, _i) => {
+    children.forEach((_v) => {
       if (typeof _v === "string" || typeof _v === "number") {
         return
       }

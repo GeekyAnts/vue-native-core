@@ -51,6 +51,7 @@ function getStyle (oldClassList: Array<string>, classList: Array<string>, ctx: C
   oldClassList.forEach(name => {
     const style = stylesheet[name]
     for (const key in style) {
+      // eslint-disable-next-line no-prototype-builtins
       if (!result.hasOwnProperty(key)) {
         result[key] = ''
       }

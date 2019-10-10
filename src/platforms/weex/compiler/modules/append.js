@@ -1,5 +1,6 @@
 /* @flow */
 
+// eslint-disable-next-line no-unused-vars
 function preTransformNode (el: ASTElement, options: CompilerOptions) {
   if (el.tag === 'cell' && !el.attrsList.some(item => item.name === 'append')) {
     el.attrsMap.append = 'tree'
