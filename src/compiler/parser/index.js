@@ -440,7 +440,11 @@ function processComponent (el) {
   }
 }
 
-export function processAttrs (el, options, customSlot = false) {
+export function processAttrs (
+  el: ASTElement,
+  options: Object | void,
+  customSlot: boolean = false,
+) {
   const list = el.attrsList
   let i, l, name, rawName, value, modifiers, isProp
   for (i = 0, l = list.length; i < l; i++) {
@@ -505,6 +509,7 @@ export function processAttrs (el, options, customSlot = false) {
           if (name === "model") {
             addAttr(el, "value", value)
             let detectOnChange = false
+            // $flow-disable-line
             el.attrs.forEach(attr => {
               if (attr.name === "on-change") {
                 detectOnChange = true
@@ -575,6 +580,7 @@ export function processAttrs (el, options, customSlot = false) {
               let customArguments = el.attrsMap["arguments"].split(",")
               customRenderer = customRenderer.replace(
                 /render \(args\)/,
+                // $flow-disable-line
                 `render (${el.attrsMap["arguments"]})`
               )
               // Replace each instance of the argument
@@ -587,6 +593,7 @@ export function processAttrs (el, options, customSlot = false) {
               customRenderer = customRenderer.replace(/vm\(args\)/g, "args")
             }
           }
+          // $flow-disable-line
           addAttr(el.parent, value, `${customRenderer}`)
           let vueNativeCoreImport = customImport.split(splitRE)
           if (vueNativeCoreImport && vueNativeCoreImport[0]) {
