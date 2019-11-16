@@ -13,9 +13,6 @@
     "^core(.*)$": "<rootDir>/src/core$1",
     "^shared(.*)$": "<rootDir>/src/shared$1",
     "^web(.*)$": "<rootDir>/src/platforms/web$1",
-    "^weex(.*)$": "<rootDir>/src/platforms/weex$1",
-    "^server(.*)$": "<rootDir>/src/server$1",
-    "^entries(.*)$": "<rootDir>/src/entries$1",
     "^sfc(.*)$": "<rootDir>/src/sfc$1"
   },
   "collectCoverage": true,
