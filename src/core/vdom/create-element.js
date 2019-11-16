@@ -29,7 +29,7 @@ export function createElement (
   data: any,
   children: any,
   normalizationType: any,
-  alwaysNormalize: boolean
+  alwaysNormalize: boolean,
 ): VNode {
   if (Array.isArray(data) || isPrimitive(data)) {
     normalizationType = children
@@ -47,13 +47,13 @@ export function _createElement (
   tag?: string | Class<Component> | Function | Object,
   data?: VNodeData,
   children?: any,
-  normalizationType?: number
+  normalizationType?: number,
 ): VNode {
   if (isDef(data) && isDef((data: any).__ob__)) {
     process.env.NODE_ENV !== 'production' && warn(
       `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
       'Always create fresh vnode data objects in each render!',
-      context
+      context,
     )
     return createEmptyVNode()
   }
@@ -81,7 +81,7 @@ export function _createElement (
       // platform built-in elements
       vnode = new VNode(
         config.parsePlatformTagName(tag), data, children,
-        undefined, undefined, context
+        undefined, undefined, context,
       )
     } else if (isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
       // component
@@ -92,7 +92,7 @@ export function _createElement (
       // parent normalizes children
       vnode = new VNode(
         tag, data, children,
-        undefined, undefined, context
+        undefined, undefined, context,
       )
     }
   } else {

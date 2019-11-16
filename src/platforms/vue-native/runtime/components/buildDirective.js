@@ -102,7 +102,7 @@ export function buildDirective(Component, createElement) {
                 newDirective,
                 oldDirective,
                 context.vm,
-                this._ref
+                this._ref,
               ) // update
             }
           })
@@ -160,7 +160,7 @@ export function buildDirective(Component, createElement) {
       return createElement(
         this.props[COMMON.directive.tag],
         this.state.props,
-        this.state.props.children
+        this.state.props.children,
       )
     }
   }

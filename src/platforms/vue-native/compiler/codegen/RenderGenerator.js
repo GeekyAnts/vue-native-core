@@ -111,7 +111,7 @@ class RenderGenerator extends BaseGenerator {
       children = children.concat(
         ast.children.map(v => {
           return this.genElement(v)
-        })
+        }),
       )
     }
     if (ast.scopedSlots) {
@@ -126,7 +126,7 @@ class RenderGenerator extends BaseGenerator {
             const slot = `'dataSlot': ${v.slotTarget}`
             const code = `{${type},${render},${slot}}`
             return code
-          })
+          }),
       )
     }
     return children
@@ -166,7 +166,7 @@ class RenderGenerator extends BaseGenerator {
     let code
     if (condition.exp) {
       code = `(${condition.exp}) ?${this.genElement(
-        condition.block
+        condition.block,
       )} : ${this.genIfConditions(conditions)}`
     } else {
       code = `${this.genElement(condition.block)}`
@@ -189,7 +189,7 @@ class RenderGenerator extends BaseGenerator {
     const code = `${
       COMMON.renderList.name
     }(${exp}, function (${alias}${iterator1}${iterator2}){return ${this.genElement(
-      this.genKeyFor(ast)
+      this.genKeyFor(ast),
     )}}.bind(this))`
     return code
   }
@@ -353,14 +353,14 @@ class RenderGenerator extends BaseGenerator {
     ast.directives.forEach(v => {
       code.push(
         `{name:"${v.name}",directiveName:"${changeCase.lowerCase(
-          changeCase.camelCase(v.name)
+          changeCase.camelCase(v.name),
         )}",rawName:"${v.rawName}"${
           v.value
             ? `,value:(${v.value}),expression:${JSON.stringify(v.value)}`
             : ""
         }${v.arg ? `,arg:"${v.arg}"` : ""}${
           v.modifiers ? `,modifiers:${JSON.stringify(v.modifiers)}` : ""
-        }}`
+        }}`,
       )
     })
     code = `${COMMON.directive.name}: [${code.join(",")}]`

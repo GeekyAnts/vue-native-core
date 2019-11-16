@@ -114,7 +114,7 @@ export function directive(Component, createElement) {
                 newDirective,
                 oldDirective,
                 context.vm,
-                this.ref
+                this.ref,
               ) // update
             }
           })
@@ -178,7 +178,7 @@ export function directive(Component, createElement) {
       return createElement(
         this.props[COMMON.directive.tag],
         this.state.formProps,
-        this.props.children
+        this.props.children,
       )
     }
   }

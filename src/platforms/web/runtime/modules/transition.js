@@ -102,7 +102,7 @@ export function enter (vnode: VNodeWithData, toggleDisplay: ?() => void) {
   const explicitEnterDuration: any = toNumber(
     isObject(duration)
       ? duration.enter
-      : duration
+      : duration,
   )
 
   if (process.env.NODE_ENV !== 'production' && explicitEnterDuration != null) {
@@ -209,7 +209,7 @@ export function leave (vnode: VNodeWithData, rm: Function) {
   const explicitLeaveDuration: any = toNumber(
     isObject(duration)
       ? duration.leave
-      : duration
+      : duration,
   )
 
   if (process.env.NODE_ENV !== 'production' && explicitLeaveDuration != null) {
@@ -280,13 +280,13 @@ function checkDuration (val, name, vnode) {
     warn(
       `<transition> explicit ${name} duration is not a valid number - ` +
       `got ${JSON.stringify(val)}.`,
-      vnode.context
+      vnode.context,
     )
   } else if (isNaN(val)) {
     warn(
       `<transition> explicit ${name} duration is NaN - ` +
       'the duration expression might be incorrect.',
-      vnode.context
+      vnode.context,
     )
   }
 }
@@ -311,7 +311,7 @@ function getHookArgumentsLength (fn: Function): boolean {
     return getHookArgumentsLength(
       Array.isArray(invokerFns)
         ? invokerFns[0]
-        : invokerFns
+        : invokerFns,
     )
   } else {
     return (fn._length || fn.length) > 1

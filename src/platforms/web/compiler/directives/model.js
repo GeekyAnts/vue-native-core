@@ -14,7 +14,7 @@ export const CHECKBOX_RADIO_TOKEN = '__c'
 export default function model (
   el: ASTElement,
   dir: ASTDirective,
-  _warn: Function
+  _warn: Function,
 ): ?boolean {
   warn = _warn
   const value = dir.value
@@ -27,7 +27,7 @@ export default function model (
     if (tag === 'input' && dynamicType) {
       warn(
         `<input :type="${dynamicType}" v-model="${value}">:\n` +
-        `v-model does not support dynamic input types. Use v-if branches instead.`
+        `v-model does not support dynamic input types. Use v-if branches instead.`,
       )
     }
     // inputs with type="file" are read only and setting the input's
@@ -35,7 +35,7 @@ export default function model (
     if (tag === 'input' && type === 'file') {
       warn(
         `<${el.tag} v-model="${value}" type="file">:\n` +
-        `File inputs are read only. Use a v-on:change listener instead.`
+        `File inputs are read only. Use a v-on:change listener instead.`,
       )
     }
   }
@@ -57,7 +57,7 @@ export default function model (
       `<${el.tag} v-model="${value}">: ` +
       `v-model is not supported on this element type. ` +
       'If you are working with contenteditable, it\'s recommended to ' +
-      'wrap a library dedicated for that purpose inside a custom component.'
+      'wrap a library dedicated for that purpose inside a custom component.',
     )
   }
 
@@ -68,7 +68,7 @@ export default function model (
 function genCheckboxModel (
   el: ASTElement,
   value: string,
-  modifiers: ?ASTModifiers
+  modifiers: ?ASTModifiers,
 ) {
   const number = modifiers && modifiers.number
   const valueBinding = getBindingAttr(el, 'value') || 'null'
@@ -80,7 +80,7 @@ function genCheckboxModel (
         trueValueBinding === 'true'
           ? `:(${value})`
           : `:_q(${value},${trueValueBinding})`
-      )
+      ),
   )
   addHandler(el, CHECKBOX_RADIO_TOKEN,
     `var $$a=${value},` +
@@ -92,14 +92,14 @@ function genCheckboxModel (
       `if($$c){$$i<0&&(${value}=$$a.concat($$v))}` +
       `else{$$i>-1&&(${value}=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}` +
     `}else{${genAssignmentCode(value, '$$c')}}`,
-    null, true
+    null, true,
   )
 }
 
 function genRadioModel (
     el: ASTElement,
     value: string,
-    modifiers: ?ASTModifiers
+    modifiers: ?ASTModifiers,
 ) {
   const number = modifiers && modifiers.number
   let valueBinding = getBindingAttr(el, 'value') || 'null'
@@ -111,7 +111,7 @@ function genRadioModel (
 function genSelect (
     el: ASTElement,
     value: string,
-    modifiers: ?ASTModifiers
+    modifiers: ?ASTModifiers,
 ) {
   const number = modifiers && modifiers.number
   const selectedVal = `Array.prototype.filter` +
@@ -128,7 +128,7 @@ function genSelect (
 function genDefaultModel (
   el: ASTElement,
   value: string,
-  modifiers: ?ASTModifiers
+  modifiers: ?ASTModifiers,
 ): ?boolean {
   const type = el.attrsMap.type
   const { lazy, number, trim } = modifiers || {}

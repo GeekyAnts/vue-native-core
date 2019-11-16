@@ -16,7 +16,7 @@ export function initAssetRegisters (Vue: GlobalAPI) {
   ASSET_TYPES.forEach(type => {
     Vue[type] = function (
       id: string,
-      definition: Function | Object
+      definition: Function | Object,
     ): Function | Object | void {
       if (!definition) {
         return this.options[type + 's'][id]
@@ -26,7 +26,7 @@ export function initAssetRegisters (Vue: GlobalAPI) {
           if (type === 'component' && config.isReservedTag(id)) {
             warn(
               'Do not use built-in or reserved HTML elements as component ' +
-              'id: ' + id
+              'id: ' + id,
             )
           }
         }

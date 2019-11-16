@@ -87,7 +87,7 @@ function genConfig(opts) {
     config.plugins.push(
       replace({
         "process.env.NODE_ENV": JSON.stringify(opts.env),
-      })
+      }),
     )
   }
 

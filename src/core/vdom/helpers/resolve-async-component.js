@@ -18,7 +18,7 @@ function ensureCtor (comp, base) {
 export function resolveAsyncComponent (
   factory: Function,
   baseCtor: Class<Component>,
-  context: Component
+  context: Component,
 ): Class<Component> | void {
   if (isTrue(factory.error) && isDef(factory.errorComp)) {
     return factory.errorComp
@@ -58,7 +58,7 @@ export function resolveAsyncComponent (
     const reject = once(reason => {
       process.env.NODE_ENV !== 'production' && warn(
         `Failed to resolve async component: ${String(factory)}` +
-        (reason ? `\nReason: ${reason}` : '')
+        (reason ? `\nReason: ${reason}` : ''),
       )
       if (isDef(factory.errorComp)) {
         factory.error = true
@@ -100,7 +100,7 @@ export function resolveAsyncComponent (
             reject(
               process.env.NODE_ENV !== 'production'
                 ? `timeout (${res.timeout}ms)`
-                : null
+                : null,
             )
           }, res.timeout)
         }

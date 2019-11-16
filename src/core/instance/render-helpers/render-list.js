@@ -7,7 +7,7 @@ import { isObject } from 'core/util/index'
  */
 export function renderList (
   val: any,
-  render: () => VNode
+  render: () => VNode,
 ): ?Array<VNode> {
   let ret: ?Array<VNode>, i, l, keys, key
   if (Array.isArray(val) || typeof val === 'string') {

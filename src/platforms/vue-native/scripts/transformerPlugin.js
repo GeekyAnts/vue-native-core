@@ -48,7 +48,7 @@ function sourceMapAstInPlace(tsMap, babelAst) {
           }
         }
       })
-    }
+    },
   )
 }
 

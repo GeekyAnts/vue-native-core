@@ -82,7 +82,7 @@ const emptyModifiers = Object.create(null)
 
 function normalizeDirectives (
   dirs: ?Array<VNodeDirective>,
-  vm: Component
+  vm: Component,
 ): { [key: string]: VNodeDirective } {
   const res = Object.create(null)
   if (!dirs) {

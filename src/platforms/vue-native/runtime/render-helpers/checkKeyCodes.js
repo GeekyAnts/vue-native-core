@@ -7,14 +7,14 @@ export function checkKeyCodes(
   vm: Object,
   eventKeyCode: number,
   key: string,
-  builtInAlias: number | Array<number> | void
+  builtInAlias: number | Array<number> | void,
 ): boolean {
   let configKeyCodes = {}
   try {
     configKeyCodes = vm.$options._base.config.keyCodes
   } catch (e) {
     warn(
-      "vue-native checkKeyCodes vm.$options._base.config.keyCodes catch error"
+      "vue-native checkKeyCodes vm.$options._base.config.keyCodes catch error",
     )
   }
   const keyCodes = configKeyCodes[key] || builtInAlias

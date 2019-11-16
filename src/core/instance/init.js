@@ -38,7 +38,7 @@ export function initMixin (Vue: Class<Component>) {
       vm.$options = mergeOptions(
         resolveConstructorOptions(vm.constructor),
         options || {},
-        vm
+        vm,
       )
     }
     /* istanbul ignore else */

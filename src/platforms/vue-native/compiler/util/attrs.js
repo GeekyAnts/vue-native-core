@@ -25,7 +25,7 @@ export const isBooleanAttr = makeMap(
   'enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,' +
   'muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,' +
   'required,reversed,scoped,seamless,selected,sortable,translate,' +
-  'truespeed,typemustmatch,visible'
+  'truespeed,typemustmatch,visible',
 )
 
 export const xlinkNS = 'http://www.w3.org/1999/xlink'

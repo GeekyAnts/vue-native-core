@@ -27,7 +27,7 @@ export default class VNode {
     text?: string,
     elm?: Node,
     context?: Component,
-    componentOptions?: VNodeComponentOptions
+    componentOptions?: VNodeComponentOptions,
   ) {
     this.tag = tag
     this.data = data
@@ -79,7 +79,7 @@ export function cloneVNode (vnode: VNode): VNode {
     vnode.text,
     vnode.elm,
     vnode.context,
-    vnode.componentOptions
+    vnode.componentOptions,
   )
   cloned.ns = vnode.ns
   cloned.isStatic = vnode.isStatic

@@ -21,7 +21,7 @@ let currentOptions
 
 export function generate (
   ast: ASTElement | void,
-  options: CompilerOptions
+  options: CompilerOptions,
 ): {
   render: string,
   staticRenderFns: Array<string>
@@ -106,7 +106,7 @@ function genOnce (el: ASTElement): string {
     }
     if (!key) {
       process.env.NODE_ENV !== 'production' && warn(
-        `v-once can only be used inside v-for that is keyed. `
+        `v-once can only be used inside v-for that is keyed. `,
       )
       return genElement(el)
     }
@@ -153,7 +153,7 @@ function genFor (el: any): string {
       `<${el.tag} v-for="${alias} in ${exp}">: component lists rendered with ` +
       `v-for should have explicit keys. ` +
       `See https://vuejs.org/guide/list.html#key for more info.`,
-      true /* tip */
+      true, /* tip */
     )
   }
 

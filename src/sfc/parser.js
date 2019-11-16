@@ -18,7 +18,7 @@ type Attribute = {
  */
 export function parseComponent (
   content: string,
-  options?: Object = {}
+  options?: Object = {},
  ): SFCDescriptor {
   const sfc: SFCDescriptor = {
     template: null,
@@ -34,7 +34,7 @@ export function parseComponent (
     attrs: Array<Attribute>,
     unary: boolean,
     start: number,
-    end: number
+    end: number,
   ) {
     if (depth === 0) {
       currentBlock = {

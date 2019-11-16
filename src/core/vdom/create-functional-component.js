@@ -16,7 +16,7 @@ export function createFunctionalComponent (
   propsData: ?Object,
   data: VNodeData,
   context: Component,
-  children: ?Array<VNode>
+  children: ?Array<VNode>,
 ): VNode | void {
   const props = {}
   const propOptions = Ctor.options.props

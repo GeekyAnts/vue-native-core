@@ -6,7 +6,7 @@
 export function genComponentModel (
   el: ASTElement,
   value: string,
-  modifiers: ?ASTModifiers
+  modifiers: ?ASTModifiers,
 ): ?boolean {
   const { number, trim } = modifiers || {}
 
@@ -35,7 +35,7 @@ export function genComponentModel (
  */
 export function genAssignmentCode (
   value: string,
-  assignment: string
+  assignment: string,
 ): string {
   const modelRs = parseModel(value)
   if (modelRs.idx === null) {

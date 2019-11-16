@@ -52,7 +52,7 @@ export default {
     binding: VNodeDirective,
     vnode: VNodeWithData,
     oldVnode: VNodeWithData,
-    isDestroy: boolean
+    isDestroy: boolean,
   ) {
     if (!isDestroy) {
       el.style.display = el.__vOriginalDisplay

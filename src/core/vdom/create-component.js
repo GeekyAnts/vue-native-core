@@ -32,14 +32,14 @@ const componentVNodeHooks = {
     vnode: VNodeWithData,
     hydrating: boolean,
     parentElm: ?Node,
-    refElm: ?Node
+    refElm: ?Node,
   ): ?boolean {
     if (!vnode.componentInstance || vnode.componentInstance._isDestroyed) {
       const child = vnode.componentInstance = createComponentInstanceForVnode(
         vnode,
         activeInstance,
         parentElm,
-        refElm
+        refElm,
       )
       child.$mount(hydrating ? vnode.elm : undefined, hydrating)
     } else if (vnode.data.keepAlive) {
@@ -57,7 +57,7 @@ const componentVNodeHooks = {
       options.propsData, // updated props
       options.listeners, // updated listeners
       vnode, // new parent vnode
-      options.children // new children
+      options.children, // new children
     )
   },
 
@@ -100,7 +100,7 @@ export function createComponent (
   data?: VNodeData,
   context: Component,
   children: ?Array<VNode>,
-  tag?: string
+  tag?: string,
 ): VNode | void {
   if (isUndef(Ctor)) {
     return
@@ -171,7 +171,7 @@ export function createComponent (
   const vnode = new VNode(
     `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
     data, undefined, undefined, undefined, context,
-    { Ctor, propsData, listeners, tag, children }
+    { Ctor, propsData, listeners, tag, children },
   )
   return vnode
 }
@@ -180,7 +180,7 @@ export function createComponentInstanceForVnode (
   vnode: any, // we know it's MountedComponentVNode but flow doesn't
   parent: any, // activeInstance in lifecycle state
   parentElm?: ?Node,
-  refElm?: ?Node
+  refElm?: ?Node,
 ): Component {
   const vnodeComponentOptions = vnode.componentOptions
   const options: InternalComponentOptions = {

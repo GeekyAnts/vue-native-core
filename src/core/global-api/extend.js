@@ -31,7 +31,7 @@ export function initExtend (Vue: GlobalAPI) {
         warn(
           'Invalid component name: "' + name + '". Component names ' +
           'can only contain alphanumeric characters and the hyphen, ' +
-          'and must start with a letter.'
+          'and must start with a letter.',
         )
       }
     }
@@ -44,7 +44,7 @@ export function initExtend (Vue: GlobalAPI) {
     Sub.cid = cid++
     Sub.options = mergeOptions(
       Super.options,
-      extendOptions
+      extendOptions,
     )
     Sub['super'] = Super
 

@@ -24,7 +24,7 @@ export function initGlobalAPI (Vue: GlobalAPI) {
   if (process.env.NODE_ENV !== 'production') {
     configDef.set = () => {
       warn(
-        'Do not replace the Vue.config object, set individual fields instead.'
+        'Do not replace the Vue.config object, set individual fields instead.',
       )
     }
   }

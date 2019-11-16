@@ -49,7 +49,7 @@ const modifierCode = {
 
 function genHandlers (
   events,
-  options
+  options,
 ) {
   let res = ''
   if (options.keyCodes) {
@@ -64,7 +64,7 @@ function genHandlers (
       ) {
       console.warn(
         `Use "contextmenu" instead of "click.right" since right clicks ` +
-        `do not actually fire "click" events.`
+        `do not actually fire "click" events.`,
       )
     }
     if (name.indexOf('!') === 0 || name.indexOf('~!') === 0) {
@@ -83,7 +83,7 @@ function genHandlers (
 
 function genCustomEventHandlers (
   events,
-  options
+  options,
 ) {
   let res = ''
   if (options.keyCodes) {
@@ -98,7 +98,7 @@ function genCustomEventHandlers (
       ) {
       console.warn(
         `Use "contextmenu" instead of "click.right" since right clicks ` +
-        `do not actually fire "click" events.`
+        `do not actually fire "click" events.`,
       )
     }
     if (name.indexOf('!') === 0 || name.indexOf('~!') === 0) {
@@ -132,7 +132,7 @@ function genTransitionEventHandlers (events) {
 
 function genHandler (
   name,
-  handler
+  handler,
 ) {
   if (!handler) {
     return 'function(){}'
@@ -184,7 +184,7 @@ function genHandler (
 
 function genCustomHandler (
   name,
-  handler
+  handler,
 ) {
   if (!handler) {
     return 'function(){}'
@@ -233,7 +233,7 @@ function genCustomHandler (
 
 function genTransitionEventHandler (
   name,
-  handler
+  handler,
 ) {
   if (!handler) {
     return 'function(){}'

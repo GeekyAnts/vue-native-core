@@ -82,7 +82,7 @@ export default {
       this._vnode,
       this.kept,
       false, // hydrating
-      true // removeOnly (!important, avoids unnecessary moves)
+      true, // removeOnly (!important, avoids unnecessary moves)
     )
     this._vnode = this.kept
   },

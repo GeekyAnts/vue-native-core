@@ -32,7 +32,7 @@ if (inBrowser) {
           /* istanbul ignore next */
           supportsPassive = true
         },
-      }: Object)
+      }: Object),
     ) // https://github.com/facebook/flow/issues/285
     window.addEventListener("test-passive", null, opts)
   } catch (e) {}

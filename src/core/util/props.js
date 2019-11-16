@@ -15,7 +15,7 @@ export function validateProp (
   key: string,
   propOptions: Object,
   propsData: Object,
-  vm?: Component
+  vm?: Component,
 ): any {
   const prop = propOptions[key]
   const absent = !hasOwn(propsData, key)
@@ -59,7 +59,7 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
       'Invalid default value for prop "' + key + '": ' +
       'Props with type Object/Array must use a factory function ' +
       'to return the default value.',
-      vm
+      vm,
     )
   }
   // the raw prop value was also undefined from previous render,
@@ -84,12 +84,12 @@ function assertProp (
   name: string,
   value: any,
   vm: ?Component,
-  absent: boolean
+  absent: boolean,
 ) {
   if (prop.required && absent) {
     warn(
       'Missing required prop: "' + name + '"',
-      vm
+      vm,
     )
     return
   }
@@ -114,7 +114,7 @@ function assertProp (
       'Invalid prop: type check failed for prop "' + name + '".' +
       ' Expected ' + expectedTypes.map(capitalize).join(', ') +
       ', got ' + Object.prototype.toString.call(value).slice(8, -1) + '.',
-      vm
+      vm,
     )
     return
   }
@@ -123,7 +123,7 @@ function assertProp (
     if (!validator(value)) {
       warn(
         'Invalid prop: custom validator check failed for prop "' + name + '".',
-        vm
+        vm,
       )
     }
   }

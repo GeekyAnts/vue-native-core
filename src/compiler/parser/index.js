@@ -48,7 +48,7 @@ let platformGetTagNamespace
  */
 export function parse (
   template: string,
-  options: CompilerOptions
+  options: CompilerOptions,
 ): ASTElement | void {
   warn = options.warn || baseWarn
   platformGetTagNamespace = options.getTagNamespace || no
@@ -118,7 +118,7 @@ export function parse (
         process.env.NODE_ENV !== 'production' && warn(
           'Templates should only be responsible for mapping the state to the ' +
           'UI. Avoid placing tags with side-effects in your templates, such as ' +
-          `<${tag}>` + ', as they will not be parsed.'
+          `<${tag}>` + ', as they will not be parsed.',
         )
       }
 
@@ -162,14 +162,14 @@ export function parse (
           if (el.tag === 'slot' || el.tag === 'template') {
             warnOnce(
               `Cannot use <${el.tag}> as component root element because it may ` +
-              'contain multiple nodes.'
+              'contain multiple nodes.',
             )
           }
           // eslint-disable-next-line no-prototype-builtins
           if (el.attrsMap.hasOwnProperty('v-for')) {
             warnOnce(
               'Cannot use v-for on stateful component root element because ' +
-              'it renders multiple elements.'
+              'it renders multiple elements.',
             )
           }
         }
@@ -191,7 +191,7 @@ export function parse (
           warnOnce(
             `Component template should contain exactly one root element. ` +
             `If you are using v-if on multiple elements, ` +
-            `use v-else-if to chain them instead.`
+            `use v-else-if to chain them instead.`,
           )
         }
       }
@@ -237,11 +237,11 @@ export function parse (
         if (process.env.NODE_ENV !== 'production') {
           if (text === template) {
             warnOnce(
-              'Component template requires a root element, rather than just text.'
+              'Component template requires a root element, rather than just text.',
             )
           } else if ((text = text.trim())) {
             warnOnce(
-              `text "${text}" outside root element will be ignored.`
+              `text "${text}" outside root element will be ignored.`,
             )
           }
         }
@@ -325,7 +325,7 @@ function processFor (el) {
     const inMatch = exp.match(forAliasRE)
     if (!inMatch) {
       process.env.NODE_ENV !== 'production' && warn(
-        `Invalid v-for expression: ${exp}`
+        `Invalid v-for expression: ${exp}`,
       )
       return
     }
@@ -373,7 +373,7 @@ function processIfConditions (el, parent) {
   } else if (process.env.NODE_ENV !== 'production') {
     warn(
       `v-${el.elseif ? ('else-if="' + el.elseif + '"') : 'else'} ` +
-      `used on element <${el.tag}> without corresponding v-if.`
+      `used on element <${el.tag}> without corresponding v-if.`,
     )
   }
 }
@@ -387,7 +387,7 @@ function findPrevElement (children: Array<any>): ASTElement | void {
       if (process.env.NODE_ENV !== 'production' && children[i].text !== ' ') {
         warn(
           `text "${children[i].text.trim()}" between v-if and v-else(-if) ` +
-          `will be ignored.`
+          `will be ignored.`,
         )
       }
       children.pop()
@@ -416,7 +416,7 @@ function processSlot (el) {
       warn(
         `\`key\` does not work on <slot> because slots are abstract outlets ` +
         `and can possibly expand into multiple elements. ` +
-        `Use the key on a wrapping element instead.`
+        `Use the key on a wrapping element instead.`,
       )
     }
   } else {
@@ -475,7 +475,7 @@ export function processAttrs (
             addHandler(
               el,
               `update:${camelize(name)}`,
-              genAssignmentCode(value, `$event`)
+              genAssignmentCode(value, `$event`),
             )
           }
         }
@@ -520,7 +520,7 @@ export function processAttrs (
                 addAttr(
                   el,
                   "on-change",
-                  `(value) => ${value}=value.nativeEvent.text`
+                  `(value) => ${value}=value.nativeEvent.text`,
                 )
               } else {
                 addAttr(el, "on-value-change", `(value) => ${value}=value`)
@@ -543,7 +543,7 @@ export function processAttrs (
             `${name}="${value}": ` +
             'Interpolation inside attributes has been removed. ' +
             'Use v-bind or the colon shorthand instead. For example, ' +
-            'instead of <div id="{{ val }}">, use <div :id="val">.'
+            'instead of <div id="{{ val }}">, use <div :id="val">.',
           )
         }
       }
@@ -562,7 +562,7 @@ export function processAttrs (
           let customImport = renderer.generateImport()
           customRenderer = customRenderer.replace(
             /render \(vm\)/,
-            "render (slotProps)"
+            "render (slotProps)",
           )
 
           if (name === "render-prop") {
@@ -571,7 +571,7 @@ export function processAttrs (
             // Support for args
             customRenderer = customRenderer.replace(
               /render \(slotProps\)/,
-              "render (args)"
+              "render (args)",
             )
             if (
               el.attrsMap["arguments"] &&
@@ -581,7 +581,7 @@ export function processAttrs (
               customRenderer = customRenderer.replace(
                 /render \(args\)/,
                 // $flow-disable-line
-                `render (${el.attrsMap["arguments"]})`
+                `render (${el.attrsMap["arguments"]})`,
               )
               // Replace each instance of the argument
               //
@@ -681,7 +681,7 @@ function checkForAliasModel (el, value) {
         `You are binding v-model directly to a v-for iteration alias. ` +
         `This will not be able to modify the v-for source array because ` +
         `writing to the alias is like modifying a function local variable. ` +
-        `Consider using an array of objects and use v-model on an object property instead.`
+        `Consider using an array of objects and use v-model on an object property instead.`,
       )
     }
     _el = _el.parent

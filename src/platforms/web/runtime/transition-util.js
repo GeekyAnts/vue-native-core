@@ -81,7 +81,7 @@ export function removeTransitionClass (el: any, cls: string) {
 export function whenTransitionEnds (
   el: Element,
   expectedType: ?string,
-  cb: Function
+  cb: Function,
 ) {
   const { type, timeout, propCount } = getTransitionInfo(el, expectedType)
   if (!type) return cb()

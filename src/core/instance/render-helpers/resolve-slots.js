@@ -5,7 +5,7 @@
  */
 export function resolveSlots (
   children: ?Array<VNode>,
-  context: ?Component
+  context: ?Component,
 ): { [key: string]: Array<VNode> } {
   const slots = {}
   if (!children) {
@@ -41,7 +41,7 @@ function isWhitespace (node: VNode): boolean {
 }
 
 export function resolveScopedSlots (
-  fns: Array<[string, Function]>
+  fns: Array<[string, Function]>,
 ): { [key: string]: Function } {
   const res = {}
   for (let i = 0; i < fns.length; i++) {

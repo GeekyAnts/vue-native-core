@@ -62,7 +62,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
       vm.$el = vm.__patch__(
         vm.$el, vnode, hydrating, false /* removeOnly */,
         vm.$options._parentElm,
-        vm.$options._refElm
+        vm.$options._refElm,
       )
     } else {
       // updates
@@ -136,7 +136,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
 export function mountComponent (
   vm: Component,
   el: ?Element,
-  hydrating?: boolean
+  hydrating?: boolean,
 ): Component {
   vm.$el = el
   if (!vm.$options.render) {
@@ -149,12 +149,12 @@ export function mountComponent (
           'You are using the runtime-only build of Vue where the template ' +
           'compiler is not available. Either pre-compile the templates into ' +
           'render functions, or use the compiler-included build.',
-          vm
+          vm,
         )
       } else {
         warn(
           'Failed to mount component: template or render function not defined.',
-          vm
+          vm,
         )
       }
     }
@@ -203,7 +203,7 @@ export function updateChildComponent (
   propsData: ?Object,
   listeners: ?Object,
   parentVnode: VNode,
-  renderChildren: ?Array<VNode>
+  renderChildren: ?Array<VNode>,
 ) {
   // determine whether component has slot children
   // we need to do this before overwriting $options._renderChildren

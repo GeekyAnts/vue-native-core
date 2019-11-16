@@ -7,7 +7,7 @@ import { cloneVNode, cloneVNodes } from 'core/vdom/vnode'
  */
 export function renderStatic (
   index: number,
-  isInFor?: boolean
+  isInFor?: boolean,
 ): VNode | Array<VNode> {
   let tree = this._staticTrees[index]
   // if has already-rendered static tree and not inside v-for,
@@ -31,7 +31,7 @@ export function renderStatic (
 export function markOnce (
   tree: VNode | Array<VNode>,
   index: number,
-  key: string
+  key: string,
 ) {
   markStatic(tree, `__once__${index}${key ? `_${key}` : ``}`, true)
   return tree
@@ -40,7 +40,7 @@ export function markOnce (
 function markStatic (
   tree: VNode | Array<VNode>,
   key: string,
-  isOnce: boolean
+  isOnce: boolean,
 ) {
   if (Array.isArray(tree)) {
     for (let i = 0; i < tree.length; i++) {

@@ -39,7 +39,7 @@ function remove (event, fn) {
 export function updateComponentListeners (
   vm: Component,
   listeners: Object,
-  oldListeners: ?Object
+  oldListeners: ?Object,
 ) {
   target = vm
   updateListeners(listeners, oldListeners || {}, add, remove, vm)
@@ -121,7 +121,7 @@ export function eventsMixin (Vue: Class<Component>) {
           `${formatComponentName(vm)} but the handler is registered for "${event}". ` +
           `Note that HTML attributes are case-insensitive and you cannot use ` +
           `v-on to listen to camelCase events when using in-DOM templates. ` +
-          `You should probably use "${hyphenate(event)}" instead of "${event}".`
+          `You should probably use "${hyphenate(event)}" instead of "${event}".`,
         )
       }
     }

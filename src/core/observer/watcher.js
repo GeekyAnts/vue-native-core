@@ -41,7 +41,7 @@ export default class Watcher {
     vm: Component,
     expOrFn: string | Function,
     cb: Function,
-    options?: Object
+    options?: Object,
   ) {
     this.vm = vm
     vm._watchers.push(this)
@@ -76,7 +76,7 @@ export default class Watcher {
           `Failed watching path: "${expOrFn}" ` +
           'Watcher only accepts simple dot-delimited paths. ' +
           'For full control, use a function instead.',
-          vm
+          vm,
         )
       }
     }

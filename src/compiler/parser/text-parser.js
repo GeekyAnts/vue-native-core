@@ -14,7 +14,7 @@ const buildRegex = cached(delimiters => {
 
 export function parseText (
   text: string,
-  delimiters?: [string, string]
+  delimiters?: [string, string],
 ): string | void {
   const tagRE = delimiters ? buildRegex(delimiters) : defaultTagRE
   if (!tagRE.test(text)) {

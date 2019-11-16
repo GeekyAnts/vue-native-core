@@ -11,7 +11,7 @@ export const namespaceMap = {
 
 export const isUnaryTag = makeMap(
   "area,base,br,col,embed,frame,hr,img,input,isindex,keygen," +
-    "link,meta,param,source,track,wbr"
+    "link,meta,param,source,track,wbr",
 )
 
 export const isHTMLTag = makeMap(
@@ -25,7 +25,7 @@ export const isHTMLTag = makeMap(
     "button,datalist,fieldset,form,input,label,legend,meter,optgroup,option," +
     "output,progress,select,textarea," +
     "details,dialog,menu,menuitem,summary," +
-    "content,element,shadow,template"
+    "content,element,shadow,template",
 )
 
 // this map is intentionally selective, only covering SVG elements that may
@@ -34,13 +34,13 @@ export const isSVG = makeMap(
   "svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face," +
     "foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern," +
     "polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view",
-  true
+  true,
 )
 
 // Elements that you can, intentionally, leave open
 // (and which close themselves)
 export const canBeLeftOpenTag = makeMap(
-  "colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr,source"
+  "colgroup,dd,dt,li,options,p,td,tfoot,th,thead,tr,source",
 )
 
 // HTML5 tags https://html.spec.whatwg.org/multipage/indices.html#elements-3
@@ -50,7 +50,7 @@ export const isNonPhrasingTag = makeMap(
     "details,dialog,div,dl,dt,fieldset,figcaption,figure,footer,form," +
     "h1,h2,h3,h4,h5,h6,head,header,hgroup,hr,html,legend,li,menuitem,meta," +
     "optgroup,option,param,rp,rt,source,style,summary,tbody,td,tfoot,th,thead," +
-    "title,tr,track"
+    "title,tr,track",
 )
 
 const buildInTags = [
@@ -103,7 +103,7 @@ export function isUnknownElement(tag: string): boolean {
       el.constructor === window.HTMLElement)
   } else {
     return (unknownElementCache[tag] = /HTMLUnknownElement/.test(
-      el.toString()
+      el.toString(),
     ))
   }
 }

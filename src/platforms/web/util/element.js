@@ -19,7 +19,7 @@ export const isHTMLTag = makeMap(
   'button,datalist,fieldset,form,input,label,legend,meter,optgroup,option,' +
   'output,progress,select,textarea,' +
   'details,dialog,menu,menuitem,summary,' +
-  'content,element,shadow,template'
+  'content,element,shadow,template',
 )
 
 // this map is intentionally selective, only covering SVG elements that may
@@ -28,7 +28,7 @@ export const isSVG = makeMap(
   'svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face,' +
   'foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern,' +
   'polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view',
-  true
+  true,
 )
 
 export const isPreTag = (tag: ?string): boolean => tag === 'pre'

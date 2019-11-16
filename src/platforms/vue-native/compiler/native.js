@@ -12,7 +12,7 @@ export function nativeCompiler(template, options) {
     {
       preserveWhitespace: false,
     },
-    options
+    options,
   )
   template = template.trim()
   if (template) {
@@ -37,7 +37,7 @@ export function nativeCompiler(template, options) {
     if (requiredImportsString) {
       importCode = importCode.replace(
         /\} from 'vue-native-helper'/g,
-        `, ${requiredImportsString} } from 'vue-native-helper'`
+        `, ${requiredImportsString} } from 'vue-native-helper'`,
       )
     }
   }

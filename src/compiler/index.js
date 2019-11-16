@@ -9,7 +9,7 @@ import { warn, tip } from 'core/util/debug'
 
 function baseCompile (
   template: string,
-  options: CompilerOptions
+  options: CompilerOptions,
 ): CompiledResult {
   const ast = parse(template.trim(), options)
   optimize(ast, options)
@@ -37,7 +37,7 @@ export function createCompiler (baseOptions: CompilerOptions) {
 
   function compile (
     template: string,
-    options?: CompilerOptions
+    options?: CompilerOptions,
   ): CompiledResult {
     const finalOptions = Object.create(baseOptions)
     const errors = []
@@ -55,7 +55,7 @@ export function createCompiler (baseOptions: CompilerOptions) {
       if (options.directives) {
         finalOptions.directives = extend(
           Object.create(baseOptions.directives),
-          options.directives
+          options.directives,
         )
       }
       // copy other options
@@ -78,7 +78,7 @@ export function createCompiler (baseOptions: CompilerOptions) {
   function compileToFunctions (
     template: string,
     options?: CompilerOptions,
-    vm?: Component
+    vm?: Component,
   ): CompiledFunctionResult {
     options = options || {}
 
@@ -94,7 +94,7 @@ export function createCompiler (baseOptions: CompilerOptions) {
             'environment with Content Security Policy that prohibits unsafe-eval. ' +
             'The template compiler cannot work in this environment. Consider ' +
             'relaxing the policy to allow unsafe-eval or pre-compiling your ' +
-            'templates into render functions.'
+            'templates into render functions.',
           )
         }
       }
@@ -117,7 +117,7 @@ export function createCompiler (baseOptions: CompilerOptions) {
         warn(
           `Error compiling template:\n\n${template}\n\n` +
           compiled.errors.map(e => `- ${e}`).join('\n') + '\n',
-          vm
+          vm,
         )
       }
       if (compiled.tips && compiled.tips.length) {
@@ -144,7 +144,7 @@ export function createCompiler (baseOptions: CompilerOptions) {
         warn(
           `Failed to generate render function:\n\n` +
           fnGenErrors.map(({ err, code }) => `${err.toString()} in\n\n${code}\n`).join('\n'),
-          vm
+          vm,
         )
       }
     }

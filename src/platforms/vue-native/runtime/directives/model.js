@@ -10,7 +10,7 @@ function setSelected (el, binding, vm) {
       `expects an Array value for its binding, but got ${
         Object.prototype.toString.call(value).slice(8, -1)
       }`,
-      vm
+      vm,
     )
     return
   }

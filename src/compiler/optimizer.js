@@ -31,7 +31,7 @@ export function optimize (root: ?ASTElement, options: CompilerOptions) {
 function genStaticKeys (keys: string): Function {
   return makeMap(
     'type,tag,attrsList,attrsMap,plain,parent,children,attrs' +
-    (keys ? ',' + keys : '')
+    (keys ? ',' + keys : ''),
   )
 }
 

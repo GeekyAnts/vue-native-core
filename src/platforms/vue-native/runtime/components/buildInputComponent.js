@@ -44,7 +44,7 @@ export function buildInputComponent(Component, createElement) {
       return createElement(
         this.props[WEB.inputComponent.tag],
         this.state.props,
-        this.state.props.children
+        this.state.props.children,
       )
     }
   }

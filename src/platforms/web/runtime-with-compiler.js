@@ -17,14 +17,14 @@ const idToTemplate = cached(id => {
 const mount = Vue.prototype.$mount
 Vue.prototype.$mount = function (
   el?: string | Element,
-  hydrating?: boolean
+  hydrating?: boolean,
 ): Component {
   el = el && query(el)
 
   /* istanbul ignore if */
   if (el === document.body || el === document.documentElement) {
     process.env.NODE_ENV !== 'production' && warn(
-      `Do not mount Vue to <html> or <body> - mount to normal elements instead.`
+      `Do not mount Vue to <html> or <body> - mount to normal elements instead.`,
     )
     return this
   }
@@ -41,7 +41,7 @@ Vue.prototype.$mount = function (
           if (process.env.NODE_ENV !== 'production' && !template) {
             warn(
               `Template element not found or is empty: ${options.template}`,
-              this
+              this,
             )
           }
         }

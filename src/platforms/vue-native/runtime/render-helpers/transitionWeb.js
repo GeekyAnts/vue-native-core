@@ -30,7 +30,7 @@ function filterCollection(collection) {
   })
   if (result.length > 1) {
     console.warn(
-      `<transition> can only be used on a single element. Use <transition-group> for lists.`
+      `<transition> can only be used on a single element. Use <transition-group> for lists.`,
     )
   }
   return result
@@ -50,7 +50,7 @@ function getHookArgumentsLength(fn) {
   if (isDef(invokerFns)) {
     // invoker
     return getHookArgumentsLength(
-      Array.isArray(invokerFns) ? invokerFns[0] : invokerFns
+      Array.isArray(invokerFns) ? invokerFns[0] : invokerFns,
     )
   } else {
     return (fn._length || fn.length) > 1
@@ -62,12 +62,12 @@ function checkDuration(val, name) {
   if (typeof val !== "number") {
     warn(
       `<transition> explicit ${name} duration is not a valid number - ` +
-        `got ${JSON.stringify(val)}.`
+        `got ${JSON.stringify(val)}.`,
     )
   } else if (isNaN(val)) {
     warn(
       `<transition> explicit ${name} duration is NaN - ` +
-        "the duration expression might be incorrect."
+        "the duration expression might be incorrect.",
     )
   }
 }
@@ -137,7 +137,7 @@ export function enter({ el, cb }) {
     : onEnterCancelled
 
   const explicitEnterDuration = toNumber(
-    isObject(duration) ? duration.enter : duration
+    isObject(duration) ? duration.enter : duration,
   )
 
   if (process.env.NODE_ENV !== "production" && explicitEnterDuration != null) {
@@ -216,7 +216,7 @@ export function leave({ el, cb }) {
   const userWantsControl = getHookArgumentsLength(onLeave)
 
   const explicitLeaveDuration = toNumber(
-    isObject(duration) ? duration.leave : duration
+    isObject(duration) ? duration.leave : duration,
   )
 
   if (process.env.NODE_ENV !== "production" && explicitLeaveDuration != null) {
@@ -489,7 +489,7 @@ export function transitionWeb(Component, createElement) {
           const props = transObj[k].props
           const children = props.children
           return createElement(type, props, children)
-        })
+        }),
       )
     }
   }

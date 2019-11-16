@@ -8,7 +8,7 @@ import config from 'core/config'
 export function checkKeyCodes (
   eventKeyCode: number,
   key: string,
-  builtInAlias: number | Array<number> | void
+  builtInAlias: number | Array<number> | void,
 ): boolean {
   const keyCodes = config.keyCodes[key] || builtInAlias
   if (Array.isArray(keyCodes)) {

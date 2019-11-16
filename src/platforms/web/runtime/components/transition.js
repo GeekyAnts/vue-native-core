@@ -95,7 +95,7 @@ export default {
       warn(
         '<transition> can only be used on a single element. Use ' +
         '<transition-group> for lists.',
-        this.$parent
+        this.$parent,
       )
     }
 
@@ -106,7 +106,7 @@ export default {
         mode && mode !== 'in-out' && mode !== 'out-in') {
       warn(
         'invalid <transition> mode: ' + mode,
-        this.$parent
+        this.$parent,
       )
     }
 

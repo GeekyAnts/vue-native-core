@@ -66,7 +66,7 @@ function flushSchedulerQueue () {
               ? `in watcher with expression "${watcher.expression}"`
               : `in a component render function.`
           ),
-          watcher.vm
+          watcher.vm,
         )
         break
       }

@@ -36,7 +36,7 @@ Vue.prototype.__patch__ = inBrowser ? patch : noop
 // public mount method
 Vue.prototype.$mount = function (
   el?: string | Element,
-  hydrating?: boolean
+  hydrating?: boolean,
 ): Component {
   el = el && inBrowser ? query(el) : undefined
   return mountComponent(this, el, hydrating)
@@ -51,7 +51,7 @@ setTimeout(() => {
     } else if (process.env.NODE_ENV !== 'production' && isChrome) {
       console[console.info ? 'info' : 'log'](
         'Download the Vue Devtools extension for a better development experience:\n' +
-        'https://github.com/vuejs/vue-devtools'
+        'https://github.com/vuejs/vue-devtools',
       )
     }
   }
@@ -61,7 +61,7 @@ setTimeout(() => {
     console[console.info ? 'info' : 'log'](
       `You are running Vue in development mode.\n` +
       `Make sure to turn on production mode when deploying for production.\n` +
-      `See more tips at https://vuejs.org/guide/deployment.html`
+      `See more tips at https://vuejs.org/guide/deployment.html`,
     )
   }
 }, 0)

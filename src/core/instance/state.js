@@ -77,7 +77,7 @@ function initProps (vm: Component, propsOptions: Object) {
       if (isReservedProp[key] || config.isReservedAttr(key)) {
         warn(
           `"${key}" is a reserved attribute and cannot be used as component prop.`,
-          vm
+          vm,
         )
       }
       /**
@@ -117,7 +117,7 @@ function initData (vm: Component) {
     process.env.NODE_ENV !== 'production' && warn(
       'data functions should return an object:\n' +
       'https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function',
-      vm
+      vm,
     )
   }
   // proxy data on instance
@@ -129,7 +129,7 @@ function initData (vm: Component) {
       process.env.NODE_ENV !== 'production' && warn(
         `The data property "${keys[i]}" is already declared as a prop. ` +
         `Use prop default value instead.`,
-        vm
+        vm,
       )
     } else if (!isReserved(keys[i])) {
       proxy(vm, `_data`, keys[i])
@@ -160,7 +160,7 @@ function initComputed (vm: Component, computed: Object) {
       if (getter === undefined) {
         warn(
           `No getter function has been defined for computed property "${key}".`,
-          vm
+          vm,
         )
         getter = noop
       }
@@ -224,13 +224,13 @@ function initMethods (vm: Component, methods: Object) {
         warn(
           `method "${key}" has an undefined value in the component definition. ` +
           `Did you reference the function correctly?`,
-          vm
+          vm,
         )
       }
       if (props && hasOwn(props, key)) {
         warn(
           `method "${key}" has already been defined as a prop.`,
-          vm
+          vm,
         )
       }
     }
@@ -276,7 +276,7 @@ export function stateMixin (Vue: Class<Component>) {
       warn(
         'Avoid replacing instance root $data. ' +
         'Use nested data properties instead.',
-        this
+        this,
       )
     }
     propsDef.set = function () {
@@ -292,7 +292,7 @@ export function stateMixin (Vue: Class<Component>) {
   Vue.prototype.$watch = function (
     expOrFn: string | Function,
     cb: Function,
-    options?: Object
+    options?: Object,
   ): Function {
     const vm: Component = this
     options = options || {}

@@ -9,7 +9,7 @@ export function renderSlot (
   name: string,
   fallback: ?Array<VNode>,
   props: ?Object,
-  bindObject: ?Object
+  bindObject: ?Object,
 ): ?Array<VNode> {
   const scopedSlotFn = this.$scopedSlots[name]
   if (scopedSlotFn) { // scoped slot
@@ -25,7 +25,7 @@ export function renderSlot (
       slotNodes._rendered && warn(
         `Duplicate presence of slot "${name}" found in the same render tree ` +
         `- this will likely cause render errors.`,
-        this
+        this,
       )
       slotNodes._rendered = true
     }

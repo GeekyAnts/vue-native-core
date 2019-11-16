@@ -62,7 +62,7 @@ function checkEvent (exp: string, text: string, errors: Array<string>) {
   if (keywordMatch && stipped.charAt(keywordMatch.index - 1) !== '$') {
     errors.push(
       `avoid using JavaScript unary operator as property name: ` +
-      `"${keywordMatch[0]}" in expression ${text.trim()}`
+      `"${keywordMatch[0]}" in expression ${text.trim()}`,
     )
   }
   checkExpression(exp, text, errors)
@@ -89,7 +89,7 @@ function checkExpression (exp: string, text: string, errors: Array<string>) {
     if (keywordMatch) {
       errors.push(
         `avoid using JavaScript keyword as property name: ` +
-        `"${keywordMatch[0]}" in expression ${text.trim()}`
+        `"${keywordMatch[0]}" in expression ${text.trim()}`,
       )
     } else {
       errors.push(`invalid expression: ${text.trim()}`)

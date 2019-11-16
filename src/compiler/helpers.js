@@ -8,7 +8,7 @@ export function baseWarn (msg: string) {
 
 export function pluckModuleFunction<F: Function> (
   modules: ?Array<Object>,
-  key: string
+  key: string,
 ): Array<F> {
   return modules
     ? modules.map(m => m[key]).filter(_ => _)
@@ -29,7 +29,7 @@ export function addDirective (
   rawName: string,
   value: string,
   arg: ?string,
-  modifiers: ?ASTModifiers
+  modifiers: ?ASTModifiers,
 ) {
   (el.directives || (el.directives = [])).push({ name, rawName, value, arg, modifiers })
 }
@@ -40,7 +40,7 @@ export function addHandler (
   value: string,
   modifiers: ?ASTModifiers,
   important?: boolean,
-  warn?: Function
+  warn?: Function,
 ) {
   // warn prevent and passive modifier
   /* istanbul ignore if */
@@ -50,7 +50,7 @@ export function addHandler (
   ) {
     warn(
       'passive and prevent can\'t be used together. ' +
-      'Passive handler can\'t prevent default event.'
+      'Passive handler can\'t prevent default event.',
     )
   }
   // check capture modifier
@@ -89,7 +89,7 @@ export function addHandler (
 export function getBindingAttr (
   el: ASTElement,
   name: string,
-  getStatic?: boolean
+  getStatic?: boolean,
 ): ?string {
   const dynamicValue =
     getAndRemoveAttr(el, ':' + name) ||

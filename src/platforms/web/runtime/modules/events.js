@@ -33,7 +33,7 @@ function add (
   handler: Function,
   once: boolean,
   capture: boolean,
-  passive: boolean
+  passive: boolean,
 ) {
   if (once) {
     const oldHandler = handler
@@ -52,7 +52,7 @@ function add (
     handler,
     supportsPassive
       ? { capture, passive }
-      : capture
+      : capture,
   )
 }
 
@@ -60,7 +60,7 @@ function remove (
   event: string,
   handler: Function,
   capture: boolean,
-  _target?: HTMLElement
+  _target?: HTMLElement,
 ) {
   (_target || target).removeEventListener(event, handler, capture)
 }

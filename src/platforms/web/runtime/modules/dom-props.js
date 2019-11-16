@@ -51,7 +51,7 @@ type acceptValueElm = HTMLInputElement | HTMLSelectElement | HTMLOptionElement;
 function shouldUpdateValue (
   elm: acceptValueElm,
   vnode: VNodeWithData,
-  checkVal: string
+  checkVal: string,
 ): boolean {
   return (!elm.composing && (
     vnode.tag === 'option' ||

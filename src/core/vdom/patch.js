@@ -123,7 +123,7 @@ export function createPatchFunction (backend) {
             'Unknown custom element: <' + tag + '> - did you ' +
             'register the component correctly? For recursive components, ' +
             'make sure to provide the "name" option.',
-            vnode.context
+            vnode.context,
           )
         }
       }
@@ -405,7 +405,7 @@ export function createPatchFunction (backend) {
           if (process.env.NODE_ENV !== 'production' && !elmToMove) {
             warn(
               'It seems there are duplicate keys that is causing an update error. ' +
-              'Make sure each v-for item has a unique key.'
+              'Make sure each v-for item has a unique key.',
             )
           }
           if (sameVnode(elmToMove, newStartVnode)) {
@@ -601,7 +601,7 @@ export function createPatchFunction (backend) {
                 'server-rendered content. This is likely caused by incorrect ' +
                 'HTML markup, for example nesting block-level elements inside ' +
                 '<p>, or missing <tbody>. Bailing hydration and performing ' +
-                'full client-side render.'
+                'full client-side render.',
               )
             }
           }
@@ -619,7 +619,7 @@ export function createPatchFunction (backend) {
           // leaving transition. Only happens when combining transition +
           // keep-alive + HOCs. (#4590)
           oldElm._leaveCb ? null : parentElm,
-          nodeOps.nextSibling(oldElm)
+          nodeOps.nextSibling(oldElm),
         )
 
         if (isDef(vnode.parent)) {

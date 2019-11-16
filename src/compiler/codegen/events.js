@@ -37,7 +37,7 @@ const modifierCode: { [key: string]: string } = {
 export function genHandlers (
   events: ASTElementHandlers,
   native: boolean,
-  warn: Function
+  warn: Function,
 ): string {
   let res = native ? 'nativeOn:{' : 'on:{'
   for (const name in events) {
@@ -49,7 +49,7 @@ export function genHandlers (
       ) {
       warn(
         `Use "contextmenu" instead of "click.right" since right clicks ` +
-        `do not actually fire "click" events.`
+        `do not actually fire "click" events.`,
       )
     }
     res += `"${name}":${genHandler(name, handler)},`
@@ -59,7 +59,7 @@ export function genHandlers (
 
 function genHandler (
   name: string,
-  handler: ASTElementHandler | Array<ASTElementHandler>
+  handler: ASTElementHandler | Array<ASTElementHandler>,
 ): string {
   if (!handler) {
     return 'function(){}'

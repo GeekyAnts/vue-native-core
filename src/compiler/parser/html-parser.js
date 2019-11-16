@@ -26,7 +26,7 @@ const singleAttrValues = [
 const attribute = new RegExp(
   '^\\s*' + singleAttrIdentifier.source +
   '(?:\\s*(' + singleAttrAssign.source + ')' +
-  '\\s*(?:' + singleAttrValues.join('|') + '))?'
+  '\\s*(?:' + singleAttrValues.join('|') + '))?',
 )
 
 // could use https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-QName
@@ -249,7 +249,7 @@ export function parseHTML (html, options) {
         name: name,
         value: decodeAttr(
           value,
-          options.shouldDecodeNewlines
+          options.shouldDecodeNewlines,
         ),
       }
     }
@@ -292,7 +292,7 @@ export function parseHTML (html, options) {
             (i > pos || !tagName) &&
             options.warn) {
           options.warn(
-            `tag <${stack[i].tag}> has no matching end tag.`
+            `tag <${stack[i].tag}> has no matching end tag.`,
           )
         }
         if (options.end) {

@@ -100,7 +100,7 @@ export function renderMixin (Vue: Class<Component>) {
         warn(
           'Multiple root nodes returned from render function. Render function ' +
           'should return a single root node.',
-          vm
+          vm,
         )
       }
       vnode = createEmptyVNode()

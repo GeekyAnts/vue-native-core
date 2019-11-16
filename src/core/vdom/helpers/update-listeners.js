@@ -44,7 +44,7 @@ export function updateListeners (
   oldOn: Object,
   add: Function,
   remove: Function,
-  vm: Component
+  vm: Component,
 ) {
   let name, cur, old, event
   for (name in on) {
@@ -54,7 +54,7 @@ export function updateListeners (
     if (isUndef(cur)) {
       process.env.NODE_ENV !== 'production' && warn(
         `Invalid handler for event "${event.name}": got ` + String(cur),
-        vm
+        vm,
       )
     } else if (isUndef(old)) {
       if (isUndef(cur.fns)) {

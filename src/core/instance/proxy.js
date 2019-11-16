@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
     'Infinity,undefined,NaN,isFinite,isNaN,' +
     'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
     'Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,' +
-    'require, toJSON' // for Webpack/Browserify
+    'require, toJSON', // for Webpack/Browserify
   )
 
   const warnNonPresent = (target, key) => {
@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
       `Property or method "${key}" is not defined on the instance but ` +
       `referenced during render. Make sure to declare reactive data ` +
       `properties in the data option.`,
-      target
+      target,
     )
   }
 

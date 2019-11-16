@@ -33,7 +33,7 @@ if (process.env.NODE_ENV !== 'production') {
     if (!vm) {
       warn(
         `option "${key}" can only be used during instance ` +
-        'creation with the `new` keyword.'
+        'creation with the `new` keyword.',
       )
     }
     return defaultStrat(parent, child)
@@ -66,7 +66,7 @@ function mergeData (to: Object, from: ?Object): Object {
 strats.data = function (
   parentVal: any,
   childVal: any,
-  vm?: Component
+  vm?: Component,
 ): ?Function {
   if (!vm) {
     // in a Vue.extend merge, both should be functions
@@ -78,7 +78,7 @@ strats.data = function (
         'The "data" option should be a function ' +
         'that returns a per-instance value in component ' +
         'definitions.',
-        vm
+        vm,
       )
       return parentVal
     }
@@ -93,7 +93,7 @@ strats.data = function (
     return function mergedDataFn () {
       return mergeData(
         childVal.call(this),
-        parentVal.call(this)
+        parentVal.call(this),
       )
     }
   } else if (parentVal || childVal) {
@@ -119,7 +119,7 @@ strats.data = function (
  */
 function mergeHook (
   parentVal: ?Array<Function>,
-  childVal: ?Function | ?Array<Function>
+  childVal: ?Function | ?Array<Function>,
 ): ?Array<Function> {
   return childVal
     ? parentVal
@@ -209,7 +209,7 @@ function checkComponents (options: Object) {
     if (isBuiltInTag(lower) || config.isReservedTag(lower)) {
       warn(
         'Do not use built-in or reserved HTML elements as component ' +
-        'id: ' + key
+        'id: ' + key,
       )
     }
   }
@@ -269,7 +269,7 @@ function normalizeDirectives (options: Object) {
 export function mergeOptions (
   parent: Object,
   child: Object,
-  vm?: Component
+  vm?: Component,
 ): Object {
   if (process.env.NODE_ENV !== 'production') {
     checkComponents(child)
@@ -316,7 +316,7 @@ export function resolveAsset (
   options: Object,
   type: string,
   id: string,
-  warnMissing?: boolean
+  warnMissing?: boolean,
 ): any {
   /* istanbul ignore if */
   if (typeof id !== 'string') {
@@ -334,7 +334,7 @@ export function resolveAsset (
   if (process.env.NODE_ENV !== 'production' && warnMissing && !res) {
     warn(
       'Failed to resolve ' + type.slice(0, -1) + ': ' + id,
-      options
+      options,
     )
   }
   return res

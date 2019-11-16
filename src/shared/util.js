@@ -66,7 +66,7 @@ export function toNumber (val: string): number | string {
  */
 export function makeMap (
   str: string,
-  expectsLowerCase?: boolean
+  expectsLowerCase?: boolean,
 ): (key: string) => true | void {
   const map = Object.create(null)
   const list: Array<string> = str.split(',')

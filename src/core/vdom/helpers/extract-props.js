@@ -12,7 +12,7 @@ import {
 export function extractPropsFromVNodeData (
   data: VNodeData,
   Ctor: Class<Component>,
-  tag?: string
+  tag?: string,
 ): ?Object {
   // we are only extracting raw values here.
   // validation and default values are handled in the child
@@ -38,7 +38,7 @@ export function extractPropsFromVNodeData (
             ` "${key}". ` +
             `Note that HTML attributes are case-insensitive and camelCased ` +
             `props need to use their kebab-case equivalents when using in-DOM ` +
-            `templates. You should probably use "${altKey}" instead of "${key}".`
+            `templates. You should probably use "${altKey}" instead of "${key}".`,
           )
         }
       }
@@ -54,7 +54,7 @@ function checkProp (
   hash: any,
   key: string,
   altKey: string,
-  preserve: boolean
+  preserve: boolean,
 ): boolean {
   if (isDef(hash)) {
     if (hasOwn(hash, key)) {
