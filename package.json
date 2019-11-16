@@ -2,9 +2,7 @@
   "name": "vue-native-core",
   "version": "0.1.4",
   "description": "Create mobile apps using vuejs",
-  "main": "dist/vue.runtime.esm.js",
-  "module": "dist/vue.runtime.esm.js",
-  "unpkg": "dist/vue.js",
+  "main": "packages/vue-native-core/index.js",
   "typings": "types/index.d.ts",
   "repository": {
     "type": "git",
@@ -26,7 +24,7 @@
   },
   "files": [
     "src",
-    "dist/*.js",
+    "packages",
     "types/*.d.ts"
   ],
   "scripts": {
