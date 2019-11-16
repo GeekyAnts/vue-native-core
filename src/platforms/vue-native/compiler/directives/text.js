@@ -1,4 +1,4 @@
-export default function text (ast) {
+export default function text(ast) {
   const children = []
   const directive = ast.directives.filter(v => v.name === 'text')[0]
   children.push({

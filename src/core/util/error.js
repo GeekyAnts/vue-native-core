@@ -2,7 +2,7 @@ import config from '../config'
 import { warn } from './debug'
 import { inBrowser } from './env'
 
-export function handleError (err, vm, info) {
+export function handleError(err, vm, info) {
   if (config.errorHandler) {
     config.errorHandler.call(null, err, vm, info)
   } else {

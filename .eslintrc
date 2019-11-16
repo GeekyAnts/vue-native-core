@@ -16,9 +16,11 @@
   ],
   "extends": [
     "eslint:recommended",
-    "plugin:flowtype/recommended"
+    "plugin:flowtype/recommended",
+    "plugin:prettier/recommended"
   ],
   "rules": {
+    "prettier/prettier": ["error"],
     "no-console": 0,
     "no-useless-escape": 0,
     "no-empty": 0,

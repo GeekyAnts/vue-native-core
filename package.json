@@ -62,6 +62,7 @@
     "cross-spawn": "^5.0.1",
     "de-indent": "^1.0.2",
     "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-flowtype": "^4.3.0",
     "eslint-plugin-prettier": "^3.1.1",
     "flow-bin": "^0.39.0",

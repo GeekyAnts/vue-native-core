@@ -1,14 +1,14 @@
-import { cached } from "shared/util"
-import { parseFilters } from "./filter-parser"
-import { COMMON } from "vue-native/compiler/config"
+import { cached } from 'shared/util'
+import { parseFilters } from './filter-parser'
+import { COMMON } from 'vue-native/compiler/config'
 
 const defaultTagRE = /\{\{((?:.|\n)+?)\}\}/g
 const regexEscapeRE = /[-.*+?^${}()|[\]\/\\]/g
 
 const buildRegex = cached(delimiters => {
-  const open = delimiters[0].replace(regexEscapeRE, "\\$&")
-  const close = delimiters[1].replace(regexEscapeRE, "\\$&")
-  return new RegExp(open + "((?:.|\\n)+?)" + close, "g")
+  const open = delimiters[0].replace(regexEscapeRE, '\\$&')
+  const close = delimiters[1].replace(regexEscapeRE, '\\$&')
+  return new RegExp(open + '((?:.|\\n)+?)' + close, 'g')
 })
 
 export function parseText(text, delimiters) {
@@ -33,5 +33,5 @@ export function parseText(text, delimiters) {
   if (lastIndex < text.length) {
     tokens.push(JSON.stringify(text.slice(lastIndex)))
   }
-  return tokens.join("+")
+  return tokens.join('+')
 }

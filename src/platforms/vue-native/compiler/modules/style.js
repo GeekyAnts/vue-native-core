@@ -1,10 +1,10 @@
 import changeCase from 'change-case'
 
-export default function parseStyleText (cssText) {
+export default function parseStyleText(cssText) {
   const res = {}
   const listDelimiter = /;(?![^(]*\))/g
   const propertyDelimiter = /:(.+)/
-  cssText.split(listDelimiter).forEach(function (item) {
+  cssText.split(listDelimiter).forEach(function(item) {
     if (item) {
       const tmp = item.split(propertyDelimiter)
       if (tmp.length > 1) {

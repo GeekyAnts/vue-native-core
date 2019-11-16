@@ -2,8 +2,8 @@
 
 import { remove } from 'core/util/index'
 
-export function lifeCycleMixin (Vue: Class<Component>) {
-  Vue.prototype.$destroy = function () {
+export function lifeCycleMixin(Vue: Class<Component>) {
+  Vue.prototype.$destroy = function() {
     const vm: Component = this
     if (vm._isBeingDestroyed) {
       return

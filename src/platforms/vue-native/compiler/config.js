@@ -6,113 +6,113 @@ import {
 } from './constants'
 
 const COMMON = {
-  'createElement': {
+  createElement: {
     name: `${HELPER_HEADER}${CREATE_ELEMENT}`,
     alias: CREATE_ELEMENT,
   },
-  'component': {
+  component: {
     name: `${HELPER_HEADER}${COMPONENT}`,
     alias: COMPONENT,
   },
-  'renderSlot': {
+  renderSlot: {
     name: `${HELPER_HEADER}renderSlot`,
     value: `${HELPER_HEADER}slotSet`,
     defaultSlot: `${HELPER_HEADER}defaultSlot`,
     slotTag: `${HELPER_HEADER}slotTag`,
     alias: 'renderSlot',
   },
-  'template': {
+  template: {
     name: `${HELPER_HEADER}template`,
     type: `${HELPER_HEADER}template`,
     alias: 'template',
   },
-  'renderList': {
+  renderList: {
     name: `${HELPER_HEADER}renderList`,
     alias: 'renderList',
   },
-  'toNumber': {
+  toNumber: {
     name: `${HELPER_HEADER}toNumber`,
     alias: 'toNumber',
   },
-  'checkKeyCodes': {
+  checkKeyCodes: {
     name: `${HELPER_HEADER}checkKeyCodes`,
     alias: 'checkKeyCodes',
   },
-  'looseEqual': {
+  looseEqual: {
     name: `${HELPER_HEADER}looseEqual`,
     alias: 'looseEqual',
   },
-  'looseIndexOf': {
+  looseIndexOf: {
     name: `${HELPER_HEADER}looseIndexOf`,
     alias: 'looseIndexOf',
   },
-  'toString': {
+  toString: {
     name: `${HELPER_HEADER}toString`,
     alias: '_toString',
   },
-  'resolveFilter': {
+  resolveFilter: {
     name: `${HELPER_HEADER}resolveFilter`,
     alias: 'resolveFilter',
   },
-  'event': {
+  event: {
     name: `${HELPER_HEADER}event`,
     alias: 'event',
   },
-  'directive': {
+  directive: {
     name: `${HELPER_HEADER}buildDirective`,
     alias: 'buildDirective',
     component: `${HELPER_HEADER}directiveComponent`,
     tag: `${HELPER_HEADER}directiveTag`,
     context: `${HELPER_HEADER}directiveContext`,
   },
-  'dynamicComponent': {
+  dynamicComponent: {
     name: `${HELPER_HEADER}dynamicComponent`,
     alias: 'dynamicComponent',
   },
-  'setRef': {
+  setRef: {
     name: `${HELPER_HEADER}setRef`,
   },
-  'customEvent': {
+  customEvent: {
     name: `${HELPER_HEADER}customEvent`,
   },
-  'handleProps': {
+  handleProps: {
     name: `${HELPER_HEADER}handleProps`,
     alias: 'handleProps',
   },
-  'mergeProps': {
+  mergeProps: {
     name: `${HELPER_HEADER}mergeProps`,
     alias: 'mergeProps',
   },
 }
 
 const WEB = {
-  'bindClass': {
+  bindClass: {
     name: `${HELPER_HEADER}bindClass`,
     alias: `bindWebClass`,
   },
-  'bindStyle': {
+  bindStyle: {
     name: `${HELPER_HEADER}bindStyle`,
     alias: `bindWebStyle`,
   },
-  'emptyComponent': {
+  emptyComponent: {
     name: `${HELPER_HEADER}buildEmptyComponent`,
     alias: 'buildWebEmptyComponent',
     component: `${HELPER_HEADER}EmptyComponent`,
   },
-  'inputComponent': {
+  inputComponent: {
     name: `${HELPER_HEADER}buildInputComponent`,
     alias: 'buildWebInputComponent',
     tag: `${HELPER_HEADER}inputComponentTag`,
     component: `${HELPER_HEADER}InputComponent`,
   },
-  'transition': {
+  transition: {
     name: `${HELPER_HEADER}transition`,
     alias: `buildWebTransition`,
     component: `${HELPER_HEADER}transitionComponent`,
     collection: `${HELPER_HEADER}transitionCollection`,
   },
   // unfinished
-  'transitionGroup': {
+  transitionGroup: {
     name: `${HELPER_HEADER}transitionGroup`,
     alias: `buildWebTransitionGroup`,
     component: `${HELPER_HEADER}transitionGroupComponent`,
@@ -121,24 +121,18 @@ const WEB = {
 }
 
 const NATIVE = {
-  'bindClass': {
+  bindClass: {
     name: `${HELPER_HEADER}bindClass`,
     alias: `bindNativeClass`,
   },
-  'bindStyle': {
+  bindStyle: {
     name: `${HELPER_HEADER}bindStyle`,
     alias: `bindNativeStyle`,
   },
-  'mergeStyleAndClass': {
-    name: HELPER_HEADER + "mergeNativeStyleAndNativeClass",
-    alias: "mergeNativeStyleAndNativeClass",
+  mergeStyleAndClass: {
+    name: HELPER_HEADER + 'mergeNativeStyleAndNativeClass',
+    alias: 'mergeNativeStyleAndNativeClass',
   },
 }
 
-export {
-  COMMON,
-  WEB,
-  NATIVE,
-  TAB_INDENT,
-  CREATE_ELEMENT,
-}
+export { COMMON, WEB, NATIVE, TAB_INDENT, CREATE_ELEMENT }

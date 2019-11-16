@@ -1,16 +1,16 @@
-import changeCase from "change-case"
-import { camelize } from "shared/util"
-import { COMMON } from "../config"
-import { HELPER_HEADER } from "../constants"
-import { isReservedTag, isBooleanAttr } from "../util/index"
-import BaseGenerator from "./BaseGenerator"
+import changeCase from 'change-case'
+import { camelize } from 'shared/util'
+import { COMMON } from '../config'
+import { HELPER_HEADER } from '../constants'
+import { isReservedTag, isBooleanAttr } from '../util/index'
+import BaseGenerator from './BaseGenerator'
 import {
   filterDirective,
   filterDirectiveBindProps,
   transformSpecialNewlines,
-} from "vue-native/compiler/helpers"
-import { parseText } from "vue-native/compiler/parser/text-parser"
-import propertyMap from "vue-native/compiler/property/index"
+} from 'vue-native/compiler/helpers'
+import { parseText } from 'vue-native/compiler/parser/text-parser'
+import propertyMap from 'vue-native/compiler/property/index'
 
 class RenderGenerator extends BaseGenerator {
   genElement(ast) {
@@ -34,19 +34,19 @@ class RenderGenerator extends BaseGenerator {
       return this.genIf(ast)
     }
 
-    if (ast.tag === "slot") {
+    if (ast.tag === 'slot') {
       return this.genSlot(ast)
     }
 
-    if (ast.tag === "template") {
+    if (ast.tag === 'template') {
       return this.genTemplate(ast)
     }
 
-    if (ast.tag === "transition") {
+    if (ast.tag === 'transition') {
       return this.genTransition(ast)
     }
 
-    if (ast.tag === "transition-group") {
+    if (ast.tag === 'transition-group') {
       return this.genTransitionGroup(ast)
     }
 
@@ -66,23 +66,21 @@ class RenderGenerator extends BaseGenerator {
     }
 
     // for dynamic component eg: <component is="view">
-    if (ast.tag === "component") {
+    if (ast.tag === 'component') {
       tag = `${COMMON.dynamicComponent.name}(vm, ${ast.component})`
     }
 
     let props = this.genProps(ast)
     if (props.length) {
-      props = `{${props.join(",")}}`
+      props = `{${props.join(',')}}`
     } else {
-      props = "null"
+      props = 'null'
     }
 
     // for modifiers eg: @click.native
     if (ast.parent === undefined) {
       // props = `Object.assign({}, this.props.${HELPER_HEADER}nativeEvents, ${props})`
-      props = `${
-        COMMON.mergeProps.name
-      }.call(this, this.props.${HELPER_HEADER}nativeEvents, ${props})`
+      props = `${COMMON.mergeProps.name}.call(this, this.props.${HELPER_HEADER}nativeEvents, ${props})`
     }
 
     // for template $props eg: v-bind:$props
@@ -95,7 +93,7 @@ class RenderGenerator extends BaseGenerator {
 
     let children = this.genChildren(ast)
     if (children.length) {
-      children = `,${children.join(",")}`
+      children = `,${children.join(',')}`
     }
 
     return `${s}${tag}${props}${children}${e}`
@@ -119,7 +117,7 @@ class RenderGenerator extends BaseGenerator {
         Object.keys(ast.scopedSlots)
           .map(v => ast.scopedSlots[v])
           .map(v => {
-            const slotCode = this.genElement(v) || ""
+            const slotCode = this.genElement(v) || ''
             const slotScope = v.slotScope
             const render = `render: (${slotScope}) => ${slotCode.trim()}`
             const type = `type: '${COMMON.template.type}'`
@@ -145,7 +143,7 @@ class RenderGenerator extends BaseGenerator {
    * @param {Object} ast
    */
   genText(ast) {
-    const text = transformSpecialNewlines(ast.text).replace(/[ \t\n]+/g, " ")
+    const text = transformSpecialNewlines(ast.text).replace(/[ \t\n]+/g, ' ')
     return JSON.stringify(text)
   }
 
@@ -160,7 +158,7 @@ class RenderGenerator extends BaseGenerator {
 
   genIfConditions(conditions) {
     if (!conditions.length) {
-      return "null"
+      return 'null'
     }
     const condition = conditions.shift()
     let code
@@ -181,8 +179,8 @@ class RenderGenerator extends BaseGenerator {
   genFor(ast) {
     const exp = ast.for
     const alias = ast.alias
-    const iterator1 = ast.iterator1 ? `,${ast.iterator1}` : ""
-    const iterator2 = ast.iterator2 ? `,${ast.iterator2}` : ""
+    const iterator1 = ast.iterator1 ? `,${ast.iterator1}` : ''
+    const iterator2 = ast.iterator2 ? `,${ast.iterator2}` : ''
 
     ast.forProcessed = true
 
@@ -207,11 +205,11 @@ class RenderGenerator extends BaseGenerator {
         props.push(`${v.name}: ${v.value}`)
       })
     }
-    let code = `${COMMON.renderSlot.value}(${name}, {${props.join(",")}})`
+    let code = `${COMMON.renderSlot.value}(${name}, {${props.join(',')}})`
     this.genChildrenKey(ast)
     const children = this.genChildren(ast)
     if (children.length) {
-      code += ` || [${children.join(",")}]`
+      code += ` || [${children.join(',')}]`
     }
     return code
   }
@@ -232,7 +230,7 @@ class RenderGenerator extends BaseGenerator {
     ast.children.forEach((v, i) => {
       v.attrs = v.attrs || []
       v.attrs.push({
-        name: "key",
+        name: 'key',
         value: String(i),
       })
     })
@@ -291,22 +289,22 @@ class RenderGenerator extends BaseGenerator {
     }
     if (Array.isArray(ast.attrsList)) {
       ast.attrsList.forEach(v => {
-        if (v.name === "v-bind" && /^\{.*\}$/.test(v.value)) {
+        if (v.name === 'v-bind' && /^\{.*\}$/.test(v.value)) {
           try {
             const matchVArr = v.value.match(/^\{(.*)\}$/)
             if (matchVArr && matchVArr[1]) {
-              matchVArr[1].split(",").forEach(_v => {
-                const _vArr = _v.split(":")
+              matchVArr[1].split(',').forEach(_v => {
+                const _vArr = _v.split(':')
                 if (_vArr.length === 2) {
                   ast.attrs.push({
-                    name: _vArr[0].trim().replace(/'|"/g, ""),
+                    name: _vArr[0].trim().replace(/'|"/g, ''),
                     value: _vArr[1].trim(),
                   })
                 }
               })
             }
           } catch (e) {
-            console.log("parse error for v-bind obj")
+            console.log('parse error for v-bind obj')
           }
         }
       })
@@ -314,23 +312,23 @@ class RenderGenerator extends BaseGenerator {
     if (Array.isArray(ast.attrs)) {
       const props = ast.attrs
         .filter(v => {
-          return v.name !== "class" && v.name !== "style" && v.name !== "v-pre"
+          return v.name !== 'class' && v.name !== 'style' && v.name !== 'v-pre'
         })
         .map(v => {
           let value = v.value
           let name = v.name
           if (
-            name.indexOf("data-") === 0 ||
+            name.indexOf('data-') === 0 ||
             name.indexOf(HELPER_HEADER) === 0
           ) {
             return `'${name}': ${value}`
           }
-          if (name === "for") {
-            name = "htmlFor"
+          if (name === 'for') {
+            name = 'htmlFor'
           }
           if (isBooleanAttr(name)) {
             if (value === '""') {
-              value = "true"
+              value = 'true'
             }
           }
           if (!isReservedTag(ast.tag)) {
@@ -357,25 +355,25 @@ class RenderGenerator extends BaseGenerator {
         )}",rawName:"${v.rawName}"${
           v.value
             ? `,value:(${v.value}),expression:${JSON.stringify(v.value)}`
-            : ""
-        }${v.arg ? `,arg:"${v.arg}"` : ""}${
-          v.modifiers ? `,modifiers:${JSON.stringify(v.modifiers)}` : ""
+            : ''
+        }${v.arg ? `,arg:"${v.arg}"` : ''}${
+          v.modifiers ? `,modifiers:${JSON.stringify(v.modifiers)}` : ''
         }}`,
       )
     })
-    code = `${COMMON.directive.name}: [${code.join(",")}]`
+    code = `${COMMON.directive.name}: [${code.join(',')}]`
     return code
   }
 
   genDirectiveTag(ast) {
-    let code = ""
+    let code = ''
     code += `${COMMON.directive.tag}: ${this.genTag(ast)}`
     return code
   }
 
   // eslint-disable-next-line no-unused-vars
   genDirectiveContext(ast) {
-    let code = ""
+    let code = ''
     code += `${COMMON.directive.context}: this`
     return code
   }
@@ -387,7 +385,7 @@ class RenderGenerator extends BaseGenerator {
   genSlotTarget(ast) {
     ast.attrs = ast.attrs || []
     ast.attrs.push({
-      name: "dataSlot",
+      name: 'dataSlot',
       value: ast.slotTarget,
     })
   }
@@ -403,8 +401,8 @@ class RenderGenerator extends BaseGenerator {
   genKeyFor(ast) {
     if (!ast.key) {
       const obj = {}
-      obj.name = "key"
-      obj.value = "arguments[1]"
+      obj.name = 'key'
+      obj.value = 'arguments[1]'
       ast.attrs = ast.attrs || []
       ast.attrs.push(obj)
     }
@@ -415,16 +413,14 @@ class RenderGenerator extends BaseGenerator {
    * gen ref
    */
   genRef(ast) {
-    let code1 = ""
-    let code2 = ""
+    let code1 = ''
+    let code2 = ''
     if (ast.ref) {
       code1 = `this.setRef(ref, ${ast.ref}, ${ast.refInFor});`
     }
     if (ast.parent === undefined) {
       // setRootRef for $el, this.props.setRef for transition component
-      code2 = `this.setRootRef(ref);this.props['${
-        COMMON.setRef.name
-      }'] && this.props['${COMMON.setRef.name}'](ref);`
+      code2 = `this.setRootRef(ref);this.props['${COMMON.setRef.name}'] && this.props['${COMMON.setRef.name}'](ref);`
     }
     return `ref: (ref) => {
       ${code1}${code2}
@@ -454,13 +450,13 @@ class RenderGenerator extends BaseGenerator {
    */
   isWebInput(ast) {
     if (!ast.inputProcessed) {
-      if (ast.tag === "textarea") {
+      if (ast.tag === 'textarea') {
         return true
-      } else if (ast.tag === "input") {
-        const type = ast.attrs.filter(v => v.name === "type")[0]
+      } else if (ast.tag === 'input') {
+        const type = ast.attrs.filter(v => v.name === 'type')[0]
         if (type === undefined) {
           return true
-        } else if (type.value === "text" || type.value === "password") {
+        } else if (type.value === 'text' || type.value === 'password') {
           return true
         }
       }

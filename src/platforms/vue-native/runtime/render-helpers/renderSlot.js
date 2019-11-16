@@ -1,4 +1,4 @@
-import { COMMON } from "vue-native/compiler/config"
+import { COMMON } from 'vue-native/compiler/config'
 
 export function renderSlot(names, children) {
   const hitSlot = {}
@@ -12,27 +12,27 @@ export function renderSlot(names, children) {
   children = children.filter(v => v != null)
   children.forEach(v => {
     if (v.type === COMMON.template.type) {
-      if (v["dataSlot"] === undefined) {
+      if (v['dataSlot'] === undefined) {
         defaultSlot.push(v.render)
       }
       return
     }
-    if (v.props === undefined || v.props["dataSlot"] === undefined) {
+    if (v.props === undefined || v.props['dataSlot'] === undefined) {
       defaultSlot.push(v)
     }
   })
   names.forEach(v => {
-    children.forEach((_v) => {
-      if (typeof _v === "string" || typeof _v === "number") {
+    children.forEach(_v => {
+      if (typeof _v === 'string' || typeof _v === 'number') {
         return
       }
       if (_v.type === COMMON.template.type) {
-        if (v === _v["dataSlot"]) {
+        if (v === _v['dataSlot']) {
           hitSlot[v] = _v.render
         }
         return
       }
-      if (v === _v.props["dataSlot"]) {
+      if (v === _v.props['dataSlot']) {
         hitSlot[v] = _v
       }
       return
@@ -45,11 +45,11 @@ export function renderSlot(names, children) {
     } else {
       target = hitSlot[name]
     }
-    if (typeof target === "function") {
+    if (typeof target === 'function') {
       return target(props)
     } else if (Array.isArray(target)) {
       return target.map(v => {
-        if (typeof v === "function") {
+        if (typeof v === 'function') {
           return v(props)
         } else {
           return v

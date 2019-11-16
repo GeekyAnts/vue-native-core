@@ -1,6 +1,12 @@
 /* @flow */
 
-import { hasOwn, isObject, isPlainObject, capitalize, hyphenate } from 'shared/util'
+import {
+  hasOwn,
+  isObject,
+  isPlainObject,
+  capitalize,
+  hyphenate,
+} from 'shared/util'
 import { observe, observerState } from '../observer/index'
 import { warn } from './debug'
 
@@ -8,10 +14,10 @@ type PropOptions = {
   type: Function | Array<Function> | null,
   default: any,
   required: ?boolean,
-  validator: ?Function
-};
+  validator: ?Function,
+}
 
-export function validateProp (
+export function validateProp(
   key: string,
   propOptions: Object,
   propsData: Object,
@@ -24,7 +30,10 @@ export function validateProp (
   if (isType(Boolean, prop.type)) {
     if (absent && !hasOwn(prop, 'default')) {
       value = false
-    } else if (!isType(String, prop.type) && (value === '' || value === hyphenate(key))) {
+    } else if (
+      !isType(String, prop.type) &&
+      (value === '' || value === hyphenate(key))
+    ) {
       value = true
     }
   }
@@ -47,7 +56,11 @@ export function validateProp (
 /**
  * Get the default value of a prop.
  */
-function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): any {
+function getPropDefaultValue(
+  vm: ?Component,
+  prop: PropOptions,
+  key: string,
+): any {
   // no default, return undefined
   if (!hasOwn(prop, 'default')) {
     return undefined
@@ -56,17 +69,22 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
   // warn against non-factory defaults for Object & Array
   if (process.env.NODE_ENV !== 'production' && isObject(def)) {
     warn(
-      'Invalid default value for prop "' + key + '": ' +
-      'Props with type Object/Array must use a factory function ' +
-      'to return the default value.',
+      'Invalid default value for prop "' +
+        key +
+        '": ' +
+        'Props with type Object/Array must use a factory function ' +
+        'to return the default value.',
       vm,
     )
   }
   // the raw prop value was also undefined from previous render,
   // return previous default value to avoid unnecessary watcher trigger
-  if (vm && vm.$options.propsData &&
+  if (
+    vm &&
+    vm.$options.propsData &&
     vm.$options.propsData[key] === undefined &&
-    vm._props[key] !== undefined) {
+    vm._props[key] !== undefined
+  ) {
     return vm._props[key]
   }
   // call factory function for non-Function types
@@ -79,7 +97,7 @@ function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): a
 /**
  * Assert whether a prop is valid.
  */
-function assertProp (
+function assertProp(
   prop: PropOptions,
   name: string,
   value: any,
@@ -87,10 +105,7 @@ function assertProp (
   absent: boolean,
 ) {
   if (prop.required && absent) {
-    warn(
-      'Missing required prop: "' + name + '"',
-      vm,
-    )
+    warn('Missing required prop: "' + name + '"', vm)
     return
   }
   if (value == null && !prop.required) {
@@ -111,9 +126,14 @@ function assertProp (
   }
   if (!valid) {
     warn(
-      'Invalid prop: type check failed for prop "' + name + '".' +
-      ' Expected ' + expectedTypes.map(capitalize).join(', ') +
-      ', got ' + Object.prototype.toString.call(value).slice(8, -1) + '.',
+      'Invalid prop: type check failed for prop "' +
+        name +
+        '".' +
+        ' Expected ' +
+        expectedTypes.map(capitalize).join(', ') +
+        ', got ' +
+        Object.prototype.toString.call(value).slice(8, -1) +
+        '.',
       vm,
     )
     return
@@ -131,9 +151,12 @@ function assertProp (
 
 const simpleCheckRE = /^(String|Number|Boolean|Function|Symbol)$/
 
-function assertType (value: any, type: Function): {
-  valid: boolean;
-  expectedType: string;
+function assertType(
+  value: any,
+  type: Function,
+): {
+  valid: boolean,
+  expectedType: string,
 } {
   let valid
   const expectedType = getType(type)
@@ -157,12 +180,12 @@ function assertType (value: any, type: Function): {
  * because a simple equality check will fail when running
  * across different vms / iframes.
  */
-function getType (fn) {
+function getType(fn) {
   const match = fn && fn.toString().match(/^\s*function (\w+)/)
   return match ? match[1] : ''
 }
 
-function isType (type, fn) {
+function isType(type, fn) {
   if (!Array.isArray(fn)) {
     return getType(fn) === getType(type)
   }

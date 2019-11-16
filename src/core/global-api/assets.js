@@ -9,12 +9,12 @@ import {
   capitalize,
 } from '../util/index'
 
-export function initAssetRegisters (Vue: GlobalAPI) {
+export function initAssetRegisters(Vue: GlobalAPI) {
   /**
    * Create asset registration methods.
    */
   ASSET_TYPES.forEach(type => {
-    Vue[type] = function (
+    Vue[type] = function(
       id: string,
       definition: Function | Object,
     ): Function | Object | void {
@@ -26,7 +26,8 @@ export function initAssetRegisters (Vue: GlobalAPI) {
           if (type === 'component' && config.isReservedTag(id)) {
             warn(
               'Do not use built-in or reserved HTML elements as component ' +
-              'id: ' + id,
+                'id: ' +
+                id,
             )
           }
         }

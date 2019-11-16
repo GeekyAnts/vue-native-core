@@ -1,4 +1,4 @@
-import { COMMON } from "vue-native/compiler/config"
+import { COMMON } from 'vue-native/compiler/config'
 
 function triggerDirective(newData, oldData, vm, ref) {
   let directive
@@ -22,9 +22,9 @@ function triggerDirective(newData, oldData, vm, ref) {
       modifiers: newData.modifiers,
     }
     const args = [ref, binding]
-    if (typeof directive === "function") {
+    if (typeof directive === 'function') {
       directive.apply(vm, args)
-    } else if (typeof directive.update === "function") {
+    } else if (typeof directive.update === 'function') {
       directive.update.apply(vm, args)
     }
   } else if (newData && !oldData) {
@@ -37,9 +37,9 @@ function triggerDirective(newData, oldData, vm, ref) {
       modifiers: newData.modifiers,
     }
     const args = [ref, binding]
-    if (typeof directive === "function") {
+    if (typeof directive === 'function') {
       directive.apply(vm, args)
-    } else if (typeof directive.bind === "function") {
+    } else if (typeof directive.bind === 'function') {
       directive.bind.apply(vm, args)
     }
   } else if (!newData && oldData) {
@@ -52,7 +52,7 @@ function triggerDirective(newData, oldData, vm, ref) {
       modifiers: oldData.modifiers,
     }
     const args = [ref, binding]
-    if (typeof directive.unbind === "function") {
+    if (typeof directive.unbind === 'function') {
       directive.unbind.apply(vm, args)
     }
   }
@@ -62,8 +62,8 @@ function isObjectShallowModified(prev, next) {
   if (
     prev == null ||
     next == null ||
-    typeof prev !== "object" ||
-    typeof next !== "object"
+    typeof prev !== 'object' ||
+    typeof next !== 'object'
   ) {
     return prev !== next
   }
@@ -110,12 +110,7 @@ export function directive(Component, createElement) {
             if (newDirective.name === oldDirective.name) {
               newDirectivesClone.splice(newIndex, 1, undefined)
               oldDirectivesClone.splice(oldIndex, 1, undefined)
-              triggerDirective(
-                newDirective,
-                oldDirective,
-                context.vm,
-                this.ref,
-              ) // update
+              triggerDirective(newDirective, oldDirective, context.vm, this.ref) // update
             }
           })
         })

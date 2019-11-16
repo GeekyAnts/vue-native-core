@@ -13,7 +13,7 @@ const keyCodes: { [key: string]: number | Array<number> } = {
   left: 37,
   right: 39,
   down: 40,
-  'delete': [8, 46],
+  delete: [8, 46],
 }
 
 // #4868: modifiers that prevent the execution of the listener
@@ -34,7 +34,7 @@ const modifierCode: { [key: string]: string } = {
   right: genGuard(`'button' in $event && $event.button !== 2`),
 }
 
-export function genHandlers (
+export function genHandlers(
   events: ASTElementHandlers,
   native: boolean,
   warn: Function,
@@ -43,13 +43,16 @@ export function genHandlers (
   for (const name in events) {
     const handler = events[name]
     // #5330: warn click.right, since right clicks do not actually fire click events.
-    if (process.env.NODE_ENV !== 'production' &&
-        name === 'click' &&
-        handler && handler.modifiers && handler.modifiers.right
-      ) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      name === 'click' &&
+      handler &&
+      handler.modifiers &&
+      handler.modifiers.right
+    ) {
       warn(
         `Use "contextmenu" instead of "click.right" since right clicks ` +
-        `do not actually fire "click" events.`,
+          `do not actually fire "click" events.`,
       )
     }
     res += `"${name}":${genHandler(name, handler)},`
@@ -57,7 +60,7 @@ export function genHandlers (
   return res.slice(0, -1) + '}'
 }
 
-function genHandler (
+function genHandler(
   name: string,
   handler: ASTElementHandler | Array<ASTElementHandler>,
 ): string {
@@ -101,21 +104,25 @@ function genHandler (
     const handlerCode = isMethodPath
       ? handler.value + '($event)'
       : isFunctionExpression
-        ? `(${handler.value})($event)`
-        : handler.value
+      ? `(${handler.value})($event)`
+      : handler.value
     return `function($event){${code}${handlerCode}}`
   }
 }
 
-function genKeyFilter (keys: Array<string>): string {
-  return `if(!('button' in $event)&&${keys.map(genFilterCode).join('&&')})return null;`
+function genKeyFilter(keys: Array<string>): string {
+  return `if(!('button' in $event)&&${keys
+    .map(genFilterCode)
+    .join('&&')})return null;`
 }
 
-function genFilterCode (key: string): string {
+function genFilterCode(key: string): string {
   const keyVal = parseInt(key, 10)
   if (keyVal) {
     return `$event.keyCode!==${keyVal}`
   }
   const alias = keyCodes[key]
-  return `_k($event.keyCode,${JSON.stringify(key)}${alias ? ',' + JSON.stringify(alias) : ''})`
+  return `_k($event.keyCode,${JSON.stringify(key)}${
+    alias ? ',' + JSON.stringify(alias) : ''
+  })`
 }

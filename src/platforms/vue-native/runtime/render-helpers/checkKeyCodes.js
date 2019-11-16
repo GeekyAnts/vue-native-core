@@ -1,5 +1,5 @@
 /* @flow */
-import { warn } from "core/util/index"
+import { warn } from 'core/util/index'
 /**
  * Runtime helper for checking keyCodes.
  */
@@ -14,7 +14,7 @@ export function checkKeyCodes(
     configKeyCodes = vm.$options._base.config.keyCodes
   } catch (e) {
     warn(
-      "vue-native checkKeyCodes vm.$options._base.config.keyCodes catch error",
+      'vue-native checkKeyCodes vm.$options._base.config.keyCodes catch error',
     )
   }
   const keyCodes = configKeyCodes[key] || builtInAlias

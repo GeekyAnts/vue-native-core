@@ -20,39 +20,44 @@ if (process.argv[2]) {
 
 build(builds)
 
-function build (builds) {
+function build(builds) {
   let built = 0
   const total = builds.length
   const next = () => {
-    buildEntry(builds[built]).then(() => {
-      built++
-      if (built < total) {
-        next()
-      }
-    }).catch(logError)
+    buildEntry(builds[built])
+      .then(() => {
+        built++
+        if (built < total) {
+          next()
+        }
+      })
+      .catch(logError)
   }
 
   next()
 }
 
-function buildEntry (config) {
+function buildEntry(config) {
   const isProd = /min\.js$/.test(config.dest)
   const output = config.output
   const { file, banner } = output
-  return rollup.rollup(config)
+  return rollup
+    .rollup(config)
     .then(bundle => bundle.generate(output))
     .then(({ output: [{ code }] }) => {
       if (isProd) {
-        const minified = (banner ? banner + '\n' : '') + uglify.minify(code, {
-          fromString: true,
-          output: {
-            screw_ie8: true,
-            ascii_only: true,
-          },
-          compress: {
-            pure_funcs: ['makeMap'],
-          },
-        }).code
+        const minified =
+          (banner ? banner + '\n' : '') +
+          uglify.minify(code, {
+            fromString: true,
+            output: {
+              screw_ie8: true,
+              ascii_only: true,
+            },
+            compress: {
+              pure_funcs: ['makeMap'],
+            },
+          }).code
         return write(file, minified, true)
       } else {
         return write(file, code)
@@ -60,10 +65,15 @@ function buildEntry (config) {
     })
 }
 
-function write (dest, code, zip) {
+function write(dest, code, zip) {
   return new Promise((resolve, reject) => {
-    function report (extra) {
-      console.log(blue(path.relative(process.cwd(), dest)) + ' ' + getSize(code) + (extra || ''))
+    function report(extra) {
+      console.log(
+        blue(path.relative(process.cwd(), dest)) +
+          ' ' +
+          getSize(code) +
+          (extra || ''),
+      )
       resolve()
     }
 
@@ -81,14 +91,14 @@ function write (dest, code, zip) {
   })
 }
 
-function getSize (code) {
+function getSize(code) {
   return (code.length / 1024).toFixed(2) + 'kb'
 }
 
-function logError (e) {
+function logError(e) {
   console.log(e)
 }
 
-function blue (str) {
+function blue(str) {
   return '\x1b[1m\x1b[34m' + str + '\x1b[39m\x1b[22m'
 }

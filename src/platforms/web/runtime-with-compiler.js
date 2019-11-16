@@ -15,7 +15,7 @@ const idToTemplate = cached(id => {
 })
 
 const mount = Vue.prototype.$mount
-Vue.prototype.$mount = function (
+Vue.prototype.$mount = function(
   el?: string | Element,
   hydrating?: boolean,
 ): Component {
@@ -23,9 +23,10 @@ Vue.prototype.$mount = function (
 
   /* istanbul ignore if */
   if (el === document.body || el === document.documentElement) {
-    process.env.NODE_ENV !== 'production' && warn(
-      `Do not mount Vue to <html> or <body> - mount to normal elements instead.`,
-    )
+    process.env.NODE_ENV !== 'production' &&
+      warn(
+        `Do not mount Vue to <html> or <body> - mount to normal elements instead.`,
+      )
     return this
   }
 
@@ -62,10 +63,14 @@ Vue.prototype.$mount = function (
         mark('compile')
       }
 
-      const { render, staticRenderFns } = compileToFunctions(template, {
-        shouldDecodeNewlines,
-        delimiters: options.delimiters,
-      }, this)
+      const { render, staticRenderFns } = compileToFunctions(
+        template,
+        {
+          shouldDecodeNewlines,
+          delimiters: options.delimiters,
+        },
+        this,
+      )
       options.render = render
       options.staticRenderFns = staticRenderFns
 
@@ -83,7 +88,7 @@ Vue.prototype.$mount = function (
  * Get outerHTML of elements, taking care
  * of SVG elements in IE as well.
  */
-function getOuterHTML (el: Element): string {
+function getOuterHTML(el: Element): string {
   if (el.outerHTML) {
     return el.outerHTML
   } else {

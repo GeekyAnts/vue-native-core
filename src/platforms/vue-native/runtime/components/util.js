@@ -1,4 +1,4 @@
-import { COMMON } from "vue-native/compiler/config"
+import { COMMON } from 'vue-native/compiler/config'
 
 export function isObjectShallowModified(prev, next) {
   // if (prev == null || next == null || typeof prev !== 'object' || typeof next !== 'object') {
@@ -20,7 +20,7 @@ export function isObjectShallowModified(prev, next) {
     return true
   }
   for (const k in next) {
-    if (typeof next[k] !== "object") {
+    if (typeof next[k] !== 'object') {
       if (next[k] !== prev[k]) {
         return true
       }
@@ -47,9 +47,9 @@ export function mergeCssModule(computed, cssModules) {
 
 export function pascalCaseTag(tag) {
   return tag
-    .split("-")
+    .split('-')
     .map(v => v.replace(/^[a-z]/, s => s.toUpperCase()))
-    .join("")
+    .join('')
 }
 
 /**
@@ -73,7 +73,7 @@ export function handleComponents(components) {
 export function handleDirectives(directives) {
   const obj = {}
   for (const k in directives) {
-    obj[k.toLowerCase().replace(/[^a-z]/g, "")] = directives[k]
+    obj[k.toLowerCase().replace(/[^a-z]/g, '')] = directives[k]
   }
   return obj
 }
@@ -91,16 +91,16 @@ export function getSlots(children) {
     children = [children]
   }
   children = children.filter(v => v != null)
-  children.forEach((v) => {
-    if (typeof v === "string" || typeof v === "number" || v === null) {
+  children.forEach(v => {
+    if (typeof v === 'string' || typeof v === 'number' || v === null) {
       slots.default = slots.default || []
       slots.default.push(v)
     } else if (v.type === COMMON.template.type) {
       // data-slot renamed to dataSlot to fix named slot issue
-      slots[v["dataSlot"]] = slots[v["dataSlot"]] || []
-      slots[v["dataSlot"]].push(v.render)
+      slots[v['dataSlot']] = slots[v['dataSlot']] || []
+      slots[v['dataSlot']].push(v.render)
     } else if (v.props) {
-      const dataSlot = v.props["dataSlot"]
+      const dataSlot = v.props['dataSlot']
       if (dataSlot == null) {
         slots.default = slots.default || []
         slots.default.push(v)
@@ -120,7 +120,7 @@ export function filterCustomEvent(props) {
     })
     .map(v => {
       return {
-        name: v.replace(COMMON.customEvent.name, ""),
+        name: v.replace(COMMON.customEvent.name, ''),
         handle: props[v],
       }
     })

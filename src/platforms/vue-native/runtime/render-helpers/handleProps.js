@@ -1,10 +1,10 @@
-import { HELPER_HEADER } from "vue-native/compiler/constants"
-import propertyMap from "vue-native/compiler/property/index"
-import { isReservedTag, isUnaryTag } from "vue-native/compiler/util/index"
+import { HELPER_HEADER } from 'vue-native/compiler/constants'
+import propertyMap from 'vue-native/compiler/property/index'
+import { isReservedTag, isUnaryTag } from 'vue-native/compiler/util/index'
 
 export function handleProps(props, tag) {
   let handledProps = {}
-  if (typeof tag === "string" && isReservedTag(tag)) {
+  if (typeof tag === 'string' && isReservedTag(tag)) {
     for (const key in props) {
       const prop = propertyMap[key.toLowerCase()]
       if (

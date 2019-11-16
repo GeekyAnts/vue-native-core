@@ -1,14 +1,14 @@
-import { addClass, removeClass } from "web/runtime/class-util.js"
+import { addClass, removeClass } from 'web/runtime/class-util.js'
 import {
   nextFrame,
   resolveTransition,
   whenTransitionEnds,
   getTransitionInfo,
-} from "web/runtime/transition-util"
-import { isIE9, warn } from "core/util/index"
-import { once, isDef, isUndef, isObject, toNumber } from "shared/util"
-import { WEB, COMMON } from "vue-native/compiler/config"
-import { buildWebEmptyComponent } from "./buildWebEmptyComponent"
+} from 'web/runtime/transition-util'
+import { isIE9, warn } from 'core/util/index'
+import { once, isDef, isUndef, isObject, toNumber } from 'shared/util'
+import { WEB, COMMON } from 'vue-native/compiler/config'
+import { buildWebEmptyComponent } from './buildWebEmptyComponent'
 // import {
 //   isObjectShallowModified
 // } from './util'
@@ -16,15 +16,17 @@ import { buildWebEmptyComponent } from "./buildWebEmptyComponent"
 function filterCollection(collection) {
   const result = []
   collection.forEach(v => {
-    if (v.type === "if") {
-      const _result = v.conditions.filter(_v => _v.exp).map(_v => {
-        return {
-          type: "if",
-          index: _v.index,
-          element: _v.element,
-          exp: _v.exp,
-        }
-      })
+    if (v.type === 'if') {
+      const _result = v.conditions
+        .filter(_v => _v.exp)
+        .map(_v => {
+          return {
+            type: 'if',
+            index: _v.index,
+            element: _v.element,
+            exp: _v.exp,
+          }
+        })
       if (_result.length) {
         result.push(_result[0])
       }
@@ -63,7 +65,7 @@ function getHookArgumentsLength(fn) {
 
 // only used in dev mode
 function checkDuration(val, name) {
-  if (typeof val !== "number") {
+  if (typeof val !== 'number') {
     warn(
       `<transition> explicit ${name} duration is not a valid number - ` +
         `got ${JSON.stringify(val)}.`,
@@ -71,13 +73,13 @@ function checkDuration(val, name) {
   } else if (isNaN(val)) {
     warn(
       `<transition> explicit ${name} duration is NaN - ` +
-        "the duration expression might be incorrect.",
+        'the duration expression might be incorrect.',
     )
   }
 }
 
 function isValidDuration(val) {
-  return typeof val === "number" && !isNaN(val)
+  return typeof val === 'number' && !isNaN(val)
 }
 
 function addTransitionClass(ref, className) {
@@ -145,7 +147,7 @@ export function enter({ el, cb }) {
     return
   }
 
-  if (isAppear && !appear && appear !== "") {
+  if (isAppear && !appear && appear !== '') {
     return
   }
 
@@ -162,9 +164,7 @@ export function enter({ el, cb }) {
     ? onBeforeAppear || onBeforeEnter
     : onBeforeEnter
   const enterHook = isAppear ? onAppear || onEnter : onEnter
-  const afterEnterHook = isAppear
-    ? onAfterAppear || onAfterEnter
-    : onAfterEnter
+  const afterEnterHook = isAppear ? onAfterAppear || onAfterEnter : onAfterEnter
   const enterCancelledHook = isAppear
     ? onAppearCancelled || onEnterCancelled
     : onEnterCancelled
@@ -173,8 +173,8 @@ export function enter({ el, cb }) {
     isObject(duration) ? duration.enter : duration,
   )
 
-  if (process.env.NODE_ENV !== "production" && explicitEnterDuration != null) {
-    checkDuration(explicitEnterDuration, "enter")
+  if (process.env.NODE_ENV !== 'production' && explicitEnterDuration != null) {
+    checkDuration(explicitEnterDuration, 'enter')
   }
 
   const expectsCSS = css !== false && !isIE9
@@ -252,8 +252,8 @@ export function leave({ el, cb }) {
     isObject(duration) ? duration.leave : duration,
   )
 
-  if (process.env.NODE_ENV !== "production" && explicitLeaveDuration != null) {
-    checkDuration(explicitLeaveDuration, "leave")
+  if (process.env.NODE_ENV !== 'production' && explicitLeaveDuration != null) {
+    checkDuration(explicitLeaveDuration, 'leave')
   }
 
   const _cb = (el._leaveCb = once(() => {
@@ -334,7 +334,7 @@ export function buildWebTransition(Component, createElement) {
         if (element.key != null) {
           key = element.key + key
         }
-        if (target.type === "component") {
+        if (target.type === 'component') {
           const targetExp = target.exp
           const thisTarget = this.state.transObj[this.state.tagKey]
           const thisExp = thisTarget && thisTarget.exp
@@ -348,7 +348,7 @@ export function buildWebTransition(Component, createElement) {
           this.setRef(ref, _props.key)
           element.ref && element.ref(ref)
         }
-        if (target.type === "component") {
+        if (target.type === 'component') {
           _props[COMMON.setRef.name] = setRef
         } else {
           _props.ref = setRef
@@ -363,7 +363,7 @@ export function buildWebTransition(Component, createElement) {
           animated: true,
           tagKey: _props.key,
         }
-      } else if (type === "update") {
+      } else if (type === 'update') {
         const tagKey = this.state.tagKey
         const transition = this.state.transObj[tagKey]
         // someone want to hide and his prev state is show
@@ -397,7 +397,7 @@ export function buildWebTransition(Component, createElement) {
     UNSAFE_componentWillReceiveProps(nextProps) {
       this.transitionResolved = resolveTransition(nextProps)
       this.isAppear = false
-      const nextState = this.resolveData(nextProps, "update")
+      const nextState = this.resolveData(nextProps, 'update')
 
       if (nextState) {
         this._shouldComponentUpdateTransitionResult = this._shouldComponentUpdateTransition(
@@ -459,13 +459,13 @@ export function buildWebTransition(Component, createElement) {
         const ref = this._refs[this.state.tagKey]
         const transition = this.state.transObj[this.state.tagKey]
         if (ref && transition) {
-          if (transition.type === "show") {
-            ref.style.display = ""
+          if (transition.type === 'show') {
+            ref.style.display = ''
             if (transition.exp === false) {
               this.resolveLeaveTransition({
                 el: ref,
                 cb: () => {
-                  ref.style.display = "none"
+                  ref.style.display = 'none'
                 },
               })
             } else if (transition.exp === true) {
@@ -473,7 +473,7 @@ export function buildWebTransition(Component, createElement) {
                 el: ref,
               })
             }
-          } else if (transition.type === "if") {
+          } else if (transition.type === 'if') {
             if (transition.exp === false) {
               const transObj = Object.assign({}, this.state.transObj)
               delete transObj[prevState.tagKey]

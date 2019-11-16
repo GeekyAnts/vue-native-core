@@ -1,4 +1,4 @@
-export default function html (ast) {
+export default function html(ast) {
   const obj = {}
   const directive = ast.directives.filter(v => v.name === 'html')[0]
   obj.name = 'dangerouslySetInnerHTML'

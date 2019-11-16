@@ -1,8 +1,8 @@
-import { WEB } from "vue-native/compiler/config"
+import { WEB } from 'vue-native/compiler/config'
 
-import { buildMixin } from "./buildMixin"
+import { buildMixin } from './buildMixin'
 
-import { handleProps } from "../render-helpers/handleProps"
+import { handleProps } from '../render-helpers/handleProps'
 
 export function buildInputComponent(Component, createElement) {
   return class Input extends buildMixin.apply(this, arguments) {

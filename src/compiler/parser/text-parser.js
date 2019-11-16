@@ -12,7 +12,7 @@ const buildRegex = cached(delimiters => {
   return new RegExp(open + '((?:.|\\n)+?)' + close, 'g')
 })
 
-export function parseText (
+export function parseText(
   text: string,
   delimiters?: [string, string],
 ): string | void {
@@ -21,7 +21,7 @@ export function parseText (
     return
   }
   const tokens = []
-  let lastIndex = tagRE.lastIndex = 0
+  let lastIndex = (tagRE.lastIndex = 0)
   let match, index
   while ((match = tagRE.exec(text))) {
     index = match.index

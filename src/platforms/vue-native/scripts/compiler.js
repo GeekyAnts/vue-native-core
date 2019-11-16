@@ -31,9 +31,7 @@ export function compileVueToRn(resource) {
   let mappings = ''
 
   // add react-vue import
-  output += `import ${constants.VUE}, { observer as ${
-    constants.OBSERVER
-    } } from 'vue-native-core'`
+  output += `import ${constants.VUE}, { observer as ${constants.OBSERVER} } from 'vue-native-core'`
   output += '\n'
 
   // // add react import
@@ -49,9 +47,7 @@ export function compileVueToRn(resource) {
   output += '\n'
 
   // add component builder import
-  output += `import { buildNativeComponent as ${
-    constants.BUILD_COMPONENT
-    } } from 'vue-native-helper'`
+  output += `import { buildNativeComponent as ${constants.BUILD_COMPONENT} } from 'vue-native-helper'`
   output += '\n'
 
   // parse template
@@ -59,18 +55,19 @@ export function compileVueToRn(resource) {
 
   //Consider the start of template for debugging
   //
-  let templateStartIndex = code.indexOf("<")
+  let templateStartIndex = code.indexOf('<')
   let tempStringBeforeStart = code.substring(0, templateStartIndex)
   let templateLineNumber = tempStringBeforeStart.split(splitRE).length - 1
 
   // Get tags and location of tags from template
   //
   let nodes = []
-  const templateFragments = parse5.parseFragment(cparsed.template.content, { sourceCodeLocationInfo: true })
+  const templateFragments = parse5.parseFragment(cparsed.template.content, {
+    sourceCodeLocationInfo: true,
+  })
   if (templateFragments.childNodes) {
     traverse(templateFragments, nodes)
   }
-
 
   let templateParsed = DEFAULT_OUTPUT.template
   if (template) {
@@ -99,7 +96,8 @@ export function compileVueToRn(resource) {
     var beforeLines = output.split(splitRE).length
     // Start of the script content of the original code
     //
-    var scriptLine = code.slice(0, cparsed.script.start).split(splitRE).length + 1
+    var scriptLine =
+      code.slice(0, cparsed.script.start).split(splitRE).length + 1
     var exportDefaultIndex = code.indexOf('export default')
     var tempString = code.substring(0, exportDefaultIndex)
     var exportDefaultLineNumber = tempString.split('\n').length
@@ -129,7 +127,9 @@ export function compileVueToRn(resource) {
   }
 
   // add render funtion
-  let beautifiedRender = beautify(addvm(templateParsed.render, { indent_size: 2 }))
+  let beautifiedRender = beautify(
+    addvm(templateParsed.render, { indent_size: 2 }),
+  )
   output += beautifiedRender
   output += '\n\n'
 
@@ -184,7 +184,7 @@ export function compileVueToRn(resource) {
   // parse css
   const styles = cparsed.styles
   let cssParsed = {}
-  styles.forEach(function (v) {
+  styles.forEach(function(v) {
     const cssAst = cssParse(v.content)
     cssParsed = Object.assign({}, cssParsed, parseCss(cssAst))
   })
@@ -194,19 +194,11 @@ export function compileVueToRn(resource) {
   output += '\n\n'
 
   // add builder
-  output += `const ${constants.COMPONENT_BUILDED} = ${
-    constants.BUILD_COMPONENT
-    }(${constants.TEMPLATE_RENDER}, ${constants.SCRIPT_OPTIONS}, {Component: ${
-    constants.COMPONENT
-    }, PropTypes: ${constants.PROP_TYPE}, Vue: ${constants.VUE}, ReactNative: ${
-    constants.REACT_NATIVE
-    }, css: ${constants.CSS}})`
+  output += `const ${constants.COMPONENT_BUILDED} = ${constants.BUILD_COMPONENT}(${constants.TEMPLATE_RENDER}, ${constants.SCRIPT_OPTIONS}, {Component: ${constants.COMPONENT}, PropTypes: ${constants.PROP_TYPE}, Vue: ${constants.VUE}, ReactNative: ${constants.REACT_NATIVE}, css: ${constants.CSS}})`
   output += '\n\n'
 
   // export default
-  output += `export default ${constants.OBSERVER}(${
-    constants.COMPONENT_BUILDED
-    })`
+  output += `export default ${constants.OBSERVER}(${constants.COMPONENT_BUILDED})`
 
   // beautiful
   // output = beautify(output, { indent_size: 2 });
@@ -251,7 +243,7 @@ function traverse(ast, nodes = []) {
     nodes.push(ast.sourceCodeLocation)
   }
   if (ast.childNodes) {
-    ast.childNodes.forEach((child) => {
+    ast.childNodes.forEach(child => {
       traverse(child, nodes)
     })
   }

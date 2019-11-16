@@ -3,7 +3,7 @@
 /**
  * Runtime helper for resolving raw children VNodes into a slot object.
  */
-export function resolveSlots (
+export function resolveSlots(
   children: ?Array<VNode>,
   context: ?Component,
 ): { [key: string]: Array<VNode> } {
@@ -17,9 +17,12 @@ export function resolveSlots (
     child = children[i]
     // named slots should only be respected if the vnode was rendered in the
     // same context.
-    if ((child.context === context || child.functionalContext === context) &&
-        child.data && (name = child.data.slot)) {
-      const slot = (slots[name] || (slots[name] = []))
+    if (
+      (child.context === context || child.functionalContext === context) &&
+      child.data &&
+      (name = child.data.slot)
+    ) {
+      const slot = slots[name] || (slots[name] = [])
       if (child.tag === 'template') {
         slot.push.apply(slot, child.children)
       } else {
@@ -36,11 +39,11 @@ export function resolveSlots (
   return slots
 }
 
-function isWhitespace (node: VNode): boolean {
+function isWhitespace(node: VNode): boolean {
   return node.isComment || node.text === ' '
 }
 
-export function resolveScopedSlots (
+export function resolveScopedSlots(
   fns: Array<[string, Function]>,
 ): { [key: string]: Function } {
   const res = {}

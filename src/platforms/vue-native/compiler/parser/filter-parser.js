@@ -1,5 +1,5 @@
 /* @flow */
-import { COMMON } from "vue-native/compiler/config"
+import { COMMON } from 'vue-native/compiler/config'
 
 const validDivisionCharRE = /[\w).+\-_$\]]/
 
@@ -77,7 +77,7 @@ export function parseFilters(exp: string): string {
         // find first non-whitespace prev char
         for (; j >= 0; j--) {
           p = exp.charAt(j)
-          if (p !== " ") break
+          if (p !== ' ') break
         }
         if (!p || !validDivisionCharRE.test(p)) {
           inRegex = true
@@ -93,7 +93,7 @@ export function parseFilters(exp: string): string {
   }
 
   function pushFilter() {
-    (filters || (filters = [])).push(exp.slice(lastFilterIndex, i).trim())
+    ;(filters || (filters = [])).push(exp.slice(lastFilterIndex, i).trim())
     lastFilterIndex = i + 1
   }
 
@@ -107,7 +107,7 @@ export function parseFilters(exp: string): string {
 }
 
 function wrapFilter(exp: string, filter: string): string {
-  const i = filter.indexOf("(")
+  const i = filter.indexOf('(')
   if (i < 0) {
     // _f: resolveFilter
     return `${COMMON.resolveFilter.name}.call(vm, "${filter}")(${exp})`

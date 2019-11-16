@@ -1,8 +1,8 @@
-import { COMMON } from "vue-native/compiler/config"
+import { COMMON } from 'vue-native/compiler/config'
 
-import { handleProps } from "../render-helpers/handleProps"
+import { handleProps } from '../render-helpers/handleProps'
 
-import { buildMixin } from "./buildMixin"
+import { buildMixin } from './buildMixin'
 
 function triggerDirective(newData, oldData, vm, ref) {
   let directive, binding, args
@@ -32,9 +32,9 @@ function triggerDirective(newData, oldData, vm, ref) {
       modifiers: newData.modifiers,
     }
     args = [ref, binding, vnode]
-    if (typeof directive === "function") {
+    if (typeof directive === 'function') {
       directive.apply(vm, args)
-    } else if (typeof directive.update === "function") {
+    } else if (typeof directive.update === 'function') {
       directive.update.apply(vm, args)
     }
   } else if (newData && !oldData) {
@@ -47,9 +47,9 @@ function triggerDirective(newData, oldData, vm, ref) {
       modifiers: newData.modifiers,
     }
     args = [ref, binding, vnode]
-    if (typeof directive === "function") {
+    if (typeof directive === 'function') {
       directive.apply(vm, args)
-    } else if (typeof directive.bind === "function") {
+    } else if (typeof directive.bind === 'function') {
       directive.bind.apply(vm, args)
     }
   } else if (!newData && oldData) {
@@ -62,7 +62,7 @@ function triggerDirective(newData, oldData, vm, ref) {
       modifiers: oldData.modifiers,
     }
     args = [ref, binding, vnode]
-    if (typeof directive.unbind === "function") {
+    if (typeof directive.unbind === 'function') {
       directive.unbind.apply(vm, args)
     }
   }
@@ -127,7 +127,7 @@ export function buildDirective(Component, createElement) {
     buildInHandle(props) {
       const names = this.getDirectiveName(props)
       const stateProps = this.buildStateProps(props)
-      if (names.indexOf("model") !== -1) {
+      if (names.indexOf('model') !== -1) {
         const onChangeFn =
           stateProps.onChange || stateProps.onInput || function() {}
         stateProps.onChange = event => {

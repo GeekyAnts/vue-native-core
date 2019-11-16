@@ -5,13 +5,7 @@ import { resolveConstructorOptions } from 'core/instance/init'
 import { queueActivatedComponent } from 'core/observer/scheduler'
 import { createFunctionalComponent } from './create-functional-component'
 
-import {
-  warn,
-  isDef,
-  isUndef,
-  isTrue,
-  isObject,
-} from '../util/index'
+import { warn, isDef, isUndef, isTrue, isObject } from '../util/index'
 
 import {
   resolveAsyncComponent,
@@ -28,19 +22,19 @@ import {
 
 // hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
-  init (
+  init(
     vnode: VNodeWithData,
     hydrating: boolean,
     parentElm: ?Node,
     refElm: ?Node,
   ): ?boolean {
     if (!vnode.componentInstance || vnode.componentInstance._isDestroyed) {
-      const child = vnode.componentInstance = createComponentInstanceForVnode(
+      const child = (vnode.componentInstance = createComponentInstanceForVnode(
         vnode,
         activeInstance,
         parentElm,
         refElm,
-      )
+      ))
       child.$mount(hydrating ? vnode.elm : undefined, hydrating)
     } else if (vnode.data.keepAlive) {
       // kept-alive components, treat as a patch
@@ -49,9 +43,9 @@ const componentVNodeHooks = {
     }
   },
 
-  prepatch (oldVnode: MountedComponentVNode, vnode: MountedComponentVNode) {
+  prepatch(oldVnode: MountedComponentVNode, vnode: MountedComponentVNode) {
     const options = vnode.componentOptions
-    const child = vnode.componentInstance = oldVnode.componentInstance
+    const child = (vnode.componentInstance = oldVnode.componentInstance)
     updateChildComponent(
       child,
       options.propsData, // updated props
@@ -61,7 +55,7 @@ const componentVNodeHooks = {
     )
   },
 
-  insert (vnode: MountedComponentVNode) {
+  insert(vnode: MountedComponentVNode) {
     const { context, componentInstance } = vnode
     if (!componentInstance._isMounted) {
       componentInstance._isMounted = true
@@ -81,7 +75,7 @@ const componentVNodeHooks = {
     }
   },
 
-  destroy (vnode: MountedComponentVNode) {
+  destroy(vnode: MountedComponentVNode) {
     const { componentInstance } = vnode
     if (!componentInstance._isDestroyed) {
       if (!vnode.data.keepAlive) {
@@ -95,7 +89,7 @@ const componentVNodeHooks = {
 
 const hooksToMerge = Object.keys(componentVNodeHooks)
 
-export function createComponent (
+export function createComponent(
   Ctor: any,
   data?: VNodeData,
   context: Component,
@@ -170,13 +164,17 @@ export function createComponent (
   const name = Ctor.options.name || tag
   const vnode = new VNode(
     `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
-    data, undefined, undefined, undefined, context,
+    data,
+    undefined,
+    undefined,
+    undefined,
+    context,
     { Ctor, propsData, listeners, tag, children },
   )
   return vnode
 }
 
-export function createComponentInstanceForVnode (
+export function createComponentInstanceForVnode(
   vnode: any, // we know it's MountedComponentVNode but flow doesn't
   parent: any, // activeInstance in lifecycle state
   parentElm?: ?Node,
@@ -203,7 +201,7 @@ export function createComponentInstanceForVnode (
   return new vnodeComponentOptions.Ctor(options)
 }
 
-function mergeHooks (data: VNodeData) {
+function mergeHooks(data: VNodeData) {
   if (!data.hook) {
     data.hook = {}
   }
@@ -215,8 +213,8 @@ function mergeHooks (data: VNodeData) {
   }
 }
 
-function mergeHook (one: Function, two: Function): Function {
-  return function (a, b, c, d) {
+function mergeHook(one: Function, two: Function): Function {
+  return function(a, b, c, d) {
     one(a, b, c, d)
     two(a, b, c, d)
   }
@@ -224,7 +222,7 @@ function mergeHook (one: Function, two: Function): Function {
 
 // transform component v-model info (value and callback) into
 // prop and event handler respectively.
-function transformModel (options, data: any) {
+function transformModel(options, data: any) {
   const prop = (options.model && options.model.prop) || 'value'
   const event = (options.model && options.model.event) || 'input'
   ;(data.props || (data.props = {}))[prop] = data.model.value

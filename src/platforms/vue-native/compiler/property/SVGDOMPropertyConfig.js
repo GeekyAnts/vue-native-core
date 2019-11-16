@@ -116,7 +116,7 @@ var ATTRS = {
   horizOriginX: 'horiz-origin-x',
   ideographic: 0,
   imageRendering: 'image-rendering',
-  'in': 0,
+  in: 0,
   in2: 0,
   intercept: 0,
   k: 0,
@@ -289,7 +289,7 @@ var SVGDOMPropertyConfig = {
   DOMAttributeNames: {},
 }
 
-Object.keys(ATTRS).forEach(function (key) {
+Object.keys(ATTRS).forEach(function(key) {
   SVGDOMPropertyConfig.Properties[key] = 0
   if (ATTRS[key]) {
     SVGDOMPropertyConfig.DOMAttributeNames[key] = ATTRS[key]

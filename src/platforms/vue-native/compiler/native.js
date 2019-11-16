@@ -1,13 +1,13 @@
 import _ from 'lodash'
 
-import { parse, processAttrs } from "compiler/parser/index"
+import { parse, processAttrs } from 'compiler/parser/index'
 
-import { NativeRenderGenerator } from "vue-native/compiler/codegen/index"
+import { NativeRenderGenerator } from 'vue-native/compiler/codegen/index'
 
 export function nativeCompiler(template, options) {
   let ast
-  let importCode = ""
-  let renderCode = "() => null"
+  let importCode = ''
+  let renderCode = '() => null'
   options = Object.assign(
     {
       preserveWhitespace: false,
@@ -24,8 +24,8 @@ export function nativeCompiler(template, options) {
     importCode = renderer.generateImport()
     renderCode = renderer.generateRender()
     // Remove extra commas
-    renderCode = renderCode.replace(/\},{2,}/g, "},")
-    renderCode = renderCode.replace(/\),{2,}/g, "),")
+    renderCode = renderCode.replace(/\},{2,}/g, '},')
+    renderCode = renderCode.replace(/\),{2,}/g, '),')
     // Add imports of the render props missing from main import
     let requiredImports = []
     imports.forEach(customImport => {
@@ -33,7 +33,7 @@ export function nativeCompiler(template, options) {
         requiredImports.push(customImport)
       }
     })
-    let requiredImportsString = requiredImports.join(",")
+    let requiredImportsString = requiredImports.join(',')
     if (requiredImportsString) {
       importCode = importCode.replace(
         /\} from 'vue-native-helper'/g,
@@ -53,11 +53,10 @@ function traverse(ast, options, importObj, parent = null, childIndex) {
   //
   if (
     ast.attrsMap &&
-    (ast.attrsMap["render-prop"] || ast.attrsMap["render-prop-fn"]) &&
+    (ast.attrsMap['render-prop'] || ast.attrsMap['render-prop-fn']) &&
     ast.parent
   ) {
-    let slotname =
-      ast.attrsMap["render-prop"] || ast.attrsMap["render-prop-fn"]
+    let slotname = ast.attrsMap['render-prop'] || ast.attrsMap['render-prop-fn']
     if (slotname && ast.parent) {
       // Get modules imported for slots
       let importModules = processAttrs(ast, options, true)

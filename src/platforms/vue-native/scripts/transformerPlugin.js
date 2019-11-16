@@ -10,7 +10,7 @@ const reactNativeMinorVersion = semver(reactNativeVersionString).minor
 
 let upstreamTransformer = null
 if (reactNativeMinorVersion >= 59) {
-  upstreamTransformer = require("metro-react-native-babel-transformer")
+  upstreamTransformer = require('metro-react-native-babel-transformer')
 } else if (reactNativeMinorVersion >= 56) {
   upstreamTransformer = require('metro/src/reactNativeTransformer')
 } else if (reactNativeMinorVersion >= 52) {
@@ -30,32 +30,28 @@ if (reactNativeMinorVersion >= 59) {
 }
 
 function sourceMapAstInPlace(tsMap, babelAst) {
-  return SourceMapConsumer.with(
-    tsMap,
-    null,
-    (consumer) => {
-      traverse.cheap(babelAst, node => {
-        if (node.loc) {
-          const originalStart = consumer.originalPositionFor(node.loc.start)
-          if (originalStart.line) {
-            node.loc.start.line = originalStart.line
-            node.loc.start.column = originalStart.column
-          }
-          const originalEnd = consumer.originalPositionFor(node.loc.end)
-          if (originalEnd.line) {
-            node.loc.end.line = originalEnd.line
-            node.loc.end.column = originalEnd.column
-          }
+  return SourceMapConsumer.with(tsMap, null, consumer => {
+    traverse.cheap(babelAst, node => {
+      if (node.loc) {
+        const originalStart = consumer.originalPositionFor(node.loc.start)
+        if (originalStart.line) {
+          node.loc.start.line = originalStart.line
+          node.loc.start.column = originalStart.column
         }
-      })
-    },
-  )
+        const originalEnd = consumer.originalPositionFor(node.loc.end)
+        if (originalEnd.line) {
+          node.loc.end.line = originalEnd.line
+          node.loc.end.column = originalEnd.column
+        }
+      }
+    })
+  })
 }
 
 export function transform({ src, filename, options }) {
   if (typeof src === 'object') {
     // handle RN >= 0.46
-    ({ src, filename, options } = src)
+    ;({ src, filename, options } = src)
   }
   const outputFile = reactVueTemplateParser(src)
 
