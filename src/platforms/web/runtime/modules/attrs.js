@@ -2,11 +2,7 @@
 
 import { isIE9 } from 'core/util/env'
 
-import {
-  extend,
-  isDef,
-  isUndef
-} from 'shared/util'
+import { extend, isDef, isUndef } from 'shared/util'
 
 import {
   isXlink,
@@ -14,10 +10,10 @@ import {
   getXlinkProp,
   isBooleanAttr,
   isEnumeratedAttr,
-  isFalsyAttrValue
+  isFalsyAttrValue,
 } from 'web/util/index'
 
-function updateAttrs (oldVnode: VNodeWithData, vnode: VNodeWithData) {
+function updateAttrs(oldVnode: VNodeWithData, vnode: VNodeWithData) {
   if (isUndef(oldVnode.data.attrs) && isUndef(vnode.data.attrs)) {
     return
   }
@@ -53,7 +49,7 @@ function updateAttrs (oldVnode: VNodeWithData, vnode: VNodeWithData) {
   }
 }
 
-function setAttr (el: Element, key: string, value: any) {
+function setAttr(el: Element, key: string, value: any) {
   if (isBooleanAttr(key)) {
     // set attribute for blank value
     // e.g. <option disabled>Select one</option>
@@ -63,7 +59,10 @@ function setAttr (el: Element, key: string, value: any) {
       el.setAttribute(key, key)
     }
   } else if (isEnumeratedAttr(key)) {
-    el.setAttribute(key, isFalsyAttrValue(value) || value === 'false' ? 'false' : 'true')
+    el.setAttribute(
+      key,
+      isFalsyAttrValue(value) || value === 'false' ? 'false' : 'true',
+    )
   } else if (isXlink(key)) {
     if (isFalsyAttrValue(value)) {
       el.removeAttributeNS(xlinkNS, getXlinkProp(key))
@@ -81,5 +80,5 @@ function setAttr (el: Element, key: string, value: any) {
 
 export default {
   create: updateAttrs,
-  update: updateAttrs
+  update: updateAttrs,
 }

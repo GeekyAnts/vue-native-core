@@ -5,18 +5,14 @@ import { createElement } from './create-element'
 import { resolveInject } from '../instance/inject'
 import { resolveSlots } from '../instance/render-helpers/resolve-slots'
 
-import {
-  isDef,
-  camelize,
-  validateProp
-} from '../util/index'
+import { isDef, camelize, validateProp } from '../util/index'
 
-export function createFunctionalComponent (
+export function createFunctionalComponent(
   Ctor: Class<Component>,
   propsData: ?Object,
   data: VNodeData,
   context: Component,
-  children: ?Array<VNode>
+  children: ?Array<VNode>,
 ): VNode | void {
   const props = {}
   const propOptions = Ctor.options.props
@@ -39,18 +35,18 @@ export function createFunctionalComponent (
     parent: context,
     listeners: data.on || {},
     injections: resolveInject(Ctor.options.inject, context),
-    slots: () => resolveSlots(children, context)
+    slots: () => resolveSlots(children, context),
   })
   if (vnode instanceof VNode) {
     vnode.functionalContext = context
     if (data.slot) {
-      (vnode.data || (vnode.data = {})).slot = data.slot
+      ;(vnode.data || (vnode.data = {})).slot = data.slot
     }
   }
   return vnode
 }
 
-function mergeProps (to, from) {
+function mergeProps(to, from) {
   for (const key in from) {
     to[camelize(key)] = from[key]
   }

@@ -1,29 +1,16 @@
 import RenderGenerator from './RenderGenerator'
 
-import {
-  camelize,
-  capitalize
-} from 'shared/util'
+import { camelize, capitalize } from 'shared/util'
 
-import {
-  genHandlers,
-  genCustomEventHandlers,
-} from '../modules/events'
-import {
-  NATIVE
-} from '../config'
+import { genHandlers, genCustomEventHandlers } from '../modules/events'
+import { NATIVE } from '../config'
 import parseStyleText from '../modules/style'
-import {
-  isReservedTag,
-  isBuildInTag
-} from '../util/index'
+import { isReservedTag, isBuildInTag } from '../util/index'
 
-import {
-  HELPER_HEADER
-} from '../constants'
+import { HELPER_HEADER } from '../constants'
 
 class ReactNativeRenderGenerator extends RenderGenerator {
-  constructor (ast, options) {
+  constructor(ast, options) {
     super(ast, options)
     this.isNative = true
   }
@@ -31,13 +18,16 @@ class ReactNativeRenderGenerator extends RenderGenerator {
   /**
    * override
    */
-  genTag (ast) {
+  genTag(ast) {
     let tag = ast.tag
 
     if (isBuildInTag(tag)) {
       tag = `${tag}`
     } else {
-      const c = tag.split(':').map(v => `['${capitalize(camelize(v))}']`).join('')
+      const c = tag
+        .split(':')
+        .map(v => `['${capitalize(camelize(v))}']`)
+        .join('')
       tag = `vm.$options.components${c}`
     }
 
@@ -49,11 +39,9 @@ class ReactNativeRenderGenerator extends RenderGenerator {
    * gen text expression
    * @param {Object} ast
    */
-  genTextExpression (ast) {
+  genTextExpression(ast) {
     let code = super.genTextExpression(ast)
-    code = code
-      .replace(/^"\\n\s*/, '"')
-      .replace(/\\n\s*"$/, '"')
+    code = code.replace(/^"\\n\s*/, '"').replace(/\\n\s*"$/, '"')
     return code
   }
 
@@ -62,18 +50,16 @@ class ReactNativeRenderGenerator extends RenderGenerator {
    * gen text
    * @param {Object} ast
    */
-  genText (ast) {
+  genText(ast) {
     let code = super.genText(ast)
-    code = code
-      .replace(/^"\\n\s*/, '"')
-      .replace(/\\n\s*"$/, '"')
+    code = code.replace(/^"\\n\s*/, '"').replace(/\\n\s*"$/, '"')
     return code
   }
 
   /**
    * override
    */
-  genProps (ast) {
+  genProps(ast) {
     let code = []
     ast.attrs = ast.attrs || []
     if (ast.slotTarget !== undefined) {
@@ -96,7 +82,7 @@ class ReactNativeRenderGenerator extends RenderGenerator {
         .filter(v => {
           return v.name !== 'class' && v.name !== 'style' && v.name !== 'v-pre'
         })
-        .map((v) => {
+        .map(v => {
           let name = v.name
           name = camelize(name)
           return `${name}: ${v.value}`
@@ -122,22 +108,22 @@ class ReactNativeRenderGenerator extends RenderGenerator {
 
   genTemplate(ast) {
     if (ast.parent === undefined) {
-      return this.genElement(ast.children[0]);
+      return this.genElement(ast.children[0])
     } else {
       if (ast.children.length > 1) {
-        ast.tag = 'view';
-        return this.genElement(ast);
+        ast.tag = 'view'
+        return this.genElement(ast)
       } else {
-        return this.genElement(ast.children[0]);
+        return this.genElement(ast.children[0])
       }
     }
   }
 
-  genEventHandler (ast) {
+  genEventHandler(ast) {
     let code = ''
     if (ast.events) {
       if (isReservedTag(ast.tag) || isBuildInTag(ast.tag)) {
-          code = genHandlers(ast.events, this.vueConfig)
+        code = genHandlers(ast.events, this.vueConfig)
       } else {
         code = genCustomEventHandlers(ast.events, this.vueConfig)
       }
@@ -145,16 +131,19 @@ class ReactNativeRenderGenerator extends RenderGenerator {
     return code
   }
 
-  genNativeEventHandler (ast) {
+  genNativeEventHandler(ast) {
     let code = ''
     if (ast.nativeEvents && !isReservedTag(ast.tag)) {
-      code = `${HELPER_HEADER}nativeEvents: {${genHandlers(ast.nativeEvents, this.vueConfig)}}`
+      code = `${HELPER_HEADER}nativeEvents: {${genHandlers(
+        ast.nativeEvents,
+        this.vueConfig,
+      )}}`
     }
     return code
   }
 
   // merge style & class
-  genNativeStyleProps (ast) {
+  genNativeStyleProps(ast) {
     const classProps = this.genClassProps(ast)
 
     const styleProps = this.genStyleProps(ast)
@@ -167,9 +156,12 @@ class ReactNativeRenderGenerator extends RenderGenerator {
    * gen style props
    * @param {Object} ast
    */
-  genStyleProps (ast) {
-    const styleAttrsValue = ast.attrs.filter(v => v.name === 'style').map(v => v.value)
-    const show = ast.directives && ast.directives.filter(v => v.name === 'show')[0]
+  genStyleProps(ast) {
+    const styleAttrsValue = ast.attrs
+      .filter(v => v.name === 'style')
+      .map(v => v.value)
+    const show =
+      ast.directives && ast.directives.filter(v => v.name === 'show')[0]
     const topParent = this.isAstTopParent(ast)
     if (styleAttrsValue.length === 0 && !show && !topParent) {
       return
@@ -197,9 +189,11 @@ class ReactNativeRenderGenerator extends RenderGenerator {
    * gen class props
    * @param {Object} ast
    */
-  genClassProps (ast) {
+  genClassProps(ast) {
     const topParent = this.isAstTopParent(ast)
-    const classAttrsValue = ast.attrs.filter(v => v.name === 'class').map(v => v.value)
+    const classAttrsValue = ast.attrs
+      .filter(v => v.name === 'class')
+      .map(v => v.value)
     if (classAttrsValue.length === 0 && !topParent) {
       return
     }
@@ -225,11 +219,15 @@ class ReactNativeRenderGenerator extends RenderGenerator {
     return `${NATIVE.bindClass.name}.call(this, ${objCode})`
   }
 
-  isAstTopParent (ast) {
+  isAstTopParent(ast) {
     if (ast.parent === undefined) {
       return true
     }
-    if (ast.parent.tag === 'template' || ast.parent.tag === 'transition' || ast.parent.originTag === 'transition') {
+    if (
+      ast.parent.tag === 'template' ||
+      ast.parent.tag === 'transition' ||
+      ast.parent.originTag === 'transition'
+    ) {
       if (ast.parent.parent === undefined) {
         return true
       }

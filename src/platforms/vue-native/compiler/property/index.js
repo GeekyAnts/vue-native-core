@@ -18,11 +18,13 @@ Object.keys(SVGDOMPropertyConfig.DOMAttributeNames).forEach(v => {
   propertyMap[SVGDOMPropertyConfig.DOMAttributeNames[v]] = v
 })
 
-Object.keys(EventConstant.topLevelTypes).map(v => {
-  return v.replace(/^top/, 'on')
-}).forEach(v => {
-  propertyMap[v.toLowerCase()] = v
-})
+Object.keys(EventConstant.topLevelTypes)
+  .map(v => {
+    return v.replace(/^top/, 'on')
+  })
+  .forEach(v => {
+    propertyMap[v.toLowerCase()] = v
+  })
 
 Object.keys(ReactProps).map(v => {
   propertyMap[v.toLowerCase()] = v

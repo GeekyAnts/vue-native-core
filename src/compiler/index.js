@@ -7,9 +7,9 @@ import { detectErrors } from './error-detector'
 import { extend, noop } from 'shared/util'
 import { warn, tip } from 'core/util/debug'
 
-function baseCompile (
+function baseCompile(
   template: string,
-  options: CompilerOptions
+  options: CompilerOptions,
 ): CompiledResult {
   const ast = parse(template.trim(), options)
   optimize(ast, options)
@@ -17,11 +17,11 @@ function baseCompile (
   return {
     ast,
     render: code.render,
-    staticRenderFns: code.staticRenderFns
+    staticRenderFns: code.staticRenderFns,
   }
 }
 
-function makeFunction (code, errors) {
+function makeFunction(code, errors) {
   try {
     return new Function(code)
   } catch (err) {
@@ -30,32 +30,34 @@ function makeFunction (code, errors) {
   }
 }
 
-export function createCompiler (baseOptions: CompilerOptions) {
+export function createCompiler(baseOptions: CompilerOptions) {
   const functionCompileCache: {
-    [key: string]: CompiledFunctionResult;
+    [key: string]: CompiledFunctionResult,
   } = Object.create(null)
 
-  function compile (
+  function compile(
     template: string,
-    options?: CompilerOptions
+    options?: CompilerOptions,
   ): CompiledResult {
     const finalOptions = Object.create(baseOptions)
     const errors = []
     const tips = []
     finalOptions.warn = (msg, tip) => {
-      (tip ? tips : errors).push(msg)
+      ;(tip ? tips : errors).push(msg)
     }
 
     if (options) {
       // merge custom modules
       if (options.modules) {
-        finalOptions.modules = (baseOptions.modules || []).concat(options.modules)
+        finalOptions.modules = (baseOptions.modules || []).concat(
+          options.modules,
+        )
       }
       // merge custom directives
       if (options.directives) {
         finalOptions.directives = extend(
           Object.create(baseOptions.directives),
-          options.directives
+          options.directives,
         )
       }
       // copy other options
@@ -75,10 +77,10 @@ export function createCompiler (baseOptions: CompilerOptions) {
     return compiled
   }
 
-  function compileToFunctions (
+  function compileToFunctions(
     template: string,
     options?: CompilerOptions,
-    vm?: Component
+    vm?: Component,
   ): CompiledFunctionResult {
     options = options || {}
 
@@ -91,10 +93,10 @@ export function createCompiler (baseOptions: CompilerOptions) {
         if (e.toString().match(/unsafe-eval|CSP/)) {
           warn(
             'It seems you are using the standalone build of Vue.js in an ' +
-            'environment with Content Security Policy that prohibits unsafe-eval. ' +
-            'The template compiler cannot work in this environment. Consider ' +
-            'relaxing the policy to allow unsafe-eval or pre-compiling your ' +
-            'templates into render functions.'
+              'environment with Content Security Policy that prohibits unsafe-eval. ' +
+              'The template compiler cannot work in this environment. Consider ' +
+              'relaxing the policy to allow unsafe-eval or pre-compiling your ' +
+              'templates into render functions.',
           )
         }
       }
@@ -116,8 +118,9 @@ export function createCompiler (baseOptions: CompilerOptions) {
       if (compiled.errors && compiled.errors.length) {
         warn(
           `Error compiling template:\n\n${template}\n\n` +
-          compiled.errors.map(e => `- ${e}`).join('\n') + '\n',
-          vm
+            compiled.errors.map(e => `- ${e}`).join('\n') +
+            '\n',
+          vm,
         )
       }
       if (compiled.tips && compiled.tips.length) {
@@ -132,7 +135,10 @@ export function createCompiler (baseOptions: CompilerOptions) {
     const l = compiled.staticRenderFns.length
     res.staticRenderFns = new Array(l)
     for (let i = 0; i < l; i++) {
-      res.staticRenderFns[i] = makeFunction(compiled.staticRenderFns[i], fnGenErrors)
+      res.staticRenderFns[i] = makeFunction(
+        compiled.staticRenderFns[i],
+        fnGenErrors,
+      )
     }
 
     // check function generation errors.
@@ -143,8 +149,10 @@ export function createCompiler (baseOptions: CompilerOptions) {
       if ((!compiled.errors || !compiled.errors.length) && fnGenErrors.length) {
         warn(
           `Failed to generate render function:\n\n` +
-          fnGenErrors.map(({ err, code }) => `${err.toString()} in\n\n${code}\n`).join('\n'),
-          vm
+            fnGenErrors
+              .map(({ err, code }) => `${err.toString()} in\n\n${code}\n`)
+              .join('\n'),
+          vm,
         )
       }
     }
@@ -154,6 +162,6 @@ export function createCompiler (baseOptions: CompilerOptions) {
 
   return {
     compile,
-    compileToFunctions
+    compileToFunctions,
   }
 }

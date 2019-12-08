@@ -5,10 +5,7 @@ import { isObject } from 'core/util/index'
 /**
  * Runtime helper for rendering v-for lists.
  */
-export function renderList (
-  val: any,
-  render: () => VNode
-): ?Array<VNode> {
+export function renderList(val: any, render: () => VNode): ?Array<VNode> {
   let ret: ?Array<VNode>, i, l, keys, key
   if (Array.isArray(val) || typeof val === 'string') {
     ret = new Array(val.length)

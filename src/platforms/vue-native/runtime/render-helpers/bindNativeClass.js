@@ -1,20 +1,22 @@
-function classBinding (c) {
+function classBinding(c) {
   const type = Object.prototype.toString.call(c)
   if (type === '[object Object]') {
-    return Object.keys(c).filter((k) => {
+    return Object.keys(c).filter(k => {
       return !!c[k]
     })
   } else if (type === '[object Array]') {
-    return c.map((v) => {
-      return classBinding(v)
-    }).reduce((acc, val) => {
-      return acc.concat(val)
-    }, [])
+    return c
+      .map(v => {
+        return classBinding(v)
+      })
+      .reduce((acc, val) => {
+        return acc.concat(val)
+      }, [])
   }
   return c
 }
 
-export function bindNativeClass (obj) {
+export function bindNativeClass(obj) {
   let arr = []
   const style = []
   if (obj.dynamicClass) {

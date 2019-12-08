@@ -1,4 +1,4 @@
-import { COMMON } from "vue-native/compiler/config";
+import { COMMON } from 'vue-native/compiler/config'
 
 export function isObjectShallowModified(prev, next) {
   // if (prev == null || next == null || typeof prev !== 'object' || typeof next !== 'object') {
@@ -17,39 +17,39 @@ export function isObjectShallowModified(prev, next) {
   // }
   // return false
   if (prev.children !== undefined || next.children !== undefined) {
-    return true;
+    return true
   }
   for (const k in next) {
-    if (typeof next[k] !== "object") {
+    if (typeof next[k] !== 'object') {
       if (next[k] !== prev[k]) {
-        return true;
+        return true
       }
     }
   }
-  return false;
+  return false
 }
 
-const hasOwnProperty = Object.prototype.hasOwnProperty;
+const hasOwnProperty = Object.prototype.hasOwnProperty
 export function hasOwn(obj, key) {
-  return hasOwnProperty.call(obj, key);
+  return hasOwnProperty.call(obj, key)
 }
 
 export function mergeCssModule(computed, cssModules) {
-  const _computed = Object.create(computed || null);
+  const _computed = Object.create(computed || null)
   Object.keys(cssModules).forEach(function(key) {
-    var module = cssModules[key];
+    var module = cssModules[key]
     _computed[key] = function() {
-      return module;
-    };
-  });
-  return _computed;
+      return module
+    }
+  })
+  return _computed
 }
 
 export function pascalCaseTag(tag) {
   return tag
-    .split("-")
+    .split('-')
     .map(v => v.replace(/^[a-z]/, s => s.toUpperCase()))
-    .join("");
+    .join('')
 }
 
 /**
@@ -60,22 +60,22 @@ export function pascalCaseTag(tag) {
 export function handleComponents(components) {
   for (const k in components) {
     if (hasOwn(components, k)) {
-      components[pascalCaseTag(k)] = components[k];
-      const c = components[k];
+      components[pascalCaseTag(k)] = components[k]
+      const c = components[k]
       if (c.name) {
-        components[pascalCaseTag(c.name)] = components[k];
+        components[pascalCaseTag(c.name)] = components[k]
       }
     }
   }
-  return components;
+  return components
 }
 
 export function handleDirectives(directives) {
-  const obj = {};
+  const obj = {}
   for (const k in directives) {
-    obj[k.toLowerCase().replace(/[^a-z]/g, "")] = directives[k];
+    obj[k.toLowerCase().replace(/[^a-z]/g, '')] = directives[k]
   }
-  return obj;
+  return obj
 }
 
 /**
@@ -83,45 +83,45 @@ export function handleDirectives(directives) {
  * @param {this.props.children} children
  */
 export function getSlots(children) {
-  const slots = {};
+  const slots = {}
   if (children == null) {
-    return slots;
+    return slots
   }
   if (!Array.isArray(children)) {
-    children = [children];
+    children = [children]
   }
-  children = children.filter(v => v != null);
-  children.forEach((v, _i) => {
-    if (typeof v === "string" || typeof v === "number" || v === null) {
-      slots.default = slots.default || [];
-      slots.default.push(v);
+  children = children.filter(v => v != null)
+  children.forEach(v => {
+    if (typeof v === 'string' || typeof v === 'number' || v === null) {
+      slots.default = slots.default || []
+      slots.default.push(v)
     } else if (v.type === COMMON.template.type) {
       // data-slot renamed to dataSlot to fix named slot issue
-      slots[v["dataSlot"]] = slots[v["dataSlot"]] || [];
-      slots[v["dataSlot"]].push(v.render);
+      slots[v['dataSlot']] = slots[v['dataSlot']] || []
+      slots[v['dataSlot']].push(v.render)
     } else if (v.props) {
-      const dataSlot = v.props["dataSlot"];
+      const dataSlot = v.props['dataSlot']
       if (dataSlot == null) {
-        slots.default = slots.default || [];
-        slots.default.push(v);
+        slots.default = slots.default || []
+        slots.default.push(v)
       } else {
-        slots[dataSlot] = slots[dataSlot] || [];
-        slots[dataSlot].push(v);
+        slots[dataSlot] = slots[dataSlot] || []
+        slots[dataSlot].push(v)
       }
     }
-  });
-  return slots;
+  })
+  return slots
 }
 
 export function filterCustomEvent(props) {
   return Object.keys(props)
     .filter(v => {
-      return v.indexOf(COMMON.customEvent.name) === 0;
+      return v.indexOf(COMMON.customEvent.name) === 0
     })
     .map(v => {
       return {
-        name: v.replace(COMMON.customEvent.name, ""),
-        handle: props[v]
-      };
-    });
+        name: v.replace(COMMON.customEvent.name, ''),
+        handle: props[v],
+      }
+    })
 }

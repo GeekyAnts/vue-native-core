@@ -12,7 +12,7 @@ var reactProps = {
   innerHTML: true,
   suppressContentEditableWarning: true,
   onFocusIn: true,
-  onFocusOut: true
+  onFocusOut: true,
 }
 
 export default reactProps

@@ -5,9 +5,13 @@ import { baseWarn, pluckModuleFunction } from '../helpers'
 import baseDirectives from '../directives/index'
 import { camelize, no } from 'shared/util'
 
-type TransformFunction = (el: ASTElement, code: string) => string;
-type DataGenFunction = (el: ASTElement) => string;
-type DirectiveFunction = (el: ASTElement, dir: ASTDirective, warn: Function) => boolean;
+type TransformFunction = (el: ASTElement, code: string) => string
+type DataGenFunction = (el: ASTElement) => string
+type DirectiveFunction = (
+  el: ASTElement,
+  dir: ASTDirective,
+  warn: Function,
+) => boolean
 
 // configurable state
 let warn
@@ -19,16 +23,16 @@ let staticRenderFns
 let onceCount
 let currentOptions
 
-export function generate (
+export function generate(
   ast: ASTElement | void,
-  options: CompilerOptions
+  options: CompilerOptions,
 ): {
   render: string,
-  staticRenderFns: Array<string>
+  staticRenderFns: Array<string>,
 } {
   // save previous staticRenderFns so generate calls can be nested
   const prevStaticRenderFns: Array<string> = staticRenderFns
-  const currentStaticRenderFns: Array<string> = staticRenderFns = []
+  const currentStaticRenderFns: Array<string> = (staticRenderFns = [])
   const prevOnceCount = onceCount
   onceCount = 0
   currentOptions = options
@@ -42,11 +46,11 @@ export function generate (
   onceCount = prevOnceCount
   return {
     render: `with(this){return ${code}}`,
-    staticRenderFns: currentStaticRenderFns
+    staticRenderFns: currentStaticRenderFns,
   }
 }
 
-function genElement (el: ASTElement): string {
+function genElement(el: ASTElement): string {
   if (el.staticRoot && !el.staticProcessed) {
     return genStatic(el)
   } else if (el.once && !el.onceProcessed) {
@@ -83,14 +87,14 @@ function genElement (el: ASTElement): string {
 }
 
 // hoist static sub-trees out
-function genStatic (el: ASTElement): string {
+function genStatic(el: ASTElement): string {
   el.staticProcessed = true
   staticRenderFns.push(`with(this){return ${genElement(el)}}`)
   return `_m(${staticRenderFns.length - 1}${el.staticInFor ? ',true' : ''})`
 }
 
 // v-once
-function genOnce (el: ASTElement): string {
+function genOnce(el: ASTElement): string {
   el.onceProcessed = true
   if (el.if && !el.ifProcessed) {
     return genIf(el)
@@ -105,9 +109,8 @@ function genOnce (el: ASTElement): string {
       parent = parent.parent
     }
     if (!key) {
-      process.env.NODE_ENV !== 'production' && warn(
-        `v-once can only be used inside v-for that is keyed. `
-      )
+      process.env.NODE_ENV !== 'production' &&
+        warn(`v-once can only be used inside v-for that is keyed. `)
       return genElement(el)
     }
     return `_o(${genElement(el)},${onceCount++}${key ? `,${key}` : ``})`
@@ -116,30 +119,32 @@ function genOnce (el: ASTElement): string {
   }
 }
 
-function genIf (el: any): string {
+function genIf(el: any): string {
   el.ifProcessed = true // avoid recursion
   return genIfConditions(el.ifConditions.slice())
 }
 
-function genIfConditions (conditions: ASTIfConditions): string {
+function genIfConditions(conditions: ASTIfConditions): string {
   if (!conditions.length) {
     return '_e()'
   }
 
   const condition = conditions.shift()
   if (condition.exp) {
-    return `(${condition.exp})?${genTernaryExp(condition.block)}:${genIfConditions(conditions)}`
+    return `(${condition.exp})?${genTernaryExp(
+      condition.block,
+    )}:${genIfConditions(conditions)}`
   } else {
     return `${genTernaryExp(condition.block)}`
   }
 
   // v-if with v-once should generate code like (a)?_m(0):_m(1)
-  function genTernaryExp (el) {
+  function genTernaryExp(el) {
     return el.once ? genOnce(el) : genElement(el)
   }
 }
 
-function genFor (el: any): string {
+function genFor(el: any): string {
   const exp = el.for
   const alias = el.alias
   const iterator1 = el.iterator1 ? `,${el.iterator1}` : ''
@@ -147,24 +152,29 @@ function genFor (el: any): string {
 
   if (
     process.env.NODE_ENV !== 'production' &&
-    maybeComponent(el) && el.tag !== 'slot' && el.tag !== 'template' && !el.key
+    maybeComponent(el) &&
+    el.tag !== 'slot' &&
+    el.tag !== 'template' &&
+    !el.key
   ) {
     warn(
       `<${el.tag} v-for="${alias} in ${exp}">: component lists rendered with ` +
-      `v-for should have explicit keys. ` +
-      `See https://vuejs.org/guide/list.html#key for more info.`,
-      true /* tip */
+        `v-for should have explicit keys. ` +
+        `See https://vuejs.org/guide/list.html#key for more info.`,
+      true /* tip */,
     )
   }
 
   el.forProcessed = true // avoid recursion
-  return `_l((${exp}),` +
+  return (
+    `_l((${exp}),` +
     `function(${alias}${iterator1}${iterator2}){` +
-      `return ${genElement(el)}` +
+    `return ${genElement(el)}` +
     '})'
+  )
 }
 
-function genData (el: ASTElement): string {
+function genData(el: ASTElement): string {
   let data = '{'
 
   // directives first.
@@ -220,13 +230,7 @@ function genData (el: ASTElement): string {
   }
   // component v-model
   if (el.model) {
-    data += `model:{value:${
-      el.model.value
-    },callback:${
-      el.model.callback
-    },expression:${
-      el.model.expression
-    }},`
+    data += `model:{value:${el.model.value},callback:${el.model.callback},expression:${el.model.expression}},`
   }
   // inline-template
   if (el.inlineTemplate) {
@@ -243,7 +247,7 @@ function genData (el: ASTElement): string {
   return data
 }
 
-function genDirectives (el: ASTElement): string | void {
+function genDirectives(el: ASTElement): string | void {
   const dirs = el.directives
   if (!dirs) return
   let res = 'directives:['
@@ -252,7 +256,8 @@ function genDirectives (el: ASTElement): string | void {
   for (i = 0, l = dirs.length; i < l; i++) {
     dir = dirs[i]
     needRuntime = true
-    const gen: DirectiveFunction = platformDirectives[dir.name] || baseDirectives[dir.name]
+    const gen: DirectiveFunction =
+      platformDirectives[dir.name] || baseDirectives[dir.name]
     if (gen) {
       // compile-time directive that manipulates AST.
       // returns true if it also needs a runtime counterpart.
@@ -261,10 +266,10 @@ function genDirectives (el: ASTElement): string | void {
     if (needRuntime) {
       hasRuntime = true
       res += `{name:"${dir.name}",rawName:"${dir.rawName}"${
-        dir.value ? `,value:(${dir.value}),expression:${JSON.stringify(dir.value)}` : ''
-      }${
-        dir.arg ? `,arg:"${dir.arg}"` : ''
-      }${
+        dir.value
+          ? `,value:(${dir.value}),expression:${JSON.stringify(dir.value)}`
+          : ''
+      }${dir.arg ? `,arg:"${dir.arg}"` : ''}${
         dir.modifiers ? `,modifiers:${JSON.stringify(dir.modifiers)}` : ''
       }},`
     }
@@ -274,46 +279,50 @@ function genDirectives (el: ASTElement): string | void {
   }
 }
 
-function genInlineTemplate (el: ASTElement): ?string {
+function genInlineTemplate(el: ASTElement): ?string {
   const ast = el.children[0]
-  if (process.env.NODE_ENV !== 'production' && (
-    el.children.length > 1 || ast.type !== 1
-  )) {
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    (el.children.length > 1 || ast.type !== 1)
+  ) {
     warn('Inline-template components must have exactly one child element.')
   }
   if (ast.type === 1) {
     const inlineRenderFns = generate(ast, currentOptions)
     return `inlineTemplate:{render:function(){${
       inlineRenderFns.render
-    }},staticRenderFns:[${
-      inlineRenderFns.staticRenderFns.map(code => `function(){${code}}`).join(',')
-    }]}`
+    }},staticRenderFns:[${inlineRenderFns.staticRenderFns
+      .map(code => `function(){${code}}`)
+      .join(',')}]}`
   }
 }
 
-function genScopedSlots (slots: { [key: string]: ASTElement }): string {
-  return `scopedSlots:_u([${
-    Object.keys(slots).map(key => genScopedSlot(key, slots[key])).join(',')
-  }])`
+function genScopedSlots(slots: { [key: string]: ASTElement }): string {
+  return `scopedSlots:_u([${Object.keys(slots)
+    .map(key => genScopedSlot(key, slots[key]))
+    .join(',')}])`
 }
 
-function genScopedSlot (key: string, el: ASTElement) {
-  return `[${key},function(${String(el.attrsMap.scope)}){` +
-    `return ${el.tag === 'template'
-      ? genChildren(el) || 'void 0'
-      : genElement(el)
-  }}]`
+function genScopedSlot(key: string, el: ASTElement) {
+  return (
+    `[${key},function(${String(el.attrsMap.scope)}){` +
+    `return ${
+      el.tag === 'template' ? genChildren(el) || 'void 0' : genElement(el)
+    }}]`
+  )
 }
 
-function genChildren (el: ASTElement, checkSkip?: boolean): string | void {
+function genChildren(el: ASTElement, checkSkip?: boolean): string | void {
   const children = el.children
   if (children.length) {
     const el: any = children[0]
     // optimize single v-for
-    if (children.length === 1 &&
-        el.for &&
-        el.tag !== 'template' &&
-        el.tag !== 'slot') {
+    if (
+      children.length === 1 &&
+      el.for &&
+      el.tag !== 'template' &&
+      el.tag !== 'slot'
+    ) {
       return genElement(el)
     }
     const normalizationType = checkSkip ? getNormalizationType(children) : 0
@@ -327,35 +336,40 @@ function genChildren (el: ASTElement, checkSkip?: boolean): string | void {
 // 0: no normalization needed
 // 1: simple normalization needed (possible 1-level deep nested array)
 // 2: full normalization needed
-function getNormalizationType (children: Array<ASTNode>): number {
+function getNormalizationType(children: Array<ASTNode>): number {
   let res = 0
   for (let i = 0; i < children.length; i++) {
     const el: ASTNode = children[i]
     if (el.type !== 1) {
       continue
     }
-    if (needsNormalization(el) ||
-        (el.ifConditions && el.ifConditions.some(c => needsNormalization(c.block)))) {
+    if (
+      needsNormalization(el) ||
+      (el.ifConditions &&
+        el.ifConditions.some(c => needsNormalization(c.block)))
+    ) {
       res = 2
       break
     }
-    if (maybeComponent(el) ||
-        (el.ifConditions && el.ifConditions.some(c => maybeComponent(c.block)))) {
+    if (
+      maybeComponent(el) ||
+      (el.ifConditions && el.ifConditions.some(c => maybeComponent(c.block)))
+    ) {
       res = 1
     }
   }
   return res
 }
 
-function needsNormalization (el: ASTElement): boolean {
+function needsNormalization(el: ASTElement): boolean {
   return el.for !== undefined || el.tag === 'template' || el.tag === 'slot'
 }
 
-function maybeComponent (el: ASTElement): boolean {
+function maybeComponent(el: ASTElement): boolean {
   return !isPlatformReservedTag(el.tag)
 }
 
-function genNode (node: ASTNode): string {
+function genNode(node: ASTNode): string {
   if (node.type === 1) {
     return genElement(node)
   } else {
@@ -363,18 +377,21 @@ function genNode (node: ASTNode): string {
   }
 }
 
-function genText (text: ASTText | ASTExpression): string {
-  return `_v(${text.type === 2
-    ? text.expression // no need for () because already wrapped in _s()
-    : transformSpecialNewlines(JSON.stringify(text.text))
+function genText(text: ASTText | ASTExpression): string {
+  return `_v(${
+    text.type === 2
+      ? text.expression // no need for () because already wrapped in _s()
+      : transformSpecialNewlines(JSON.stringify(text.text))
   })`
 }
 
-function genSlot (el: ASTElement): string {
+function genSlot(el: ASTElement): string {
   const slotName = el.slotName || '"default"'
   const children = genChildren(el)
   let res = `_t(${slotName}${children ? `,${children}` : ''}`
-  const attrs = el.attrs && `{${el.attrs.map(a => `${camelize(a.name)}:${a.value}`).join(',')}}`
+  const attrs =
+    el.attrs &&
+    `{${el.attrs.map(a => `${camelize(a.name)}:${a.value}`).join(',')}}`
   const bind = el.attrsMap['v-bind']
   if ((attrs || bind) && !children) {
     res += `,null`
@@ -389,14 +406,12 @@ function genSlot (el: ASTElement): string {
 }
 
 // componentName is el.component, take it as argument to shun flow's pessimistic refinement
-function genComponent (componentName: string, el: ASTElement): string {
+function genComponent(componentName: string, el: ASTElement): string {
   const children = el.inlineTemplate ? null : genChildren(el, true)
-  return `_c(${componentName},${genData(el)}${
-    children ? `,${children}` : ''
-  })`
+  return `_c(${componentName},${genData(el)}${children ? `,${children}` : ''})`
 }
 
-function genProps (props: Array<{ name: string, value: string }>): string {
+function genProps(props: Array<{ name: string, value: string }>): string {
   let res = ''
   for (let i = 0; i < props.length; i++) {
     const prop = props[i]
@@ -406,8 +421,6 @@ function genProps (props: Array<{ name: string, value: string }>): string {
 }
 
 // #3895, #4268
-function transformSpecialNewlines (text: string): string {
-  return text
-    .replace(/\u2028/g, '\\u2028')
-    .replace(/\u2029/g, '\\u2029')
+function transformSpecialNewlines(text: string): string {
+  return text.replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029')
 }

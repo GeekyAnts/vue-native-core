@@ -1,37 +1,26 @@
 import { baseWarn } from 'compiler/helpers'
-import {
-  camelize,
-  capitalize
-} from 'shared/util'
+import { camelize, capitalize } from 'shared/util'
 import RenderGenerator from './RenderGenerator'
-import {
-  WEB
-} from '../config'
-import {
-  HELPER_HEADER
-} from '../constants'
+import { WEB } from '../config'
+import { HELPER_HEADER } from '../constants'
 import {
   genHandlers,
   genCustomEventHandlers,
-  genTransitionEventHandlers
+  genTransitionEventHandlers,
 } from '../modules/events'
 import parseStyleText from '../modules/style'
 import {
   model as genModelDirectives,
   html as genHtmlDirectives,
-  text as genTextDirectives
+  text as genTextDirectives,
 } from '../directives/index'
-import {
-  isReservedTag,
-  isBuildInTag
-} from '../util/index'
+import { isReservedTag, isBuildInTag } from '../util/index'
 
 class ReactWebRenderGenerator extends RenderGenerator {
-
   /**
    * override
    */
-  genTag (ast) {
+  genTag(ast) {
     let tag = ast.tag
 
     if (isReservedTag(tag)) {
@@ -41,8 +30,8 @@ class ReactWebRenderGenerator extends RenderGenerator {
     } else {
       // Add support for react-router
       //
-      if (tag === "router-link") {
-        tag = "touchable-opacity";
+      if (tag === 'router-link') {
+        tag = 'touchable-opacity'
       }
       tag = `vm.$options.components['${capitalize(camelize(tag))}']`
     }
@@ -53,7 +42,7 @@ class ReactWebRenderGenerator extends RenderGenerator {
   /**
    * override
    */
-  genProps (ast) {
+  genProps(ast) {
     let code = []
     code = code.concat(super.genProps(ast))
     ast.attrs = ast.attrs || []
@@ -79,10 +68,10 @@ class ReactWebRenderGenerator extends RenderGenerator {
     return code
   }
 
-   /**
+  /**
    * override
    */
-  genTemplate (ast) {
+  genTemplate(ast) {
     if (ast.parent === undefined) {
       return this.genElement(ast.children[0])
     } else {
@@ -94,17 +83,17 @@ class ReactWebRenderGenerator extends RenderGenerator {
   /**
    * override
    */
-  genTransition (ast) {
+  genTransition(ast) {
     ast.originTag = ast.tag
     ast.tag = WEB.transition.component
     ast.attrs = ast.attrs || []
     const obj = {
       name: WEB.transition.collection,
-      value: ''
+      value: '',
     }
     const arr = []
     let i = 0
-    ast.children.forEach((v1, i1) => {
+    ast.children.forEach(v1 => {
       if (v1.if) {
         const conditionsArr = []
         v1.ifProcessed = true
@@ -119,7 +108,10 @@ class ReactWebRenderGenerator extends RenderGenerator {
           type: 'if',
           conditions: [${conditionsArr.join(',')}]
         }`)
-      } else if (Array.isArray(v1.directives) && v1.directives.filter(v => v.name === 'show').length) {
+      } else if (
+        Array.isArray(v1.directives) &&
+        v1.directives.filter(v => v.name === 'show').length
+      ) {
         v1.directives.forEach(v => {
           if (v.name === 'show') {
             arr.push(`{
@@ -161,23 +153,23 @@ class ReactWebRenderGenerator extends RenderGenerator {
   /**
    * override unfinished
    */
-  genTransitionGroup (ast) {
+  genTransitionGroup(ast) {
     const node = {
       tag: 'span',
       children: ast.children,
-      parent: ast.parent
+      parent: ast.parent,
     }
     return this.genElement(node)
   }
-  _genTransitionGroup (ast) {
+  _genTransitionGroup(ast) {
     ast.tag = WEB.transitionGroup.component
     ast.attrs = ast.attrs || []
     const obj = {
       name: WEB.transitionGroup.collection,
-      value: ''
+      value: '',
     }
     const arr = []
-    ast.children.forEach((v1, i1) => {
+    ast.children.forEach(v1 => {
       if (v1.if) {
         const conditionsArr = []
         v1.ifProcessed = true
@@ -191,7 +183,10 @@ class ReactWebRenderGenerator extends RenderGenerator {
           type: 'if',
           conditions: [${conditionsArr.join(',')}]
         }`)
-      } else if (Array.isArray(v1.directives) && v1.directives.filter(v => v.name === 'show').length) {
+      } else if (
+        Array.isArray(v1.directives) &&
+        v1.directives.filter(v => v.name === 'show').length
+      ) {
         v1.directives.forEach(v => {
           if (v.name === 'show') {
             arr.push(`{
@@ -218,10 +213,12 @@ class ReactWebRenderGenerator extends RenderGenerator {
    * gen class props
    * @param {Object} ast
    */
-  genClassProps (ast) {
+  genClassProps(ast) {
     let code = ''
     const topParent = this.isAstTopParent(ast)
-    const classAttrsValue = ast.attrs.filter(v => v.name === 'class').map(v => v.value)
+    const classAttrsValue = ast.attrs
+      .filter(v => v.name === 'class')
+      .map(v => v.value)
     if (classAttrsValue.length === 0 && !topParent) {
       return code
     }
@@ -251,9 +248,12 @@ class ReactWebRenderGenerator extends RenderGenerator {
    * gen style props
    * @param {Object} ast
    */
-  genStyleProps (ast) {
-    const styleAttrsValue = ast.attrs.filter(v => v.name === 'style').map(v => v.value)
-    const show = ast.directives && ast.directives.filter(v => v.name === 'show')[0]
+  genStyleProps(ast) {
+    const styleAttrsValue = ast.attrs
+      .filter(v => v.name === 'style')
+      .map(v => v.value)
+    const show =
+      ast.directives && ast.directives.filter(v => v.name === 'show')[0]
     const topParent = this.isAstTopParent(ast)
     if (styleAttrsValue.length === 0 && !show && !topParent) {
       return
@@ -287,19 +287,19 @@ class ReactWebRenderGenerator extends RenderGenerator {
    * override
    * @param {Object} ast
    */
-  genIMEResolve (ast) {
+  genIMEResolve(ast) {
     ast.attrs = ast.attrs || []
     ast.attrs.push({
       name: WEB.inputComponent.tag,
-      value: `'${ast.tag}'`
+      value: `'${ast.tag}'`,
     })
     ast.tag = WEB.inputComponent.component
     return this.genElement(ast)
   }
 
-  genDirectives (ast) {
+  genDirectives(ast) {
     const code = super.genDirectives(ast)
-    ast.directives.forEach((v) => {
+    ast.directives.forEach(v => {
       if (v.name === 'model') {
         this.genModelDirectives(ast, v)
       } else if (v.name === 'html') {
@@ -311,19 +311,19 @@ class ReactWebRenderGenerator extends RenderGenerator {
     return code
   }
 
-  genModelDirectives (ast, directive) {
+  genModelDirectives(ast, directive) {
     return genModelDirectives(ast, directive, baseWarn)
   }
 
-  genHtmlDirectives (ast) {
+  genHtmlDirectives(ast) {
     return genHtmlDirectives(ast)
   }
 
-  genTextDirectives (ast) {
+  genTextDirectives(ast) {
     return genTextDirectives(ast)
   }
 
-  genEventHandler (ast) {
+  genEventHandler(ast) {
     let code = ''
     if (ast.events) {
       if (isReservedTag(ast.tag) || isBuildInTag(ast.tag)) {
@@ -342,19 +342,26 @@ class ReactWebRenderGenerator extends RenderGenerator {
     return code
   }
 
-  genNativeEventHandler (ast) {
+  genNativeEventHandler(ast) {
     let code = ''
     if (ast.nativeEvents && !isReservedTag(ast.tag)) {
-      code = `${HELPER_HEADER}nativeEvents: {${genHandlers(ast.nativeEvents, this.vueConfig)}}`
+      code = `${HELPER_HEADER}nativeEvents: {${genHandlers(
+        ast.nativeEvents,
+        this.vueConfig,
+      )}}`
     }
     return code
   }
 
-  isAstTopParent (ast) {
+  isAstTopParent(ast) {
     if (ast.parent === undefined) {
       return true
     }
-    if (ast.parent.tag === 'template' || ast.parent.tag === 'transition' || ast.parent.originTag === 'transition') {
+    if (
+      ast.parent.tag === 'template' ||
+      ast.parent.tag === 'transition' ||
+      ast.parent.originTag === 'transition'
+    ) {
       if (ast.parent.parent === undefined) {
         return true
       }

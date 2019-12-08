@@ -3,10 +3,10 @@ import { cached, camelize } from 'shared/util'
 const prefixes = ['Webkit', 'Moz', 'ms']
 
 let testEl
-const normalize = cached(function (prop) {
+const normalize = cached(function(prop) {
   testEl = testEl || document.createElement('div')
   prop = camelize(prop)
-  if (prop !== 'filter' && (prop in testEl.style)) {
+  if (prop !== 'filter' && prop in testEl.style) {
     return prop
   }
   const upper = prop.charAt(0).toUpperCase() + prop.slice(1)
@@ -18,7 +18,7 @@ const normalize = cached(function (prop) {
   }
 })
 
-export function bindWebStyle (styleBinding, staticStyle, showStyle) {
+export function bindWebStyle(styleBinding, staticStyle, showStyle) {
   if (styleBinding === undefined) {
     styleBinding = {}
   }
@@ -32,8 +32,10 @@ export function bindWebStyle (styleBinding, staticStyle, showStyle) {
     }
     return normalizedStyle
   } else if (type === '[object Array]') {
-    return styleBinding.map((v) => {
-      return bindWebStyle(v, staticStyle, showStyle)
-    }).reduce((acc, val) => Object.assign(acc, val), {})
+    return styleBinding
+      .map(v => {
+        return bindWebStyle(v, staticStyle, showStyle)
+      })
+      .reduce((acc, val) => Object.assign(acc, val), {})
   }
 }

@@ -1,9 +1,9 @@
-const TAB_INDENT = "    ";
-const CREATE_ELEMENT = "createElement";
-const COMPONENT = "Component";
-const HELPER_HEADER = "__react__vue__";
-const HELPER_HEADER_NATIVE = "__react__vue__native__";
-const RENDER_HELPER_MODULE_NAME = "vue-native-helper";
+const TAB_INDENT = '    '
+const CREATE_ELEMENT = 'createElement'
+const COMPONENT = 'Component'
+const HELPER_HEADER = '__react__vue__'
+const HELPER_HEADER_NATIVE = '__react__vue__native__'
+const RENDER_HELPER_MODULE_NAME = 'vue-native-helper'
 
 export {
   TAB_INDENT,
@@ -11,5 +11,5 @@ export {
   COMPONENT,
   HELPER_HEADER,
   HELPER_HEADER_NATIVE,
-  RENDER_HELPER_MODULE_NAME
-};
+  RENDER_HELPER_MODULE_NAME,
+}

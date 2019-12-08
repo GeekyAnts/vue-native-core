@@ -5,16 +5,21 @@
 import React from 'react'
 import Watcher from 'core/observer/watcher'
 
-export default function observer (componentClass) {
-  if (typeof componentClass === 'function' &&
-    (!componentClass.prototype || !componentClass.prototype.render) && !componentClass.isReactClass && !React.Component.isPrototypeOf(componentClass)
+export default function observer(componentClass) {
+  if (
+    typeof componentClass === 'function' &&
+    (!componentClass.prototype || !componentClass.prototype.render) &&
+    !componentClass.isReactClass &&
+    // eslint-disable-next-line no-prototype-builtins
+    !React.Component.isPrototypeOf(componentClass)
   ) {
     class ObserverComponent extends React.Component {
-      render () {
+      render() {
         return componentClass.call(this, this.props, this.context)
       }
     }
-    ObserverComponent.displayName = componentClass.displayName || componentClass.name
+    ObserverComponent.displayName =
+      componentClass.displayName || componentClass.name
     ObserverComponent.contextTypes = componentClass.contextTypes
     ObserverComponent.propTypes = componentClass.propTypes
     ObserverComponent.defaultProps = componentClass.defaultProps
@@ -30,10 +35,12 @@ export default function observer (componentClass) {
   return componentClass
 }
 
-function mixinLifecycleEvents (target) {
+function mixinLifecycleEvents(target) {
   for (const key in lifecycleMixin) {
-    if (key === 'shouldComponentUpdate' &&
-      typeof target.shouldComponentUpdate === 'function') {
+    if (
+      key === 'shouldComponentUpdate' &&
+      typeof target.shouldComponentUpdate === 'function'
+    ) {
       continue
     }
     patch(target, key)
@@ -41,7 +48,7 @@ function mixinLifecycleEvents (target) {
 }
 
 const lifecycleMixin = {
-  UNSAFE_componentWillMount () {
+  UNSAFE_componentWillMount() {
     const cb = this.forceUpdate.bind(this)
     const render = this.render.bind(this)
     const watcher = new Watcher({ _watchers: [] }, render, cb, { lazy: true })
@@ -50,30 +57,37 @@ const lifecycleMixin = {
     watcher.run = cb
     this.$vuewatcher = watcher
   },
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.$vuewatcher.teardown()
   },
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     if (this.state !== nextState) {
       return true
     }
     return isObjectShallowModified(this.props, nextProps)
-  }
+  },
 }
 
-function patch (target, funcName) {
+function patch(target, funcName) {
   const base = target[funcName]
   const mixinFunc = lifecycleMixin[funcName]
-  target[funcName] = !base ? function () {
-    return mixinFunc.apply(this, arguments)
-  } : function () {
-    mixinFunc.apply(this, arguments)
-    return base.apply(this, arguments)
-  }
+  target[funcName] = !base
+    ? function() {
+        return mixinFunc.apply(this, arguments)
+      }
+    : function() {
+        mixinFunc.apply(this, arguments)
+        return base.apply(this, arguments)
+      }
 }
 
-function isObjectShallowModified (prev, next) {
-  if (prev == null || next == null || typeof prev !== 'object' || typeof next !== 'object') {
+function isObjectShallowModified(prev, next) {
+  if (
+    prev == null ||
+    next == null ||
+    typeof prev !== 'object' ||
+    typeof next !== 'object'
+  ) {
     return prev !== next
   }
   const keys = Object.keys(prev)

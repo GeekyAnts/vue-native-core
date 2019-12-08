@@ -1,0 +1,6 @@
+{
+  "parser": "babel",
+  "semi": false,
+  "trailingComma": "all",
+  "singleQuote": true
+}

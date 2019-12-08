@@ -3,10 +3,10 @@
 /**
  * Cross-platform code generation for component v-model
  */
-export function genComponentModel (
+export function genComponentModel(
   el: ASTElement,
   value: string,
-  modifiers: ?ASTModifiers
+  modifiers: ?ASTModifiers,
 ): ?boolean {
   const { number, trim } = modifiers || {}
 
@@ -15,8 +15,8 @@ export function genComponentModel (
   if (trim) {
     valueExpression =
       `(typeof ${baseValueExpression} === 'string'` +
-        `? ${baseValueExpression}.trim()` +
-        `: ${baseValueExpression})`
+      `? ${baseValueExpression}.trim()` +
+      `: ${baseValueExpression})`
   }
   if (number) {
     valueExpression = `_n(${valueExpression})`
@@ -26,25 +26,24 @@ export function genComponentModel (
   el.model = {
     value: `(${value})`,
     expression: `"${value}"`,
-    callback: `function (${baseValueExpression}) {${assignment}}`
+    callback: `function (${baseValueExpression}) {${assignment}}`,
   }
 }
 
 /**
  * Cross-platform codegen helper for generating v-model value assignment code.
  */
-export function genAssignmentCode (
-  value: string,
-  assignment: string
-): string {
+export function genAssignmentCode(value: string, assignment: string): string {
   const modelRs = parseModel(value)
   if (modelRs.idx === null) {
     return `${value}=${assignment}`
   } else {
-    return `var $$exp = ${modelRs.exp}, $$idx = ${modelRs.idx};` +
+    return (
+      `var $$exp = ${modelRs.exp}, $$idx = ${modelRs.idx};` +
       `if (!Array.isArray($$exp)){` +
-        `${value}=${assignment}}` +
+      `${value}=${assignment}}` +
       `else{$$exp.splice($$idx, 1, ${assignment})}`
+    )
   }
 }
 
@@ -64,7 +63,7 @@ export function genAssignmentCode (
 
 let len, str, chr, index, expressionPos, expressionEndPos
 
-export function parseModel (val: string): Object {
+export function parseModel(val: string): Object {
   str = val
   len = str.length
   index = expressionPos = expressionEndPos = 0
@@ -72,7 +71,7 @@ export function parseModel (val: string): Object {
   if (val.indexOf('[') < 0 || val.lastIndexOf(']') < len - 1) {
     return {
       exp: val,
-      idx: null
+      idx: null,
     }
   }
 
@@ -81,30 +80,30 @@ export function parseModel (val: string): Object {
     /* istanbul ignore if */
     if (isStringStart(chr)) {
       parseString(chr)
-    } else if (chr === 0x5B) {
+    } else if (chr === 0x5b) {
       parseBracket(chr)
     }
   }
 
   return {
     exp: val.substring(0, expressionPos),
-    idx: val.substring(expressionPos + 1, expressionEndPos)
+    idx: val.substring(expressionPos + 1, expressionEndPos),
   }
 }
 
-function next (): number {
+function next(): number {
   return str.charCodeAt(++index)
 }
 
-function eof (): boolean {
+function eof(): boolean {
   return index >= len
 }
 
-function isStringStart (chr: number): boolean {
+function isStringStart(chr: number): boolean {
   return chr === 0x22 || chr === 0x27
 }
 
-function parseBracket (chr: number): void {
+function parseBracket(chr: number): void {
   let inBracket = 1
   expressionPos = index
   while (!eof()) {
@@ -113,8 +112,8 @@ function parseBracket (chr: number): void {
       parseString(chr)
       continue
     }
-    if (chr === 0x5B) inBracket++
-    if (chr === 0x5D) inBracket--
+    if (chr === 0x5b) inBracket++
+    if (chr === 0x5d) inBracket--
     if (inBracket === 0) {
       expressionEndPos = index
       break
@@ -122,7 +121,7 @@ function parseBracket (chr: number): void {
   }
 }
 
-function parseString (chr: number): void {
+function parseString(chr: number): void {
   const stringQuote = chr
   while (!eof()) {
     chr = next()

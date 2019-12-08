@@ -4,16 +4,14 @@ import { hasSymbol } from 'core/util/env'
 import { warn } from '../util/index'
 import { defineReactive } from '../observer/index'
 
-export function initProvide (vm: Component) {
+export function initProvide(vm: Component) {
   const provide = vm.$options.provide
   if (provide) {
-    vm._provided = typeof provide === 'function'
-      ? provide.call(vm)
-      : provide
+    vm._provided = typeof provide === 'function' ? provide.call(vm) : provide
   }
 }
 
-export function initInjections (vm: Component) {
+export function initInjections(vm: Component) {
   const result = resolveInject(vm.$options.inject, vm)
   if (result) {
     Object.keys(result).forEach(key => {
@@ -22,9 +20,9 @@ export function initInjections (vm: Component) {
         defineReactive(vm, key, result[key], () => {
           warn(
             `Avoid mutating an injected value directly since the changes will be ` +
-            `overwritten whenever the provided component re-renders. ` +
-            `injection being mutated: "${key}"`,
-            vm
+              `overwritten whenever the provided component re-renders. ` +
+              `injection being mutated: "${key}"`,
+            vm,
           )
         })
       } else {
@@ -34,7 +32,7 @@ export function initInjections (vm: Component) {
   }
 }
 
-export function resolveInject (inject: any, vm: Component): ?Object {
+export function resolveInject(inject: any, vm: Component): ?Object {
   if (inject) {
     // inject is :any because flow is not smart enough to figure out cached
     // isArray here
@@ -43,8 +41,8 @@ export function resolveInject (inject: any, vm: Component): ?Object {
     const keys = isArray
       ? inject
       : hasSymbol
-        ? Reflect.ownKeys(inject)
-        : Object.keys(inject)
+      ? Reflect.ownKeys(inject)
+      : Object.keys(inject)
 
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]

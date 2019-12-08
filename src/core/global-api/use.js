@@ -2,8 +2,8 @@
 
 import { toArray } from '../util/index'
 
-export function initUse (Vue: GlobalAPI) {
-  Vue.use = function (plugin: Function | Object) {
+export function initUse(Vue: GlobalAPI) {
+  Vue.use = function(plugin: Function | Object) {
     /* istanbul ignore if */
     if (plugin.installed) {
       return

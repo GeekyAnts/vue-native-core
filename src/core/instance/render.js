@@ -8,13 +8,13 @@ import {
   looseEqual,
   emptyObject,
   handleError,
-  looseIndexOf
+  looseIndexOf,
 } from '../util/index'
 
 import VNode, {
   cloneVNodes,
   createTextVNode,
-  createEmptyVNode
+  createEmptyVNode,
 } from '../vdom/vnode'
 
 import { createElement } from '../vdom/create-element'
@@ -24,13 +24,16 @@ import { resolveFilter } from './render-helpers/resolve-filter'
 import { checkKeyCodes } from './render-helpers/check-keycodes'
 import { bindObjectProps } from './render-helpers/bind-object-props'
 import { renderStatic, markOnce } from './render-helpers/render-static'
-import { resolveSlots, resolveScopedSlots } from './render-helpers/resolve-slots'
+import {
+  // resolveSlots,
+  resolveScopedSlots,
+} from './render-helpers/resolve-slots'
 
-export function initRender (vm: Component) {
+export function initRender(vm: Component) {
   vm._vnode = null // the root of the child tree
   vm._staticTrees = null
-  const parentVnode = vm.$vnode = vm.$options._parentVnode // the placeholder node in parent tree
-  const renderContext = parentVnode && parentVnode.context
+  // const parentVnode = vm.$vnode = vm.$options._parentVnode // the placeholder node in parent tree
+  // const renderContext = parentVnode && parentVnode.context
   /**
    * react-vue change
    */
@@ -46,18 +49,14 @@ export function initRender (vm: Component) {
   vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
 }
 
-export function renderMixin (Vue: Class<Component>) {
-  Vue.prototype.$nextTick = function (fn: Function) {
+export function renderMixin(Vue: Class<Component>) {
+  Vue.prototype.$nextTick = function(fn: Function) {
     return nextTick(fn, this)
   }
 
-  Vue.prototype._render = function (): VNode {
+  Vue.prototype._render = function(): VNode {
     const vm: Component = this
-    const {
-      render,
-      staticRenderFns,
-      _parentVnode
-    } = vm.$options
+    const { render, staticRenderFns, _parentVnode } = vm.$options
 
     if (vm._isMounted) {
       // clone slot nodes on re-renders
@@ -66,7 +65,8 @@ export function renderMixin (Vue: Class<Component>) {
       }
     }
 
-    vm.$scopedSlots = (_parentVnode && _parentVnode.data.scopedSlots) || emptyObject
+    vm.$scopedSlots =
+      (_parentVnode && _parentVnode.data.scopedSlots) || emptyObject
 
     if (staticRenderFns && !vm._staticTrees) {
       vm._staticTrees = []
@@ -96,8 +96,8 @@ export function renderMixin (Vue: Class<Component>) {
       if (process.env.NODE_ENV !== 'production' && Array.isArray(vnode)) {
         warn(
           'Multiple root nodes returned from render function. Render function ' +
-          'should return a single root node.',
-          vm
+            'should return a single root node.',
+          vm,
         )
       }
       vnode = createEmptyVNode()

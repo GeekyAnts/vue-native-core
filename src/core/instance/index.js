@@ -9,11 +9,13 @@ import { eventsMixin } from './events'
  * react-vue change
  */
 // import { lifecycleMixin } from './lifecycle'
-import { warn, nextTick } from '../util/index'
+import {
+  warn,
+  // nextTick,
+} from '../util/index'
 
-function Vue (options) {
-  if (process.env.NODE_ENV !== 'production' &&
-    !(this instanceof Vue)) {
+function Vue(options) {
+  if (process.env.NODE_ENV !== 'production' && !(this instanceof Vue)) {
     warn('Vue is a constructor and should be called with the `new` keyword')
   }
   /**

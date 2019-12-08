@@ -1,8 +1,8 @@
 // unfinished
 
-export function transitionGroupWeb (Component, createElement) {
+export function transitionGroupWeb(Component, createElement) {
   return class TransitionGroup extends Component {
-    render () {
+    render() {
       const tag = this.props.tag || 'span'
       return createElement(tag, null)
     }

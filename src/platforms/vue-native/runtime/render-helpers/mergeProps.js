@@ -1,8 +1,8 @@
-export function mergeProps () {
+export function mergeProps() {
   const args = Array.prototype.slice.call(arguments, 0).filter(v => v)
   const obj = {}
-  args.forEach((o) => {
-    Object.keys(o).forEach((k) => {
+  args.forEach(o => {
+    Object.keys(o).forEach(k => {
       if (!obj[k]) {
         obj[k] = []
       }
@@ -16,7 +16,7 @@ export function mergeProps () {
     } else if (l > 1) {
       const _p = obj[k]
       if (typeof _p[0] === 'function') {
-        obj[k] = function () {
+        obj[k] = function() {
           for (let i = 0; i < l; i++) {
             typeof _p[i] === 'function' && _p[i].apply(this, arguments)
           }

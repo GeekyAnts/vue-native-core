@@ -1,24 +1,15 @@
 /* @flow */
 
-import {
-  warn,
-  once,
-  isDef,
-  isUndef,
-  isTrue,
-  isObject
-} from 'core/util/index'
+import { warn, once, isDef, isUndef, isTrue, isObject } from 'core/util/index'
 
-function ensureCtor (comp, base) {
-  return isObject(comp)
-    ? base.extend(comp)
-    : comp
+function ensureCtor(comp, base) {
+  return isObject(comp) ? base.extend(comp) : comp
 }
 
-export function resolveAsyncComponent (
+export function resolveAsyncComponent(
   factory: Function,
   baseCtor: Class<Component>,
-  context: Component
+  context: Component,
 ): Class<Component> | void {
   if (isTrue(factory.error) && isDef(factory.errorComp)) {
     return factory.errorComp
@@ -36,7 +27,7 @@ export function resolveAsyncComponent (
     // already pending
     factory.contexts.push(context)
   } else {
-    const contexts = factory.contexts = [context]
+    const contexts = (factory.contexts = [context])
     let sync = true
 
     const forceRender = () => {
@@ -56,10 +47,11 @@ export function resolveAsyncComponent (
     })
 
     const reject = once(reason => {
-      process.env.NODE_ENV !== 'production' && warn(
-        `Failed to resolve async component: ${String(factory)}` +
-        (reason ? `\nReason: ${reason}` : '')
-      )
+      process.env.NODE_ENV !== 'production' &&
+        warn(
+          `Failed to resolve async component: ${String(factory)}` +
+            (reason ? `\nReason: ${reason}` : ''),
+        )
       if (isDef(factory.errorComp)) {
         factory.error = true
         forceRender()
@@ -74,7 +66,10 @@ export function resolveAsyncComponent (
         if (isUndef(factory.resolved)) {
           res.then(resolve, reject)
         }
-      } else if (isDef(res.component) && typeof res.component.then === 'function') {
+      } else if (
+        isDef(res.component) &&
+        typeof res.component.then === 'function'
+      ) {
         res.component.then(resolve, reject)
 
         if (isDef(res.error)) {
@@ -100,7 +95,7 @@ export function resolveAsyncComponent (
             reject(
               process.env.NODE_ENV !== 'production'
                 ? `timeout (${res.timeout}ms)`
-                : null
+                : null,
             )
           }, res.timeout)
         }
@@ -109,8 +104,6 @@ export function resolveAsyncComponent (
 
     sync = false
     // return in case resolved synchronously
-    return factory.loading
-      ? factory.loadingComp
-      : factory.resolved
+    return factory.loading ? factory.loadingComp : factory.resolved
   }
 }
