@@ -4,9 +4,8 @@ const alias = require('rollup-plugin-alias')
 const replace = require('rollup-plugin-replace')
 const flow = require('rollup-plugin-flow-no-whitespace')
 const prettier = require('rollup-plugin-prettier')
-const version =
-  process.env.VERSION ||
-  require('../packages/vue-native-core/package.json').version
+
+const version = '2.2.6'
 
 // const banner =
 //   "/*!\n" +
