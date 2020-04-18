@@ -14,6 +14,10 @@ export const deprecatedPackages = [
   'SwipeableListView',
   'ViewPagerAndroid',
   'WebView',
+  'DatePickerIOS',
+  'DatePickerAndroid',
+  'TimePickerAndroid',
+  'StatusBarIOS',
 ]
 
 export const ASSET_TYPES = ['component', 'directive', 'filter']
