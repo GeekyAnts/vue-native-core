@@ -13,3 +13,5 @@ dist/vue.common.min.js
 coverage
 
 packages/**/build.js
+packages/**/package-lock.json
+packages/**/.watchmanconfig
