@@ -71,6 +71,10 @@ Hence these modules are no longer made available with Vue Native.
 - SwipeableListView
 - ViewPagerAndroid
 - WebView
+- DatePickerIOS
+- DatePickerAndroid
+- TimePickerAndroid
+- StatusBarIOS
 
 If you still wish to use them, you can import them explicitly from `react-native` (until they are removed) or from their individual forked packages.
 For more information, refer to [this page](https://facebook.github.io/react-native/blog/2019/03/12/releasing-react-native-059#lean-core-is-underway).
