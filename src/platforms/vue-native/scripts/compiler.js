@@ -70,16 +70,16 @@ export function compileVueToRn(resource) {
     traverse(templateFragments, templateASTNodes)
   }
 
-  let templateParsed = DEFAULT_OUTPUT.template
+  let generatedTemplateCode = DEFAULT_OUTPUT.template
   if (template) {
     const templateContent = template.content.replace(/\/\/\n/g, '').trim()
     if (templateContent) {
-      templateParsed = parseTemplate(templateContent)
+      generatedTemplateCode = parseTemplate(templateContent)
     }
   }
 
   // add render dep import
-  output += templateParsed.import
+  output += generatedTemplateCode.import
   output += '\n'
 
   // parse script
@@ -129,7 +129,7 @@ export function compileVueToRn(resource) {
 
   // add render funtion
   let beautifiedRender = beautify(
-    addvm(templateParsed.render, { indent_size: 2 }),
+    addvm(generatedTemplateCode.render, { indent_size: 2 }),
   )
   output += beautifiedRender
   output += '\n\n'
