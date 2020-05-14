@@ -13,7 +13,7 @@ import { addvm } from './util/addvm'
 import { parseCss } from './util/parseCss'
 
 const filePath = 'test.js'
-var splitRE = /\r?\n/g
+var newLine = /\r?\n/g
 
 const DEFAULT_OUTPUT = {
   template: {
@@ -57,7 +57,7 @@ export function compileVueToRn(resource) {
   //
   let templateStartIndex = cparsed.template.start
   let tempStringBeforeStart = code.substring(0, templateStartIndex)
-  let templateLineNumber = tempStringBeforeStart.split(splitRE).length - 1
+  let templateLineNumber = tempStringBeforeStart.split(newLine).length - 1
 
   // Get tags and location of tags from template
   //
@@ -93,11 +93,11 @@ export function compileVueToRn(resource) {
   if (mappings) {
     // Start of the script content
     //
-    var beforeLines = output.split(splitRE).length
+    var beforeLines = output.split(newLine).length
     // Start of the script content of the original code
     //
     var scriptLine =
-      code.slice(0, cparsed.script.start).split(splitRE).length + 1
+      code.slice(0, cparsed.script.start).split(newLine).length + 1
     var exportDefaultIndex = code.indexOf('export default')
     var tempString = code.substring(0, exportDefaultIndex)
     var exportDefaultLineNumber = tempString.split('\n').length
@@ -107,7 +107,7 @@ export function compileVueToRn(resource) {
   output += scriptParsed
   output += '\n\n'
 
-  var endLines = output.split(splitRE).length - 1
+  var endLines = output.split(newLine).length - 1
   for (; scriptLine < endLines; scriptLine++) {
     //Skip export default line
     if (scriptLine !== exportDefaultLineNumber) {
@@ -135,7 +135,7 @@ export function compileVueToRn(resource) {
 
   // Get last line of render code
   //
-  let renderEndLine = beautifiedRender.split(splitRE).length - 1
+  let renderEndLine = beautifiedRender.split(newLine).length - 1
 
   // Search Elements and postion based on render function
   //
