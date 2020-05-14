@@ -25,7 +25,7 @@ const DEFAULT_OUTPUT = {
 
 export function compileVueToRn(resource) {
   const code = resource.toString()
-  const cparsed = compiler.parseComponent(code, { pad: 'line' })
+  const parsedSFC = compiler.parseComponent(code, { pad: 'line' })
 
   let output = ''
   let mappings = ''
@@ -51,18 +51,18 @@ export function compileVueToRn(resource) {
   output += '\n'
 
   // parse template
-  const template = cparsed.template
+  const template = parsedSFC.template
 
   //Consider the start of template for debugging
   //
-  let templateStartIndex = cparsed.template.start
+  let templateStartIndex = parsedSFC.template.start
   let tempStringBeforeStart = code.substring(0, templateStartIndex)
   let templateLineNumber = tempStringBeforeStart.split(newLine).length - 1
 
   // Get tags and location of tags from template
   //
   let nodes = []
-  const templateFragments = parse5.parseFragment(cparsed.template.content, {
+  const templateFragments = parse5.parseFragment(parsedSFC.template.content, {
     sourceCodeLocationInfo: true,
   })
   if (templateFragments.childNodes) {
@@ -82,7 +82,7 @@ export function compileVueToRn(resource) {
   output += '\n'
 
   // parse script
-  const script = cparsed.script
+  const script = parsedSFC.script
   let scriptParsed = DEFAULT_OUTPUT.script
   if (script) {
     const scriptContent = script.content.replace(/\/\/\n/g, '').trim()
@@ -97,7 +97,7 @@ export function compileVueToRn(resource) {
     // Start of the script content of the original code
     //
     var scriptLine =
-      code.slice(0, cparsed.script.start).split(newLine).length + 1
+      code.slice(0, parsedSFC.script.start).split(newLine).length + 1
     var exportDefaultIndex = code.indexOf('export default')
     var tempString = code.substring(0, exportDefaultIndex)
     var exportDefaultLineNumber = tempString.split('\n').length
@@ -182,7 +182,7 @@ export function compileVueToRn(resource) {
   }
 
   // parse css
-  const styles = cparsed.styles
+  const styles = parsedSFC.styles
   let cssParsed = {}
   styles.forEach(function(v) {
     const cssAst = cssParse(v.content)
