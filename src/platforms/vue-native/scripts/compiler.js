@@ -12,7 +12,6 @@ import constants from './util/constants'
 import { addvm } from './util/addvm'
 import { parseCss } from './util/parseCss'
 
-const filePath = 'test.js'
 var newLine = /\r?\n/g
 
 const DEFAULT_OUTPUT = {
@@ -23,7 +22,7 @@ const DEFAULT_OUTPUT = {
   script: `const ${constants.SCRIPT_OPTIONS} = {}`,
 }
 
-export function compileVueToRn(resource) {
+export function compileVueToRn(resource, filename = 'sfc.vue') {
   const code = resource.toString()
   const parsedSFC = compiler.parseComponent(code, { pad: 'line' })
 
@@ -88,7 +87,7 @@ export function compileVueToRn(resource) {
   if (script) {
     const scriptContent = script.content.replace(/\/\/\n/g, '').trim()
     scriptParsed = parseScript(scriptContent)
-    mappings = generateSourceMap(code)
+    mappings = generateSourceMap(code, filename)
   }
 
   if (mappings) {
@@ -226,7 +225,7 @@ function parseTemplate(code) {
   }
 }
 
-function generateSourceMap(content) {
+function generateSourceMap(content, filePath) {
   // hot-reload source map busting
   var hashedFilename = path.basename(filePath) + '?' + hash(filePath + content)
   var map = new sourceMap.SourceMapGenerator()
