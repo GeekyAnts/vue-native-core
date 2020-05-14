@@ -55,7 +55,7 @@ export function compileVueToRn(resource) {
 
   //Consider the start of template for debugging
   //
-  let templateStartIndex = code.indexOf('<')
+  let templateStartIndex = cparsed.template.start
   let tempStringBeforeStart = code.substring(0, templateStartIndex)
   let templateLineNumber = tempStringBeforeStart.split(splitRE).length - 1
 
