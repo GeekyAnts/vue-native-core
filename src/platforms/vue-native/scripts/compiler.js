@@ -62,12 +62,12 @@ export function compileVueToRn(resource) {
 
   // Get tags and location of tags from template
   //
-  let nodes = []
+  let templateASTNodes = []
   const templateFragments = parse5.parseFragment(parsedSFC.template.content, {
     sourceCodeLocationInfo: true,
   })
   if (templateFragments.childNodes) {
-    traverse(templateFragments, nodes)
+    traverse(templateFragments, templateASTNodes)
   }
 
   let templateParsed = DEFAULT_OUTPUT.template
@@ -148,7 +148,7 @@ export function compileVueToRn(resource) {
       if (foundLines[index + 1]) {
         for (let i = line.number; i < foundLines[index + 1].number; i++) {
           // Add Mapping
-          if (nodes[index]) {
+          if (templateASTNodes[index]) {
             mappings.addMapping({
               source: mappings._hashedFilename,
               generated: {
@@ -156,13 +156,15 @@ export function compileVueToRn(resource) {
                 column: 0,
               },
               original: {
-                line: nodes[index].startTag.startLine + templateStartLineNumber,
+                line:
+                  templateASTNodes[index].startTag.startLine +
+                  templateStartLineNumber,
                 column: 0,
               },
             })
           }
         }
-      } else if (nodes[index] && nodes[index].startTag) {
+      } else if (templateASTNodes[index] && templateASTNodes[index].startTag) {
         // Last Line
         for (let i = line.number; i < renderEndLine; i++) {
           // Add Mapping
@@ -173,7 +175,9 @@ export function compileVueToRn(resource) {
               column: 0,
             },
             original: {
-              line: nodes[index].startTag.startLine + templateStartLineNumber,
+              line:
+                templateASTNodes[index].startTag.startLine +
+                templateStartLineNumber,
               column: 0,
             },
           })
