@@ -56,8 +56,9 @@ export function compileVueToRn(resource) {
   //Consider the start of template for debugging
   //
   let templateStartIndex = parsedSFC.template.start
-  let templateLineNumber = code.substring(0, templateStartIndex).split(newLine)
-    .length
+  let templateStartLineNumber = code
+    .substring(0, templateStartIndex)
+    .split(newLine).length
 
   // Get tags and location of tags from template
   //
@@ -155,7 +156,7 @@ export function compileVueToRn(resource) {
                 column: 0,
               },
               original: {
-                line: nodes[index].startTag.startLine + templateLineNumber,
+                line: nodes[index].startTag.startLine + templateStartLineNumber,
                 column: 0,
               },
             })
@@ -172,7 +173,7 @@ export function compileVueToRn(resource) {
               column: 0,
             },
             original: {
-              line: nodes[index].startTag.startLine + templateLineNumber,
+              line: nodes[index].startTag.startLine + templateStartLineNumber,
               column: 0,
             },
           })
