@@ -83,10 +83,10 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
 
   // parse script
   const script = parsedSFC.script
-  let scriptParsed = DEFAULT_OUTPUT.script
+  let generatedScriptCode = DEFAULT_OUTPUT.script
   if (script) {
     const scriptContent = script.content.replace(/\/\/\n/g, '').trim()
-    scriptParsed = parseScript(scriptContent)
+    generatedScriptCode = parseScript(scriptContent)
     mappings = generateSourceMap(code, filename)
   }
 
@@ -104,7 +104,7 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   }
 
   // add vue options
-  output += scriptParsed
+  output += generatedScriptCode
   output += '\n\n'
 
   var endLines = output.split(newLine).length - 1
