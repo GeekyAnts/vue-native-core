@@ -56,8 +56,8 @@ export function compileVueToRn(resource) {
   //Consider the start of template for debugging
   //
   let templateStartIndex = parsedSFC.template.start
-  let tempStringBeforeStart = code.substring(0, templateStartIndex)
-  let templateLineNumber = tempStringBeforeStart.split(newLine).length - 1
+  let templateLineNumber = code.substring(0, templateStartIndex).split(newLine)
+    .length
 
   // Get tags and location of tags from template
   //
