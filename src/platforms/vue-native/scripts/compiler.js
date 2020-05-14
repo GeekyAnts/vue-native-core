@@ -1,4 +1,4 @@
-// const fs = require('fs');
+// const fs = require('fs')
 import * as compiler from 'vue-native-template-compiler'
 import cssParse from 'css-parse'
 import { js_beautify as beautify } from 'js-beautify'
@@ -96,9 +96,9 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
     var beforeLines = output.split(newLine).length
     // Start of the script content of the original code
     //
-    var scriptLine =
-      originalCodeString.slice(0, parsedSFC.script.start).split(newLine)
-        .length + 1
+    var scriptLine = originalCodeString
+      .slice(0, parsedSFC.script.start)
+      .split(newLine).length
     var exportDefaultIndex = originalCodeString.indexOf('export default')
     var tempString = originalCodeString.substring(0, exportDefaultIndex)
     var exportDefaultLineNumber = tempString.split('\n').length
