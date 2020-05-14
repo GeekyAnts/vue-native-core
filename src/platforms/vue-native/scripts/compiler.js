@@ -23,8 +23,8 @@ const DEFAULT_OUTPUT = {
 }
 
 export function compileVueToRn(resource, filename = 'sfc.vue') {
-  const code = resource.toString()
-  const parsedSFC = compiler.parseComponent(code, { pad: 'line' })
+  const originalCodeString = resource.toString()
+  const parsedSFC = compiler.parseComponent(originalCodeString, { pad: 'line' })
 
   let output = ''
   let mappings = ''
@@ -55,7 +55,7 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   //Consider the start of template for debugging
   //
   let templateStartIndex = parsedSFC.template.start
-  let templateStartLineNumber = code
+  let templateStartLineNumber = originalCodeString
     .substring(0, templateStartIndex)
     .split(newLine).length
 
@@ -87,7 +87,7 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   if (script) {
     const scriptContent = script.content.replace(/\/\/\n/g, '').trim()
     generatedScriptCode = parseScript(scriptContent)
-    mappings = generateSourceMap(code, filename)
+    mappings = generateSourceMap(originalCodeString, filename)
   }
 
   if (mappings) {
@@ -97,9 +97,10 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
     // Start of the script content of the original code
     //
     var scriptLine =
-      code.slice(0, parsedSFC.script.start).split(newLine).length + 1
-    var exportDefaultIndex = code.indexOf('export default')
-    var tempString = code.substring(0, exportDefaultIndex)
+      originalCodeString.slice(0, parsedSFC.script.start).split(newLine)
+        .length + 1
+    var exportDefaultIndex = originalCodeString.indexOf('export default')
+    var tempString = originalCodeString.substring(0, exportDefaultIndex)
     var exportDefaultLineNumber = tempString.split('\n').length
   }
 
