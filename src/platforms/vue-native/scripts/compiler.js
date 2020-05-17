@@ -100,8 +100,9 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
       .slice(0, parsedSFC.script.start)
       .split(newLine).length
     var exportDefaultIndex = originalCodeString.indexOf('export default')
-    var tempString = originalCodeString.substring(0, exportDefaultIndex)
-    var exportDefaultLineNumber = tempString.split('\n').length
+    var exportDefaultLineNumber = originalCodeString
+      .substring(0, exportDefaultIndex)
+      .split(newLine).length
   }
 
   // add vue options
