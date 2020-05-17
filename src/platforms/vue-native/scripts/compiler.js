@@ -81,6 +81,10 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   output += generatedTemplateCode.import
   output += '\n'
 
+  // Record the start of the script content
+  //
+  var lineAfterLastImport = output.split(newLine).length + 1
+
   // parse script
   const script = parsedSFC.script
   let generatedScriptCode = DEFAULT_OUTPUT.script
@@ -91,12 +95,9 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   }
 
   if (mappings) {
-    // Start of the script content
-    //
-    var beforeLines = output.split(newLine).length
     // Start of the script content of the original code
     //
-    var scriptLine = originalCodeString
+    var scriptTagLineNumber = originalCodeString
       .slice(0, parsedSFC.script.start)
       .split(newLine).length
     var exportDefaultIndex = originalCodeString.indexOf('export default')
@@ -109,23 +110,25 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   output += generatedScriptCode
   output += '\n\n'
 
+  let originalCodeCursor = scriptTagLineNumber + 1
   var endLines = output.split(newLine).length - 1
-  for (; scriptLine < endLines; scriptLine++) {
+  let generatedCodeCursor = lineAfterLastImport
+  for (; originalCodeCursor < endLines; originalCodeCursor++) {
     //Skip export default line
-    if (scriptLine !== exportDefaultLineNumber) {
+    if (originalCodeCursor !== exportDefaultLineNumber) {
       mappings.addMapping({
         source: mappings._hashedFilename,
         generated: {
-          line: beforeLines,
+          line: generatedCodeCursor,
           column: 0,
         },
         original: {
-          line: scriptLine,
+          line: originalCodeCursor,
           column: 0,
         },
       })
     }
-    beforeLines++
+    generatedCodeCursor++
   }
 
   // add render funtion
