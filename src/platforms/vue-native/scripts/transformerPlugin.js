@@ -29,22 +29,22 @@ if (reactNativeMinorVersion >= 59) {
   }
 }
 
-function sourceMapAstInPlace(tsMap, babelAst) {
-  return SourceMapConsumer.with(tsMap, null, consumer => {
-    traverse.cheap(babelAst, node => {
-      if (node.loc) {
-        const originalStart = consumer.originalPositionFor(node.loc.start)
-        if (originalStart.line) {
-          node.loc.start.line = originalStart.line
-          node.loc.start.column = originalStart.column
-        }
-        const originalEnd = consumer.originalPositionFor(node.loc.end)
-        if (originalEnd.line) {
-          node.loc.end.line = originalEnd.line
-          node.loc.end.column = originalEnd.column
-        }
+function sourceMapAstInPlace(sourceMap, babelAst) {
+  const consumer = new SourceMapConsumer(sourceMap)
+
+  traverse.cheap(babelAst, node => {
+    if (node.loc) {
+      const originalStart = consumer.originalPositionFor(node.loc.start)
+      if (originalStart.line) {
+        node.loc.start.line = originalStart.line
+        node.loc.start.column = originalStart.column
       }
-    })
+      const originalEnd = consumer.originalPositionFor(node.loc.end)
+      if (originalEnd.line) {
+        node.loc.end.line = originalEnd.line
+        node.loc.end.column = originalEnd.column
+      }
+    }
   })
 }
 
