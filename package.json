@@ -73,7 +73,7 @@
     "jasmine-core": "^2.5.2",
     "jest": "^26.0.1",
     "js-beautify": "^1.6.14",
-    "lodash": "^4.17.1",
+    "lodash": "^4.17.20",
     "lodash.template": "^4.4.0",
     "lru-cache": "^4.0.2",
     "prettier": "^1.18.2",
