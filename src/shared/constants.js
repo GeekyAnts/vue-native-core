@@ -1,16 +1,28 @@
 export const SSR_ATTR = 'data-server-rendered'
 
 /**
- * List of soon to be deprecated packages in react native v0.59
+ * List of soon to be deprecated packages in react native v0.63
  */
 export const deprecatedPackages = [
   'AlertIOS',
   'AsyncStorage',
+  'CheckBox',
+  'Clipboard',
+  'DatePickerAndroid',
+  'DatePickerIOS',
+  'ImagePickerIOS',
   'ImageStore',
   'ListView',
   'MaskedViewIOS',
   'NetInfo',
+  'Picker',
+  'PickerIOS',
+  'ProgressBarAndroid',
+  'ProgressViewIOS',
+  'PushNotificationIOS',
+  'SegmentedControlIOS',
   'Slider',
+  'StatusBarIOS',
   'SwipeableListView',
   'ViewPagerAndroid',
   'WebView',
