@@ -1,8 +1,10 @@
 set -e
 
-# check if np is installed
-np_version=$(np --version)
-echo "Using np:" $np_version
+CURRENT_BRANCH=$(git branch --show-current)
+if [ $CURRENT_BRANCH != "master" ]; then
+  echo "This script can only be run in the master branch. Exiting..."
+  exit 1
+fi
 
 # get the version number from the user
 read -e -p "Enter the new Vue Native version: " VERSION
@@ -49,18 +51,17 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   git add -A
   git commit -m "[build] $VERSION"
 
-  # use np to create release with VERSION and publish vue-native-core
-  # you MUST be in the master branch to do this
-  # if it fails, then the last commit is reset and the script exits
-  # TODO: add tests and remove --yolo
-  np --no-yarn --contents packages/vue-native-core --yolo $VERSION || { git reset --soft HEAD~1; exit 1; }
-
   # publish packages
   # vue-native-core has already been published by np
   # packages:
+  # - vue-native-core
   # - vue-native-helper
   # - vue-native-scripts
   # - vue-native-template-compiler
+
+  cd packages/vue-native-core
+  npm publish
+  cd -
 
   cd packages/vue-native-helper
   npm publish
@@ -74,4 +75,12 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   npm publish
   cd -
 
+  # Update version in main package.json and commit
+  npm version $VERSION
+
+  # Push the tags and version update
+  git push origin v$VERSION
+  git push origin master
+
+  echo "\nPublished v$VERSION!"
 fi
