@@ -1,6 +1,6 @@
 {
   "name": "vue-native-scripts",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Compile Vue Native components to React Native",
   "main": "index.js",
   "scripts": {},
