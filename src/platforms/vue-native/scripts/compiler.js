@@ -205,7 +205,7 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   // parse css
   const styles = parsedSFC.styles
   let cssParsed = {}
-  styles.forEach(function (v) {
+  styles.forEach(function(v) {
     const cssAst = cssParse(v.content)
     cssParsed = Object.assign({}, cssParsed, parseCss(cssAst))
   })
@@ -265,7 +265,7 @@ function traverse(ast, nodes = []) {
     nodes.push(ast.sourceCodeLocation)
   }
   if (ast.childNodes) {
-    ast.childNodes.forEach((child) => {
+    ast.childNodes.forEach(child => {
       traverse(child, nodes)
     })
   }

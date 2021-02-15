@@ -32,7 +32,7 @@ if (reactNativeMinorVersion >= 59) {
 function sourceMapAstInPlace(sourceMap, babelAst) {
   const consumer = new SourceMapConsumer(sourceMap)
 
-  traverse.cheap(babelAst, (node) => {
+  traverse.cheap(babelAst, node => {
     if (node.loc) {
       const originalStart = consumer.originalPositionFor(node.loc.start)
       // Removed the column mapping with original position as we have only mapped lines during generation
