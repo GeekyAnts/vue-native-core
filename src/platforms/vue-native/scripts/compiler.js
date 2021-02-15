@@ -54,6 +54,7 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
 
   //Consider the start of template for debugging
   //
+
   let templateStartIndex = parsedSFC.template.start
   let templateStartLineNumber = originalCodeString
     .substring(0, templateStartIndex)
@@ -83,13 +84,22 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
 
   // Record the start of the script content
   //
-  var lineAfterLastImport = output.split(newLine).length + 1
 
   // parse script
   const script = parsedSFC.script
   let generatedScriptCode = DEFAULT_OUTPUT.script
   if (script) {
-    const scriptContent = script.content.replace(/\/\/\n/g, '').trim()
+    const indexofExport = script.content.indexOf('export')
+    var indexofImport = script.content.indexOf('import')
+
+    if (indexofImport < 0) {
+      indexofImport = indexofExport
+    }
+
+    const scriptContent = script.content
+      .slice(Math.min(indexofExport, indexofImport), script.content.length)
+      .trim()
+
     generatedScriptCode = parseScript(scriptContent)
     mappings = generateSourceMap(originalCodeString, filename)
   }
@@ -97,9 +107,8 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   if (mappings) {
     // Start of the script content of the original code
     //
-    var scriptTagLineNumber = originalCodeString
-      .slice(0, parsedSFC.script.start)
-      .split(newLine).length
+    var scriptTagLineNumber = getLineOfExport(parsedSFC.script.content)
+
     var exportDefaultIndex = originalCodeString.indexOf('export default')
     var exportDefaultLineNumber = originalCodeString
       .substring(0, exportDefaultIndex)
@@ -109,12 +118,14 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   // add vue options
   output += generatedScriptCode
   output += '\n\n'
-
-  let originalCodeCursor = scriptTagLineNumber + 1
+  var lineAfterLastImport = getLineOfRVOptions(output)
+  let originalCodeCursor = scriptTagLineNumber
   var endLines = output.split(newLine).length - 1
+
   let generatedCodeCursor = lineAfterLastImport
-  for (; originalCodeCursor < endLines; originalCodeCursor++) {
+  for (; generatedCodeCursor < endLines; generatedCodeCursor++) {
     //Skip export default line
+
     if (originalCodeCursor !== exportDefaultLineNumber) {
       mappings.addMapping({
         source: mappings._hashedFilename,
@@ -128,7 +139,7 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
         },
       })
     }
-    generatedCodeCursor++
+    originalCodeCursor++
   }
 
   // add render funtion
@@ -146,6 +157,7 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   //
   var reactVueElementRegex = /__react__vue__createElement/
   let foundLines = lineNumber(beautifiedRender, reactVueElementRegex)
+
   if (mappings) {
     foundLines.forEach((line, index) => {
       let renderJsLine = endLines + line.number
@@ -193,7 +205,7 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   // parse css
   const styles = parsedSFC.styles
   let cssParsed = {}
-  styles.forEach(function(v) {
+  styles.forEach(function (v) {
     const cssAst = cssParse(v.content)
     cssParsed = Object.assign({}, cssParsed, parseCss(cssAst))
   })
@@ -211,6 +223,7 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
 
   // beautiful
   // output = beautify(output, { indent_size: 2 });
+
   return { output, mappings: mappings ? mappings.toJSON() : null }
 }
 
@@ -252,8 +265,33 @@ function traverse(ast, nodes = []) {
     nodes.push(ast.sourceCodeLocation)
   }
   if (ast.childNodes) {
-    ast.childNodes.forEach(child => {
+    ast.childNodes.forEach((child) => {
       traverse(child, nodes)
     })
   }
+}
+
+function getLineOfExport(content) {
+  var lineOfExport = 0
+  content.split(newLine).some((line, index) => {
+    if (line.includes('export')) {
+      lineOfExport = index
+      return true
+    } else {
+      return false
+    }
+  })
+  return lineOfExport
+}
+function getLineOfRVOptions(content) {
+  var lineOfRVOptions = 0
+  content.split(newLine).some((line, index) => {
+    if (line.includes('const __react__vue__options')) {
+      lineOfRVOptions = index
+      return true
+    } else {
+      return false
+    }
+  })
+  return lineOfRVOptions
 }
