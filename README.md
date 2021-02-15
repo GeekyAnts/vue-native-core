@@ -18,7 +18,7 @@ Vue Native is a framework to build cross platform native mobile apps using JavaS
 - [Installation](#installation)
 - [Project setup with Vue Native CLI](#project-setup-with-vue-native-cli)
 - [Using Vue Native with a pre-existing React Native or Expo project](#using-vue-native-in-a-react-native-project)
-- [Deprecated React Native modules](#react-native-components-that-cant-be-used-out-of-the-box)
+- [Available React Native components](#available-react-native-components)
 - [Contributors](#contributors)
 - [Backers](#backers)
 - [Sponsors](#sponsors)
@@ -57,27 +57,15 @@ It is possible to integrate Vue Native into a pre-existing React Native project.
 
 These instructions can also be used to set up a Vue Native project from scratch.
 
-## React Native components that can't be used out of the box
+## Available React Native components
 
-The following modules are set to be removed from React Native in the future.
-Hence these modules are no longer made available with Vue Native.
-- AlertIOS
-- AsyncStorage
-- ImageStore
-- ListView
-- MaskedViewIOS
-- NetInfo
-- Slider
-- SwipeableListView
-- ViewPagerAndroid
-- WebView
-- DatePickerIOS
-- DatePickerAndroid
-- TimePickerAndroid
-- StatusBarIOS
+All the core components of React Native 0.63 onwards are globally registered and available to use in templates without the need to import and locally register.
 
-If you still wish to use them, you can import them explicitly from `react-native` (until they are removed) or from their individual forked packages.
-For more information, refer to [this page](https://facebook.github.io/react-native/blog/2019/03/12/releasing-react-native-059#lean-core-is-underway).
+[The components and their React Native documentation can be found here.](https://reactnative.dev/docs/components-and-apis)
+
+All other components that were previously available, but then deprecated from React Native can still be used by installing their respective packages.
+
+For example, to use `WebView`, use the [react-native-webview](https://github.com/react-native-webview/react-native-webview) package.
 
 ## Contributors
 
