@@ -142,6 +142,31 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
     originalCodeCursor++
   }
 
+  // Mapping the contents in between export default and script opening tag
+
+  let lineOfRVOptionsInOutput = getLineOfRVOptions(output)
+  let lineOfFirstImportInScript =
+    getLineOfFirstImport(parsedSFC.script.content) + 1
+  let lineOfExpDefaultInScript = scriptTagLineNumber
+
+  if (lineOfFirstImportInScript !== 0) {
+    while (lineOfExpDefaultInScript >= lineOfFirstImportInScript) {
+      mappings.addMapping({
+        source: mappings._hashedFilename,
+        generated: {
+          line: lineOfRVOptionsInOutput,
+          column: 0,
+        },
+        original: {
+          line: lineOfExpDefaultInScript,
+          column: 0,
+        },
+      })
+      lineOfRVOptionsInOutput--
+      lineOfExpDefaultInScript--
+    }
+  }
+
   // add render funtion
   let beautifiedRender = beautify(
     addvm(generatedTemplateCode.render, { indent_size: 2 }),
@@ -283,6 +308,23 @@ function getLineOfExport(content) {
   })
   return lineOfExport
 }
+
+function getLineOfFirstImport(content) {
+  var lineOfImport = 0
+  if (!content.includes('import')) {
+    return -1
+  }
+  content.split(newLine).some((line, index) => {
+    if (line.includes('import')) {
+      lineOfImport = index
+      return true
+    } else {
+      return false
+    }
+  })
+  return lineOfImport
+}
+
 function getLineOfRVOptions(content) {
   var lineOfRVOptions = 0
   content.split(newLine).some((line, index) => {
