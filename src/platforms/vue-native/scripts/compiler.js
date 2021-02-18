@@ -87,28 +87,23 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
 
   // parse script
   const script = parsedSFC.script
+
   let generatedScriptCode = DEFAULT_OUTPUT.script
   if (script) {
-    const indexofExport = script.content.indexOf('export')
-    var indexofImport = script.content.indexOf('import')
-
-    if (indexofImport < 0) {
-      indexofImport = indexofExport
-    }
+    const scriptContentStartLine = getFirstValidLine(script.content)
 
     const scriptContent = script.content
-      .slice(Math.min(indexofExport, indexofImport), script.content.length)
+      .split(newLine)
+      .slice(scriptContentStartLine)
+      .join('\n')
       .trim()
-
     generatedScriptCode = parseScript(scriptContent)
+
     mappings = generateSourceMap(originalCodeString, filename)
   }
 
   if (mappings) {
     // Start of the script content of the original code
-    //
-    var scriptTagLineNumber = getLineOfExport(parsedSFC.script.content)
-
     var exportDefaultIndex = originalCodeString.indexOf('export default')
     var exportDefaultLineNumber = originalCodeString
       .substring(0, exportDefaultIndex)
@@ -118,15 +113,21 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
   // add vue options
   output += generatedScriptCode
   output += '\n\n'
-  var lineAfterLastImport = getLineOfRVOptions(output)
-  let originalCodeCursor = scriptTagLineNumber
+
   var endLines = output.split(newLine).length - 1
+  let firstLineOfScript = getFirstValidLine(parsedSFC.script.content) + 1
 
-  let generatedCodeCursor = lineAfterLastImport
-  for (; generatedCodeCursor < endLines; generatedCodeCursor++) {
+  let generatedCodeCursor = endLines
+  let scriptEndLine = parsedSFC.script.content.split(newLine).length
+
+  // Mapping from Bottom to Up from the endlines of script and generated code to first valid line of parsed script content
+  for (
+    let scriptCodeCursor = scriptEndLine;
+    scriptCodeCursor >= firstLineOfScript;
+    scriptCodeCursor--
+  ) {
     //Skip export default line
-
-    if (originalCodeCursor !== exportDefaultLineNumber) {
+    if (scriptCodeCursor !== exportDefaultLineNumber) {
       mappings.addMapping({
         source: mappings._hashedFilename,
         generated: {
@@ -134,37 +135,12 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
           column: 0,
         },
         original: {
-          line: originalCodeCursor,
+          line: scriptCodeCursor,
           column: 0,
         },
       })
     }
-    originalCodeCursor++
-  }
-
-  // Mapping the contents in between export default and script opening tag
-
-  let lineOfRVOptionsInOutput = getLineOfRVOptions(output)
-  let lineOfFirstImportInScript =
-    getLineOfFirstImport(parsedSFC.script.content) + 1
-  let lineOfExpDefaultInScript = scriptTagLineNumber
-
-  if (lineOfFirstImportInScript !== 0) {
-    while (lineOfExpDefaultInScript >= lineOfFirstImportInScript) {
-      mappings.addMapping({
-        source: mappings._hashedFilename,
-        generated: {
-          line: lineOfRVOptionsInOutput,
-          column: 0,
-        },
-        original: {
-          line: lineOfExpDefaultInScript,
-          column: 0,
-        },
-      })
-      lineOfRVOptionsInOutput--
-      lineOfExpDefaultInScript--
-    }
+    generatedCodeCursor--
   }
 
   // add render funtion
@@ -296,44 +272,45 @@ function traverse(ast, nodes = []) {
   }
 }
 
-function getLineOfExport(content) {
-  var lineOfExport = 0
-  content.split(newLine).some((line, index) => {
-    if (line.includes('export')) {
-      lineOfExport = index
-      return true
-    } else {
-      return false
-    }
-  })
-  return lineOfExport
-}
-
-function getLineOfFirstImport(content) {
-  var lineOfImport = 0
-  if (!content.includes('import')) {
-    return -1
+function getFirstLineOfText(content, text) {
+  var firstLine = 0
+  let splittedContent = content.split(newLine)
+  if (!content.includes(text)) {
+    return splittedContent.length
   }
-  content.split(newLine).some((line, index) => {
-    if (line.includes('import')) {
-      lineOfImport = index
+  splittedContent.some((line, index) => {
+    if (line.includes(text)) {
+      firstLine = index
       return true
     } else {
       return false
     }
   })
-  return lineOfImport
+  return firstLine
 }
 
-function getLineOfRVOptions(content) {
-  var lineOfRVOptions = 0
-  content.split(newLine).some((line, index) => {
-    if (line.includes('const __react__vue__options')) {
-      lineOfRVOptions = index
-      return true
-    } else {
+function getFirstNonLineOfText(content, text) {
+  var firstNonCommentedLine = 0
+  let splittedContent = content.split(newLine)
+
+  if (!content.includes(text)) {
+    return 0
+  }
+  splittedContent.some((line, index) => {
+    if (line.includes(text)) {
       return false
+    } else {
+      firstNonCommentedLine = index
+      return true
     }
   })
-  return lineOfRVOptions
+  return firstNonCommentedLine
+}
+
+function getFirstValidLine(content) {
+  let firstImport = getFirstLineOfText(content, 'import')
+  let firstExport = getFirstLineOfText(content, 'export')
+  let firstNonCommentedLine = getFirstNonLineOfText(content, '//')
+
+  return Math.min(firstImport, firstExport, firstNonCommentedLine)
 }
