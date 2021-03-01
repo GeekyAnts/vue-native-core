@@ -272,45 +272,26 @@ function traverse(ast, nodes = []) {
   }
 }
 
-function getFirstLineOfText(content, text) {
-  var firstLine = 0
-  let splittedContent = content.split(newLine)
+function getFirstLineWithText(content, text) {
+  const contentByLine = content.split(newLine)
   if (!content.includes(text)) {
-    return splittedContent.length
+    return contentByLine.length
   }
-  splittedContent.some((line, index) => {
-    if (line.includes(text)) {
-      firstLine = index
-      return true
-    } else {
-      return false
-    }
-  })
-  return firstLine
+  return contentByLine.findIndex(line => line.includes(text))
 }
 
-function getFirstNonLineOfText(content, text) {
-  var firstNonCommentedLine = 0
-  let splittedContent = content.split(newLine)
-
+function getFirstLineWithoutText(content, text) {
+  const contentByLine = content.split(newLine)
   if (!content.includes(text)) {
     return 0
   }
-  splittedContent.some((line, index) => {
-    if (line.includes(text)) {
-      return false
-    } else {
-      firstNonCommentedLine = index
-      return true
-    }
-  })
-  return firstNonCommentedLine
+  return contentByLine.findIndex(line => !line.includes(text))
 }
 
 function getFirstValidLine(content) {
-  let firstImport = getFirstLineOfText(content, 'import')
-  let firstExport = getFirstLineOfText(content, 'export')
-  let firstNonCommentedLine = getFirstNonLineOfText(content, '//')
+  const firstImport = getFirstLineWithText(content, 'import')
+  const firstExport = getFirstLineWithText(content, 'export')
+  const firstNonCommentedLine = getFirstLineWithoutText(content, '//')
 
   return Math.min(firstImport, firstExport, firstNonCommentedLine)
 }
