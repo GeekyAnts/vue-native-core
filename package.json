@@ -108,7 +108,7 @@
     "nightwatch-helpers": "^1.2.0",
     "node-sass": "^4.5.3",
     "phantomjs-prebuilt": "^2.1.1",
-    "pug": "^2.0.0-rc.1",
+    "pug": "^3.0.1",
     "pug-loader": "^2.3.0",
     "resolve": "^1.2.0",
     "rollup": "^1.17.0",
