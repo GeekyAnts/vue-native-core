@@ -1,4 +1,4 @@
-// const fs = require('fs');
+// const fs = require('fs')
 import * as compiler from 'vue-native-template-compiler'
 import cssParse from 'css-parse'
 import { js_beautify as beautify } from 'js-beautify'
@@ -12,8 +12,7 @@ import constants from './util/constants'
 import { addvm } from './util/addvm'
 import { parseCss } from './util/parseCss'
 
-const filePath = 'test.js'
-var splitRE = /\r?\n/g
+var newLine = /\r?\n/g
 
 const DEFAULT_OUTPUT = {
   template: {
@@ -23,9 +22,9 @@ const DEFAULT_OUTPUT = {
   script: `const ${constants.SCRIPT_OPTIONS} = {}`,
 }
 
-export function compileVueToRn(resource) {
-  const code = resource.toString()
-  const cparsed = compiler.parseComponent(code, { pad: 'line' })
+export function compileVueToRn(resource, filename = 'sfc.vue') {
+  const originalCodeString = resource.toString()
+  const parsedSFC = compiler.parseComponent(originalCodeString, { pad: 'line' })
 
   let output = ''
   let mappings = ''
@@ -51,103 +50,122 @@ export function compileVueToRn(resource) {
   output += '\n'
 
   // parse template
-  const template = cparsed.template
+  const template = parsedSFC.template
 
   //Consider the start of template for debugging
   //
-  let templateStartIndex = code.indexOf('<')
-  let tempStringBeforeStart = code.substring(0, templateStartIndex)
-  let templateLineNumber = tempStringBeforeStart.split(splitRE).length - 1
+
+  let templateStartIndex = parsedSFC.template.start
+  let templateStartLineNumber = originalCodeString
+    .substring(0, templateStartIndex)
+    .split(newLine).length
 
   // Get tags and location of tags from template
   //
-  let nodes = []
-  const templateFragments = parse5.parseFragment(cparsed.template.content, {
+  let templateASTNodes = []
+  const templateFragments = parse5.parseFragment(parsedSFC.template.content, {
     sourceCodeLocationInfo: true,
   })
   if (templateFragments.childNodes) {
-    traverse(templateFragments, nodes)
+    traverse(templateFragments, templateASTNodes)
   }
 
-  let templateParsed = DEFAULT_OUTPUT.template
+  let generatedTemplateCode = DEFAULT_OUTPUT.template
   if (template) {
     const templateContent = template.content.replace(/\/\/\n/g, '').trim()
     if (templateContent) {
-      templateParsed = parseTemplate(templateContent)
+      generatedTemplateCode = parseTemplate(templateContent)
     }
   }
 
   // add render dep import
-  output += templateParsed.import
+  output += generatedTemplateCode.import
   output += '\n'
 
+  // Record the start of the script content
+  //
+
   // parse script
-  const script = cparsed.script
-  let scriptParsed = DEFAULT_OUTPUT.script
+  const script = parsedSFC.script
+
+  let generatedScriptCode = DEFAULT_OUTPUT.script
   if (script) {
-    const scriptContent = script.content.replace(/\/\/\n/g, '').trim()
-    scriptParsed = parseScript(scriptContent)
-    mappings = generateSourceMap(code)
+    const scriptContentStartLine = getFirstValidLine(script.content)
+
+    const scriptContent = script.content
+      .split(newLine)
+      .slice(scriptContentStartLine)
+      .join('\n')
+      .trim()
+    generatedScriptCode = parseScript(scriptContent)
+
+    mappings = generateSourceMap(originalCodeString, filename)
   }
 
   if (mappings) {
-    // Start of the script content
-    //
-    var beforeLines = output.split(splitRE).length
     // Start of the script content of the original code
-    //
-    var scriptLine =
-      code.slice(0, cparsed.script.start).split(splitRE).length + 1
-    var exportDefaultIndex = code.indexOf('export default')
-    var tempString = code.substring(0, exportDefaultIndex)
-    var exportDefaultLineNumber = tempString.split('\n').length
+    var exportDefaultIndex = originalCodeString.indexOf('export default')
+    var exportDefaultLineNumber = originalCodeString
+      .substring(0, exportDefaultIndex)
+      .split(newLine).length
   }
 
   // add vue options
-  output += scriptParsed
+  output += generatedScriptCode
   output += '\n\n'
 
-  var endLines = output.split(splitRE).length - 1
-  for (; scriptLine < endLines; scriptLine++) {
+  var endLines = output.split(newLine).length - 1
+  let firstLineOfScript = getFirstValidLine(parsedSFC.script.content) + 1
+
+  let generatedCodeCursor = endLines
+  let scriptEndLine = parsedSFC.script.content.split(newLine).length
+
+  // Mapping from Bottom to Up from the endlines of script and generated code to first valid line of parsed script content
+  for (
+    let scriptCodeCursor = scriptEndLine;
+    scriptCodeCursor >= firstLineOfScript;
+    scriptCodeCursor--
+  ) {
     //Skip export default line
-    if (scriptLine !== exportDefaultLineNumber) {
+    if (scriptCodeCursor !== exportDefaultLineNumber) {
       mappings.addMapping({
         source: mappings._hashedFilename,
         generated: {
-          line: beforeLines,
+          line: generatedCodeCursor,
           column: 0,
         },
         original: {
-          line: scriptLine,
+          line: scriptCodeCursor,
           column: 0,
         },
       })
     }
-    beforeLines++
+    generatedCodeCursor--
   }
 
   // add render funtion
   let beautifiedRender = beautify(
-    addvm(templateParsed.render, { indent_size: 2 }),
+    addvm(generatedTemplateCode.render, { indent_size: 2 }),
   )
   output += beautifiedRender
   output += '\n\n'
 
   // Get last line of render code
   //
-  let renderEndLine = beautifiedRender.split(splitRE).length - 1
+  let renderEndLine = beautifiedRender.split(newLine).length - 1
 
   // Search Elements and postion based on render function
   //
   var reactVueElementRegex = /__react__vue__createElement/
   let foundLines = lineNumber(beautifiedRender, reactVueElementRegex)
+
   if (mappings) {
     foundLines.forEach((line, index) => {
       let renderJsLine = endLines + line.number
       if (foundLines[index + 1]) {
         for (let i = line.number; i < foundLines[index + 1].number; i++) {
           // Add Mapping
-          if (nodes[index]) {
+          if (templateASTNodes[index]) {
             mappings.addMapping({
               source: mappings._hashedFilename,
               generated: {
@@ -155,13 +173,15 @@ export function compileVueToRn(resource) {
                 column: 0,
               },
               original: {
-                line: nodes[index].startTag.startLine + templateLineNumber,
+                line:
+                  templateASTNodes[index].startTag.startLine +
+                  templateStartLineNumber,
                 column: 0,
               },
             })
           }
         }
-      } else if (nodes[index] && nodes[index].startTag) {
+      } else if (templateASTNodes[index] && templateASTNodes[index].startTag) {
         // Last Line
         for (let i = line.number; i < renderEndLine; i++) {
           // Add Mapping
@@ -172,7 +192,9 @@ export function compileVueToRn(resource) {
               column: 0,
             },
             original: {
-              line: nodes[index].startTag.startLine + templateLineNumber,
+              line:
+                templateASTNodes[index].startTag.startLine +
+                templateStartLineNumber,
               column: 0,
             },
           })
@@ -182,7 +204,7 @@ export function compileVueToRn(resource) {
   }
 
   // parse css
-  const styles = cparsed.styles
+  const styles = parsedSFC.styles
   let cssParsed = {}
   styles.forEach(function(v) {
     const cssAst = cssParse(v.content)
@@ -202,6 +224,7 @@ export function compileVueToRn(resource) {
 
   // beautiful
   // output = beautify(output, { indent_size: 2 });
+
   return { output, mappings: mappings ? mappings.toJSON() : null }
 }
 
@@ -221,7 +244,7 @@ function parseTemplate(code) {
   }
 }
 
-function generateSourceMap(content) {
+function generateSourceMap(content, filePath) {
   // hot-reload source map busting
   var hashedFilename = path.basename(filePath) + '?' + hash(filePath + content)
   var map = new sourceMap.SourceMapGenerator()
@@ -247,4 +270,28 @@ function traverse(ast, nodes = []) {
       traverse(child, nodes)
     })
   }
+}
+
+function getFirstLineWithText(content, text) {
+  const contentByLine = content.split(newLine)
+  if (!content.includes(text)) {
+    return contentByLine.length
+  }
+  return contentByLine.findIndex(line => line.includes(text))
+}
+
+function getFirstLineWithoutText(content, text) {
+  const contentByLine = content.split(newLine)
+  if (!content.includes(text)) {
+    return 0
+  }
+  return contentByLine.findIndex(line => !line.includes(text))
+}
+
+function getFirstValidLine(content) {
+  const firstImport = getFirstLineWithText(content, 'import')
+  const firstExport = getFirstLineWithText(content, 'export')
+  const firstNonCommentedLine = getFirstLineWithoutText(content, '//')
+
+  return Math.min(firstImport, firstExport, firstNonCommentedLine)
 }
