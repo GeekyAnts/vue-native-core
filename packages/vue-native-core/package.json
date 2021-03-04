@@ -1,6 +1,6 @@
 {
   "name": "vue-native-core",
-  "version": "0.2.0",
+  "version": "0.3.0-rc.1",
   "description": "Library with core functionalities to create Vue Native components",
   "main": "index.js",
   "repository": {
