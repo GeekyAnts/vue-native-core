@@ -3,7 +3,7 @@
 import { updateListeners } from '../vdom/helpers/index'
 import { toArray, tip, hyphenate, formatComponentName } from '../util/index'
 
-export function initEvents (vm: Component) {
+export function initEvents(vm: Component) {
   vm._events = Object.create(null)
 
   /**
@@ -24,7 +24,7 @@ export function initEvents (vm: Component) {
 
 let target: Component
 
-function add (event, fn, once) {
+function add(event, fn, once) {
   if (once) {
     target.$once(event, fn)
   } else {
@@ -32,29 +32,32 @@ function add (event, fn, once) {
   }
 }
 
-function remove (event, fn) {
+function remove(event, fn) {
   target.$off(event, fn)
 }
 
-export function updateComponentListeners (
+export function updateComponentListeners(
   vm: Component,
   listeners: Object,
-  oldListeners: ?Object
+  oldListeners: ?Object,
 ) {
   target = vm
   updateListeners(listeners, oldListeners || {}, add, remove, vm)
 }
 
-export function eventsMixin (Vue: Class<Component>) {
+export function eventsMixin(Vue: Class<Component>) {
   const hookRE = /^hook:/
-  Vue.prototype.$on = function (event: string | Array<string>, fn: Function): Component {
+  Vue.prototype.$on = function(
+    event: string | Array<string>,
+    fn: Function,
+  ): Component {
     const vm: Component = this
     if (Array.isArray(event)) {
       for (let i = 0, l = event.length; i < l; i++) {
         this.$on(event[i], fn)
       }
     } else {
-      (vm._events[event] || (vm._events[event] = [])).push(fn)
+      ;(vm._events[event] || (vm._events[event] = [])).push(fn)
       // optimize hook:event cost by using a boolean flag marked at registration
       // instead of a hash lookup
       if (hookRE.test(event)) {
@@ -64,9 +67,9 @@ export function eventsMixin (Vue: Class<Component>) {
     return vm
   }
 
-  Vue.prototype.$once = function (event: string, fn: Function): Component {
+  Vue.prototype.$once = function(event: string, fn: Function): Component {
     const vm: Component = this
-    function on () {
+    function on() {
       vm.$off(event, on)
       fn.apply(vm, arguments)
     }
@@ -75,7 +78,10 @@ export function eventsMixin (Vue: Class<Component>) {
     return vm
   }
 
-  Vue.prototype.$off = function (event?: string | Array<string>, fn?: Function): Component {
+  Vue.prototype.$off = function(
+    event?: string | Array<string>,
+    fn?: Function,
+  ): Component {
     const vm: Component = this
     // all
     if (!arguments.length) {
@@ -111,17 +117,21 @@ export function eventsMixin (Vue: Class<Component>) {
     return vm
   }
 
-  Vue.prototype.$emit = function (event: string): Component {
+  Vue.prototype.$emit = function(event: string): Component {
     const vm: Component = this
     if (process.env.NODE_ENV !== 'production') {
       const lowerCaseEvent = event.toLowerCase()
       if (lowerCaseEvent !== event && vm._events[lowerCaseEvent]) {
         tip(
           `Event "${lowerCaseEvent}" is emitted in component ` +
-          `${formatComponentName(vm)} but the handler is registered for "${event}". ` +
-          `Note that HTML attributes are case-insensitive and you cannot use ` +
-          `v-on to listen to camelCase events when using in-DOM templates. ` +
-          `You should probably use "${hyphenate(event)}" instead of "${event}".`
+            `${formatComponentName(
+              vm,
+            )} but the handler is registered for "${event}". ` +
+            `Note that HTML attributes are case-insensitive and you cannot use ` +
+            `v-on to listen to camelCase events when using in-DOM templates. ` +
+            `You should probably use "${hyphenate(
+              event,
+            )}" instead of "${event}".`,
         )
       }
     }

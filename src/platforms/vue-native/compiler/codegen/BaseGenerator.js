@@ -1,17 +1,9 @@
-import {
-  COMMON,
-  WEB,
-  NATIVE
-} from '../config'
-import {
-  specialObserver
-} from '../helpers'
-import {
-  RENDER_HELPER_MODULE_NAME
-} from '../constants'
+import { COMMON, WEB, NATIVE } from '../config'
+import { specialObserver } from '../helpers'
+import { RENDER_HELPER_MODULE_NAME } from '../constants'
 
 class BaseGenerator {
-  constructor (ast, options) {
+  constructor(ast, options) {
     this.ast = ast
     this.variableDependency = []
     this.slots = []
@@ -25,43 +17,46 @@ class BaseGenerator {
     this.coreCode = this.genElement(this.ast).trim()
   }
 
-  setSlots (name) {
+  setSlots(name) {
     if (this.slots.indexOf(name) === -1) {
       this.slots.push(name)
     }
   }
 
-  setVariableDependency (variable) {
+  setVariableDependency(variable) {
     if (this.variableDependency.indexOf(variable) === -1) {
       this.variableDependency.push(variable)
     }
   }
 
-  generate () {
+  generate() {
     const importCode = this.generateImport()
     const renderCode = this.generateRender()
 
     return `${importCode} \n export default ${renderCode}`
   }
 
-  generateImport () {
+  generateImport() {
     return this.genDependence()
   }
 
-  generateRender () {
+  generateRender() {
     let render = `return ${this.coreCode}`
     if (this.slots.length) {
-      const slot = `const ${COMMON.renderSlot.value} = ${COMMON.renderSlot.name}.call(this, [${this.slots.join(',')}], this.props.children)`
+      const slot = `const ${COMMON.renderSlot.value} = ${
+        COMMON.renderSlot.name
+      }.call(this, [${this.slots.join(',')}], this.props.children)`
       render = `${slot}\n${render}`
     }
     render = `function render (vm) {${render}}`
     return render
   }
 
-  genDependence () {
+  genDependence() {
     let code = ``
-    const helperDependency = this.variableDependency
-      .filter(v => v !== COMMON.createElement && v !== COMMON.component && v.alias)
+    const helperDependency = this.variableDependency.filter(
+      v => v !== COMMON.createElement && v !== COMMON.component && v.alias,
+    )
     if (helperDependency.length) {
       code += 'import { '
       code += helperDependency.map(v => `${v.alias} as ${v.name}`).join(',')

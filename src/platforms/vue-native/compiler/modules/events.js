@@ -1,13 +1,30 @@
 import changeCase from 'change-case'
-import {
-  COMMON
-} from '../config'
+import { COMMON } from '../config'
 
 const fnExpRE = /^\s*([\w$_]+|\([^)]*?\))\s*=>|^function\s*\(/
 const simplePathRE = /^\s*[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['.*?']|\[".*?"]|\[\d+]|\[[A-Za-z_$][\w$]*])*\s*$/
-const EVENT_ACTION = ['composition', 'key', 'context', 'double', 'drag', 'mouse', 'touch', 'can', 'play', 'duration', 'loaded', 'meta', 'load', 'rate', 'time', 'volume', 'animation', 'transition']
+const EVENT_ACTION = [
+  'composition',
+  'key',
+  'context',
+  'double',
+  'drag',
+  'mouse',
+  'touch',
+  'can',
+  'play',
+  'duration',
+  'loaded',
+  'meta',
+  'load',
+  'rate',
+  'time',
+  'volume',
+  'animation',
+  'transition',
+]
 
-const addSeparateLine = function (eventName) {
+const addSeparateLine = function(eventName) {
   EVENT_ACTION.forEach(v => {
     eventName = eventName.replace(v, v + '-')
   })
@@ -26,7 +43,7 @@ let keyCodes = {
   left: 37,
   right: 39,
   down: 40,
-  'delete': [8, 46]
+  delete: [8, 46],
 }
 
 // #4868: modifiers that prevent the execution of the listener
@@ -44,13 +61,10 @@ const modifierCode = {
   meta: genGuard(`!$event.metaKey`),
   left: genGuard(`'button' in $event && $event.button !== 0`),
   middle: genGuard(`'button' in $event && $event.button !== 1`),
-  right: genGuard(`'button' in $event && $event.button !== 2`)
+  right: genGuard(`'button' in $event && $event.button !== 2`),
 }
 
-function genHandlers (
-  events,
-  options
-) {
+function genHandlers(events, options) {
   let res = ''
   if (options.keyCodes) {
     keyCodes = Object.assign({}, keyCodes, options.keyCodes)
@@ -58,13 +72,16 @@ function genHandlers (
   for (let name in events) {
     const handler = events[name]
     // #5330: warn click.right, since right clicks do not actually fire click events.
-    if (process.env.NODE_ENV !== 'production' &&
-        name === 'click' &&
-        handler && handler.modifiers && handler.modifiers.right
-      ) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      name === 'click' &&
+      handler &&
+      handler.modifiers &&
+      handler.modifiers.right
+    ) {
       console.warn(
         `Use "contextmenu" instead of "click.right" since right clicks ` +
-        `do not actually fire "click" events.`
+          `do not actually fire "click" events.`,
       )
     }
     if (name.indexOf('!') === 0 || name.indexOf('~!') === 0) {
@@ -81,10 +98,7 @@ function genHandlers (
   return res
 }
 
-function genCustomEventHandlers (
-  events,
-  options
-) {
+function genCustomEventHandlers(events, options) {
   let res = ''
   if (options.keyCodes) {
     keyCodes = Object.assign({}, keyCodes, options.keyCodes)
@@ -92,13 +106,16 @@ function genCustomEventHandlers (
   for (let name in events) {
     const handler = events[name]
     // #5330: warn click.right, since right clicks do not actually fire click events.
-    if (process.env.NODE_ENV !== 'production' &&
-        name === 'click' &&
-        handler && handler.modifiers && handler.modifiers.right
-      ) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      name === 'click' &&
+      handler &&
+      handler.modifiers &&
+      handler.modifiers.right
+    ) {
       console.warn(
         `Use "contextmenu" instead of "click.right" since right clicks ` +
-        `do not actually fire "click" events.`
+          `do not actually fire "click" events.`,
       )
     }
     if (name.indexOf('!') === 0 || name.indexOf('~!') === 0) {
@@ -115,10 +132,7 @@ function genCustomEventHandlers (
   return res
 }
 
-function genTransitionEventHandlers (
-  events,
-  options
-) {
+function genTransitionEventHandlers(events) {
   let res = ''
   for (const name in events) {
     const handler = events[name]
@@ -133,10 +147,7 @@ function genTransitionEventHandlers (
   return res
 }
 
-function genHandler (
-  name,
-  handler
-) {
+function genHandler(name, handler) {
   if (!handler) {
     return 'function(){}'
   }
@@ -151,8 +162,8 @@ function genHandler (
   const handlerCode = isMethodPath
     ? handler.value + '($event)'
     : isFunctionExpression
-      ? `(${handler.value})($event)`
-      : handler.value
+    ? `(${handler.value})($event)`
+    : handler.value
 
   if (!handler.modifiers) {
     return `({nativeEvent: $event}) => {${handlerCode}}`
@@ -185,10 +196,7 @@ function genHandler (
   }
 }
 
-function genCustomHandler (
-  name,
-  handler
-) {
+function genCustomHandler(name, handler) {
   if (!handler) {
     return 'function(){}'
   }
@@ -203,8 +211,8 @@ function genCustomHandler (
   const handlerCode = isMethodPath
     ? handler.value + '.apply(this, arguments)'
     : isFunctionExpression
-      ? `(${handler.value}).apply(this, arguments)`
-      : handler.value
+    ? `(${handler.value}).apply(this, arguments)`
+    : handler.value
 
   if (!handler.modifiers) {
     return `function ($event) {${handlerCode}}.bind(this)`
@@ -234,16 +242,15 @@ function genCustomHandler (
   }
 }
 
-function genTransitionEventHandler (
-  name,
-  handler
-) {
+function genTransitionEventHandler(name, handler) {
   if (!handler) {
     return 'function(){}'
   }
 
   if (Array.isArray(handler)) {
-    return `[${handler.map(handler => genTransitionEventHandler(name, handler)).join(',')}]`
+    return `[${handler
+      .map(handler => genTransitionEventHandler(name, handler))
+      .join(',')}]`
   }
 
   const isMethodPath = simplePathRE.test(handler.value)
@@ -252,26 +259,26 @@ function genTransitionEventHandler (
   const handlerCode = isMethodPath
     ? handler.value + '.apply(this, arguments)'
     : isFunctionExpression
-      ? `(${handler.value}).apply(this, arguments)`
-      : handler.value
+    ? `(${handler.value}).apply(this, arguments)`
+    : handler.value
   return `function () {${handlerCode}}.bind(this)`
 }
 
-function genKeyFilter (keys) {
-  return `if(!('button' in $event)&&${keys.map(genFilterCode).join('&&')})return null;`
+function genKeyFilter(keys) {
+  return `if(!('button' in $event)&&${keys
+    .map(genFilterCode)
+    .join('&&')})return null;`
 }
 
-function genFilterCode (key) {
+function genFilterCode(key) {
   const keyVal = parseInt(key, 10)
   if (keyVal) {
     return `$event.keyCode!==${keyVal}`
   }
   const alias = keyCodes[key]
-  return `${COMMON.checkKeyCodes.name}(vm, $event.keyCode,${JSON.stringify(key)}${alias ? ',' + JSON.stringify(alias) : ''})`
+  return `${COMMON.checkKeyCodes.name}(vm, $event.keyCode,${JSON.stringify(
+    key,
+  )}${alias ? ',' + JSON.stringify(alias) : ''})`
 }
 
-export {
-  genHandlers,
-  genCustomEventHandlers,
-  genTransitionEventHandlers
-}
+export { genHandlers, genCustomEventHandlers, genTransitionEventHandlers }

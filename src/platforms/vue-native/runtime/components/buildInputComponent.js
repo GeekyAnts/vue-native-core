@@ -1,51 +1,51 @@
-import { WEB } from "vue-native/compiler/config";
+import { WEB } from 'vue-native/compiler/config'
 
-import { buildMixin } from "./buildMixin";
+import { buildMixin } from './buildMixin'
 
-import { handleProps } from "../render-helpers/handleProps";
+import { handleProps } from '../render-helpers/handleProps'
 
 export function buildInputComponent(Component, createElement) {
   return class Input extends buildMixin.apply(this, arguments) {
     constructor(props) {
-      super(props);
+      super(props)
       this.state = {
-        props: {}
-      };
+        props: {},
+      }
     }
     buildStateProps(props) {
-      const stateProps = super.buildStateProps(props);
+      const stateProps = super.buildStateProps(props)
 
       const onChangeFn =
-        stateProps.onChange || stateProps.onInput || function() {};
+        stateProps.onChange || stateProps.onInput || function() {}
       stateProps.onChange = event => {
         this.setState({
           props: Object.assign({}, this.state.props, {
-            value: event.target.value
-          })
-        });
-        return onChangeFn(event);
-      };
+            value: event.target.value,
+          }),
+        })
+        return onChangeFn(event)
+      }
 
-      return handleProps(stateProps, props[WEB.inputComponent.tag]);
+      return handleProps(stateProps, props[WEB.inputComponent.tag])
     }
     setStateProps(props) {
-      const stateProps = this.buildStateProps(props);
+      const stateProps = this.buildStateProps(props)
       this.setState({
-        props: stateProps
-      });
+        props: stateProps,
+      })
     }
     UNSAFE_componentWillMount() {
-      this.setStateProps(this.props);
+      this.setStateProps(this.props)
     }
     UNSAFE_componentWillReceiveProps(nextProps) {
-      this.setStateProps(nextProps);
+      this.setStateProps(nextProps)
     }
     render() {
       return createElement(
         this.props[WEB.inputComponent.tag],
         this.state.props,
-        this.state.props.children
-      );
+        this.state.props.children,
+      )
     }
-  };
+  }
 }

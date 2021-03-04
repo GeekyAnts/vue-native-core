@@ -5,16 +5,16 @@ import {
   handleDirectives,
   getSlots,
   pascalCaseTag,
-  filterCustomEvent
+  filterCustomEvent,
 } from './util'
 
-export function buildComponent (render, options, config) {
+export function buildComponent(render, options, config) {
   const { Component, PropTypes, Vue, cssModules } = config
   if (cssModules) {
     options.computed = mergeCssModule(options.computed, cssModules)
   }
   class ReactVueComponent extends Component {
-    constructor (props) {
+    constructor(props) {
       super(props)
       this._ref = null
       this.eventOnceUid = []
@@ -31,18 +31,18 @@ export function buildComponent (render, options, config) {
     /**
      * children can access parent instance by 'this.context.owner'
      */
-    getChildContext () {
+    getChildContext() {
       return {
-        owner: this
+        owner: this,
       }
     }
 
     /**
      * for event modifiers v-on:xxx.once
      */
-    setEventOnce (fn) {
+    setEventOnce(fn) {
       const name = fn.name
-      return (event) => {
+      return event => {
         if (this.eventOnceUid.indexOf(name) === -1) {
           this.eventOnceUid.push(name)
           fn(event)
@@ -50,7 +50,7 @@ export function buildComponent (render, options, config) {
       }
     }
 
-    setRootRef (ref) {
+    setRootRef(ref) {
       if (ref) {
         ref = ref._ref || ref
         this._ref = ref
@@ -58,7 +58,7 @@ export function buildComponent (render, options, config) {
       }
     }
 
-    setRef (ref, text, inFor) {
+    setRef(ref, text, inFor) {
       if (ref) {
         // for buildin component, we set ref to his hold node directly
         // it means the buildin componet would be the end of $refs chain
@@ -75,20 +75,20 @@ export function buildComponent (render, options, config) {
       }
     }
 
-    buildVM (options) {
+    buildVM(options) {
       // set this property to prevent runtime error in vue
       render._withStripped = true
 
       const vueOptions = {
         render: render,
         propsData: this.props,
-        parent: this.context.owner ? this.context.owner.vm : undefined
+        parent: this.context.owner ? this.context.owner.vm : undefined,
       }
 
       const reactVueOptions = {
         reactVueSlots: getSlots(this.props.children),
         reactVueForceUpdate: this.forceUpdate.bind(this),
-        reactVueCustomEvent: filterCustomEvent(this.props)
+        reactVueCustomEvent: filterCustomEvent(this.props),
       }
 
       Object.assign(options, vueOptions, reactVueOptions)
@@ -111,7 +111,7 @@ export function buildComponent (render, options, config) {
       return vm
     }
 
-    UNSAFE_componentWillMount () {
+    UNSAFE_componentWillMount() {
       this.vm = this.buildVM(options)
 
       this.beforeMount = this.vm.$options.beforeMount || []
@@ -123,34 +123,34 @@ export function buildComponent (render, options, config) {
       this.beforeMount.forEach(v => v.call(this.vm))
     }
 
-    componentDidMount () {
+    componentDidMount() {
       this.vm.$nextTick(() => this.mounted.forEach(v => v.call(this.vm)))
     }
-    UNSAFE_componentWillUpdate () {
+    UNSAFE_componentWillUpdate() {
       this.beforeUpdate.forEach(v => v.call(this.vm))
     }
-    componentDidUpdate () {
+    componentDidUpdate() {
       this.updated.forEach(v => v.call(this.vm))
     }
-    componentWillUnmount () {
+    componentWillUnmount() {
       this.beforeDestroy.forEach(v => v.call(this.vm))
     }
-    UNSAFE_componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
       this.vm._props && Object.assign(this.vm._props, nextProps)
       this.vm.$slots = getSlots(nextProps.children)
     }
-    shouldComponentUpdate (nextProps) {
+    shouldComponentUpdate(nextProps) {
       return isObjectShallowModified(this.props, nextProps)
     }
-    render () {
+    render() {
       return render ? render.call(this, this.vm._renderProxy) : null
     }
   }
   ReactVueComponent.childContextTypes = {
-    owner: PropTypes.object
+    owner: PropTypes.object,
   }
   ReactVueComponent.contextTypes = {
-    owner: PropTypes.object
+    owner: PropTypes.object,
   }
 
   ReactVueComponent.options = options

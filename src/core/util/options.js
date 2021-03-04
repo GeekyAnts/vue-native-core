@@ -4,10 +4,7 @@ import config from '../config'
 import { warn } from './debug'
 import { set } from '../observer/index'
 
-import {
-  ASSET_TYPES,
-  LIFECYCLE_HOOKS
-} from 'shared/constants'
+import { ASSET_TYPES, LIFECYCLE_HOOKS } from 'shared/constants'
 
 import {
   extend,
@@ -15,7 +12,7 @@ import {
   camelize,
   capitalize,
   isBuiltInTag,
-  isPlainObject
+  isPlainObject,
 } from 'shared/util'
 
 /**
@@ -29,11 +26,11 @@ const strats = config.optionMergeStrategies
  * Options with restrictions
  */
 if (process.env.NODE_ENV !== 'production') {
-  strats.el = strats.propsData = function (parent, child, vm, key) {
+  strats.el = strats.propsData = function(parent, child, vm, key) {
     if (!vm) {
       warn(
         `option "${key}" can only be used during instance ` +
-        'creation with the `new` keyword.'
+          'creation with the `new` keyword.',
       )
     }
     return defaultStrat(parent, child)
@@ -43,7 +40,7 @@ if (process.env.NODE_ENV !== 'production') {
 /**
  * Helper that recursively merges two data objects together.
  */
-function mergeData (to: Object, from: ?Object): Object {
+function mergeData(to: Object, from: ?Object): Object {
   if (!from) return to
   let key, toVal, fromVal
   const keys = Object.keys(from)
@@ -63,10 +60,10 @@ function mergeData (to: Object, from: ?Object): Object {
 /**
  * Data
  */
-strats.data = function (
+strats.data = function(
   parentVal: any,
   childVal: any,
-  vm?: Component
+  vm?: Component,
 ): ?Function {
   if (!vm) {
     // in a Vue.extend merge, both should be functions
@@ -74,12 +71,13 @@ strats.data = function (
       return parentVal
     }
     if (typeof childVal !== 'function') {
-      process.env.NODE_ENV !== 'production' && warn(
-        'The "data" option should be a function ' +
-        'that returns a per-instance value in component ' +
-        'definitions.',
-        vm
-      )
+      process.env.NODE_ENV !== 'production' &&
+        warn(
+          'The "data" option should be a function ' +
+            'that returns a per-instance value in component ' +
+            'definitions.',
+          vm,
+        )
       return parentVal
     }
     if (!parentVal) {
@@ -90,21 +88,16 @@ strats.data = function (
     // merged result of both functions... no need to
     // check if parentVal is a function here because
     // it has to be a function to pass previous merges.
-    return function mergedDataFn () {
-      return mergeData(
-        childVal.call(this),
-        parentVal.call(this)
-      )
+    return function mergedDataFn() {
+      return mergeData(childVal.call(this), parentVal.call(this))
     }
   } else if (parentVal || childVal) {
-    return function mergedInstanceDataFn () {
+    return function mergedInstanceDataFn() {
       // instance merge
-      const instanceData = typeof childVal === 'function'
-        ? childVal.call(vm)
-        : childVal
-      const defaultData = typeof parentVal === 'function'
-        ? parentVal.call(vm)
-        : undefined
+      const instanceData =
+        typeof childVal === 'function' ? childVal.call(vm) : childVal
+      const defaultData =
+        typeof parentVal === 'function' ? parentVal.call(vm) : undefined
       if (instanceData) {
         return mergeData(instanceData, defaultData)
       } else {
@@ -117,16 +110,16 @@ strats.data = function (
 /**
  * Hooks and props are merged as arrays.
  */
-function mergeHook (
+function mergeHook(
   parentVal: ?Array<Function>,
-  childVal: ?Function | ?Array<Function>
+  childVal: ?Function | ?Array<Function>,
 ): ?Array<Function> {
   return childVal
     ? parentVal
       ? parentVal.concat(childVal)
       : Array.isArray(childVal)
-        ? childVal
-        : [childVal]
+      ? childVal
+      : [childVal]
     : parentVal
 }
 
@@ -141,14 +134,12 @@ LIFECYCLE_HOOKS.forEach(hook => {
  * a three-way merge between constructor options, instance
  * options and parent options.
  */
-function mergeAssets (parentVal: ?Object, childVal: ?Object): Object {
+function mergeAssets(parentVal: ?Object, childVal: ?Object): Object {
   const res = Object.create(parentVal || null)
-  return childVal
-    ? extend(res, childVal)
-    : res
+  return childVal ? extend(res, childVal) : res
 }
 
-ASSET_TYPES.forEach(function (type) {
+ASSET_TYPES.forEach(function(type) {
   strats[type + 's'] = mergeAssets
 })
 
@@ -158,7 +149,7 @@ ASSET_TYPES.forEach(function (type) {
  * Watchers hashes should not overwrite one
  * another, so we merge them as arrays.
  */
-strats.watch = function (parentVal: ?Object, childVal: ?Object): ?Object {
+strats.watch = function(parentVal: ?Object, childVal: ?Object): ?Object {
   /* istanbul ignore if */
   if (!childVal) return Object.create(parentVal || null)
   if (!parentVal) return childVal
@@ -170,9 +161,7 @@ strats.watch = function (parentVal: ?Object, childVal: ?Object): ?Object {
     if (parent && !Array.isArray(parent)) {
       parent = [parent]
     }
-    ret[key] = parent
-      ? parent.concat(child)
-      : [child]
+    ret[key] = parent ? parent.concat(child) : [child]
   }
   return ret
 }
@@ -180,9 +169,10 @@ strats.watch = function (parentVal: ?Object, childVal: ?Object): ?Object {
 /**
  * Other object hashes.
  */
-strats.props =
-strats.methods =
-strats.computed = function (parentVal: ?Object, childVal: ?Object): ?Object {
+strats.props = strats.methods = strats.computed = function(
+  parentVal: ?Object,
+  childVal: ?Object,
+): ?Object {
   if (!childVal) return Object.create(parentVal || null)
   if (!parentVal) return childVal
   const ret = Object.create(null)
@@ -194,22 +184,21 @@ strats.computed = function (parentVal: ?Object, childVal: ?Object): ?Object {
 /**
  * Default strategy.
  */
-const defaultStrat = function (parentVal: any, childVal: any): any {
-  return childVal === undefined
-    ? parentVal
-    : childVal
+const defaultStrat = function(parentVal: any, childVal: any): any {
+  return childVal === undefined ? parentVal : childVal
 }
 
 /**
  * Validate component names
  */
-function checkComponents (options: Object) {
+function checkComponents(options: Object) {
   for (const key in options.components) {
     const lower = key.toLowerCase()
     if (isBuiltInTag(lower) || config.isReservedTag(lower)) {
       warn(
         'Do not use built-in or reserved HTML elements as component ' +
-        'id: ' + key
+          'id: ' +
+          key,
       )
     }
   }
@@ -219,7 +208,7 @@ function checkComponents (options: Object) {
  * Ensure all props option syntax are normalized into the
  * Object-based format.
  */
-function normalizeProps (options: Object) {
+function normalizeProps(options: Object) {
   const props = options.props
   if (!props) return
   const res = {}
@@ -239,9 +228,7 @@ function normalizeProps (options: Object) {
     for (const key in props) {
       val = props[key]
       name = camelize(key)
-      res[name] = isPlainObject(val)
-        ? val
-        : { type: val }
+      res[name] = isPlainObject(val) ? val : { type: val }
     }
   }
   options.props = res
@@ -250,7 +237,7 @@ function normalizeProps (options: Object) {
 /**
  * Normalize raw function directives into object format.
  */
-function normalizeDirectives (options: Object) {
+function normalizeDirectives(options: Object) {
   const dirs = options.directives
   if (dirs) {
     for (const key in dirs) {
@@ -266,10 +253,10 @@ function normalizeDirectives (options: Object) {
  * Merge two option objects into a new one.
  * Core utility used in both instantiation and inheritance.
  */
-export function mergeOptions (
+export function mergeOptions(
   parent: Object,
   child: Object,
-  vm?: Component
+  vm?: Component,
 ): Object {
   if (process.env.NODE_ENV !== 'production') {
     checkComponents(child)
@@ -300,7 +287,7 @@ export function mergeOptions (
       mergeField(key)
     }
   }
-  function mergeField (key) {
+  function mergeField(key) {
     const strat = strats[key] || defaultStrat
     options[key] = strat(parent[key], child[key], vm, key)
   }
@@ -312,11 +299,11 @@ export function mergeOptions (
  * This function is used because child instances need access
  * to assets defined in its ancestor chain.
  */
-export function resolveAsset (
+export function resolveAsset(
   options: Object,
   type: string,
   id: string,
-  warnMissing?: boolean
+  warnMissing?: boolean,
 ): any {
   /* istanbul ignore if */
   if (typeof id !== 'string') {
@@ -332,10 +319,7 @@ export function resolveAsset (
   // fallback to prototype chain
   const res = assets[id] || assets[camelizedId] || assets[PascalCaseId]
   if (process.env.NODE_ENV !== 'production' && warnMissing && !res) {
-    warn(
-      'Failed to resolve ' + type.slice(0, -1) + ': ' + id,
-      options
-    )
+    warn('Failed to resolve ' + type.slice(0, -1) + ': ' + id, options)
   }
   return res
 }

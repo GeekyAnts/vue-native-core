@@ -1,0 +1,25 @@
+{
+  "verbose": true,
+  "testMatch": [
+    "<rootDir>/**/__tests__/**/*.(test|spec).js"
+  ],
+  "moduleDirectories": [
+    "node_modules"
+  ],
+  "moduleNameMapper": {
+    "^vue-native(.*)$": "<rootDir>/src/platforms/vue-native$1",
+    "^vue(.*)$": "<rootDir>/src/platforms/web/runtime-with-compiler$1",
+    "^compiler(.*)$": "<rootDir>/src/compiler$1",
+    "^core(.*)$": "<rootDir>/src/core$1",
+    "^shared(.*)$": "<rootDir>/src/shared$1",
+    "^web(.*)$": "<rootDir>/src/platforms/web$1",
+    "^sfc(.*)$": "<rootDir>/src/sfc$1"
+  },
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "<rootDir>/src/platforms/vue-native/**/*.js",
+    "!**/node_modules/**"
+  ],
+  "coverageDirectory": "<rootDir>/coverage",
+  "testURL": "http://localhost"
+}

@@ -1,14 +1,14 @@
-import { parse } from "compiler/parser/index";
+import { parse } from 'compiler/parser/index'
 
-import { WebRenderGenerator } from "vue-native/compiler/codegen/index";
+import { WebRenderGenerator } from 'vue-native/compiler/codegen/index'
 
 import {
   isPreTag,
   isUnaryTag,
   canBeLeftOpenTag,
   isReservedTag,
-  getTagNamespace
-} from "./util/index";
+  getTagNamespace,
+} from './util/index'
 
 const baseOptions = {
   expectHTML: true,
@@ -16,22 +16,22 @@ const baseOptions = {
   isUnaryTag,
   canBeLeftOpenTag,
   isReservedTag,
-  getTagNamespace
-};
+  getTagNamespace,
+}
 
 export function compile(template, options) {
-  let ast;
-  let code;
-  template = template.trim();
+  let ast
+  let code
+  template = template.trim()
   if (template) {
-    ast = parse(template, Object.assign({}, baseOptions, options));
-    const renderer = new WebRenderGenerator(ast, options);
-    code = renderer.generate();
+    ast = parse(template, Object.assign({}, baseOptions, options))
+    const renderer = new WebRenderGenerator(ast, options)
+    code = renderer.generate()
   } else {
-    code = "export default () => null";
+    code = 'export default () => null'
   }
   return {
     ast,
-    code
-  };
+    code,
+  }
 }

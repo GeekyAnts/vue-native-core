@@ -1,19 +1,19 @@
-export function buildWebEmptyComponent (Component, createElement) {
+export function buildWebEmptyComponent(Component, createElement) {
   return class EmptyComponent extends Component {
-    constructor (props) {
+    constructor(props) {
       super(props)
       this._ref = null
       this.state = {
-        props: {}
+        props: {},
       }
     }
-    setRef (ref) {
+    setRef(ref) {
       this._ref = ref
     }
-    buildStateProps (props) {
+    buildStateProps(props) {
       const stateProps = Object.assign({}, props)
       const originRef = stateProps.ref
-      stateProps.ref = (ref) => {
+      stateProps.ref = ref => {
         this.setRef(ref)
         if (typeof originRef === 'function') {
           return originRef(ref)
@@ -23,17 +23,17 @@ export function buildWebEmptyComponent (Component, createElement) {
       }
       return stateProps
     }
-    UNSAFE_componentWillMount () {
+    UNSAFE_componentWillMount() {
       this.setState({
-        props: this.buildStateProps(this.props)
+        props: this.buildStateProps(this.props),
       })
     }
-    UNSAFE_componentWillReceiveProps (nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
       this.setState({
-        props: this.buildStateProps(nextProps)
+        props: this.buildStateProps(nextProps),
       })
     }
-    unwrap (wrapper) {
+    unwrap(wrapper) {
       if (wrapper.parentNode) {
         const docFrag = document.createDocumentFragment()
         while (wrapper.firstChild) {
@@ -43,16 +43,14 @@ export function buildWebEmptyComponent (Component, createElement) {
         wrapper.parentNode.replaceChild(docFrag, wrapper)
       }
     }
-    componentDidMount () {
+    componentDidMount() {
       // this.unwrap(this._ref)
     }
-    componentDidUpdate () {
+    componentDidUpdate() {
       // this.unwrap(this._ref)
     }
-    render () {
-      const {
-        tag, children
-      } = this.state.props
+    render() {
+      const { tag, children } = this.state.props
       return createElement(tag || 'view', this.state.props, children)
     }
   }

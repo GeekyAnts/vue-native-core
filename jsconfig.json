@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "baseUrl": "src",
+    "paths": {
+      "vue/*": ["platforms/web/runtime-with-compiler/*"],
+      "compiler/*": ["compiler/*"],
+      "core/*": ["core/*"],
+      "shared/*": ["shared/*"],
+      "web/*": ["platforms/web/*"],
+      "vue-native/*": ["platforms/vue-native/*"],
+      "sfc/*": ["sfc/*"]
+    }
+  },
+  "exclude": ["node_modules", "packages"]
+}

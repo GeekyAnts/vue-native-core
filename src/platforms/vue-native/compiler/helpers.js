@@ -1,18 +1,16 @@
-import {
-  isUnaryTag
-} from './util/index'
+import { isUnaryTag } from './util/index'
 
-export function specialObserver (obj, cb) {
+export function specialObserver(obj, cb) {
   for (const key in obj) {
     const val = obj[key]
     if (typeof val === 'string') {
       Object.defineProperty(obj, key, {
         enumerable: true,
         configurable: true,
-        get () {
+        get() {
           cb && cb(obj)
           return val
-        }
+        },
       })
     } else {
       specialObserver(val, cb)
@@ -20,7 +18,7 @@ export function specialObserver (obj, cb) {
   }
 }
 
-export function handleUnaryTag (ast) {
+export function handleUnaryTag(ast) {
   if (!ast.children) {
     return
   }
@@ -39,7 +37,7 @@ export function handleUnaryTag (ast) {
   }
 }
 
-export function filterDirective (ast) {
+export function filterDirective(ast) {
   const arr = ['show', 'bind']
   if (Array.isArray(ast.directives)) {
     return ast.directives.filter(v => arr.indexOf(v.name) === -1)
@@ -48,7 +46,7 @@ export function filterDirective (ast) {
   }
 }
 
-export function filterDirectiveBindProps (ast) {
+export function filterDirectiveBindProps(ast) {
   if (Array.isArray(ast.directives)) {
     return ast.directives.filter(v => v.name === 'bind' && v.value === '$props')
   } else {
@@ -56,8 +54,6 @@ export function filterDirectiveBindProps (ast) {
   }
 }
 
-export function transformSpecialNewlines (text) {
-  return text
-    .replace(/\u2028/g, '\\u2028')
-    .replace(/\u2029/g, '\\u2029')
+export function transformSpecialNewlines(text) {
+  return text.replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029')
 }

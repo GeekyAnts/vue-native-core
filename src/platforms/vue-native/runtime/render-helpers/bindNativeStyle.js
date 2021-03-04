@@ -1,4 +1,4 @@
-export function bindNativeStyle (styleBinding, staticStyle, showStyle) {
+export function bindNativeStyle(styleBinding, staticStyle, showStyle) {
   if (styleBinding === undefined) {
     styleBinding = {}
   }
@@ -10,8 +10,10 @@ export function bindNativeStyle (styleBinding, staticStyle, showStyle) {
   if (type === '[object Object]') {
     return Object.assign({}, styleBinding, staticStyle)
   } else if (type === '[object Array]') {
-    return styleBinding.map((v) => {
-      return bindNativeStyle(v, staticStyle, showStyle)
-    }).reduce((acc, val) => Object.assign(acc, val), {})
+    return styleBinding
+      .map(v => {
+        return bindNativeStyle(v, staticStyle, showStyle)
+      })
+      .reduce((acc, val) => Object.assign(acc, val), {})
   }
 }

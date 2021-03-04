@@ -1,7 +1,8 @@
 # Vue Native
 
 [![Backers on Open Collective](https://opencollective.com/vue-native-core/backers/badge.svg)](#backers)
- [![Sponsors on Open Collective](https://opencollective.com/vue-native-core/sponsors/badge.svg)](#sponsors) 
+[![Sponsors on Open Collective](https://opencollective.com/vue-native-core/sponsors/badge.svg)](#sponsors)
+[![Build Status](https://travis-ci.com/GeekyAnts/vue-native-core.svg?branch=master)](https://travis-ci.com/GeekyAnts/vue-native-core)
 
 Visit our website at [vue-native.io](https://vue-native.io) or read the official documentation [here](https://vue-native.io/docs/installation.html).
 

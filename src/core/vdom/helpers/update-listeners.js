@@ -7,7 +7,7 @@ const normalizeEvent = cached((name: string): {
   name: string,
   once: boolean,
   capture: boolean,
-  passive: boolean
+  passive: boolean,
 } => {
   const passive = name.charAt(0) === '&'
   name = passive ? name.slice(1) : name
@@ -19,12 +19,12 @@ const normalizeEvent = cached((name: string): {
     name,
     once,
     capture,
-    passive
+    passive,
   }
 })
 
-export function createFnInvoker (fns: Function | Array<Function>): Function {
-  function invoker () {
+export function createFnInvoker(fns: Function | Array<Function>): Function {
+  function invoker() {
     const fns = invoker.fns
     if (Array.isArray(fns)) {
       for (let i = 0; i < fns.length; i++) {
@@ -39,12 +39,12 @@ export function createFnInvoker (fns: Function | Array<Function>): Function {
   return invoker
 }
 
-export function updateListeners (
+export function updateListeners(
   on: Object,
   oldOn: Object,
   add: Function,
   remove: Function,
-  vm: Component
+  vm: Component,
 ) {
   let name, cur, old, event
   for (name in on) {
@@ -52,10 +52,11 @@ export function updateListeners (
     old = oldOn[name]
     event = normalizeEvent(name)
     if (isUndef(cur)) {
-      process.env.NODE_ENV !== 'production' && warn(
-        `Invalid handler for event "${event.name}": got ` + String(cur),
-        vm
-      )
+      process.env.NODE_ENV !== 'production' &&
+        warn(
+          `Invalid handler for event "${event.name}": got ` + String(cur),
+          vm,
+        )
     } else if (isUndef(old)) {
       if (isUndef(cur.fns)) {
         cur = on[name] = createFnInvoker(cur)

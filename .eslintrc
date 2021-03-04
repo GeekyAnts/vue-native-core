@@ -1,0 +1,33 @@
+{
+  "root": true,
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
+  "plugins": [
+    "flowtype",
+    "prettier"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:flowtype/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "prettier/prettier": ["error"],
+    "no-console": 0,
+    "no-useless-escape": 0,
+    "no-empty": 0,
+    "semi": ["error", "never"],
+    "comma-dangle": ["error", "always-multiline"]
+  },
+  "globals": {
+    "__WEEX__": true
+  }
+}

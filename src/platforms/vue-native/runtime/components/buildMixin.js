@@ -1,6 +1,6 @@
-export function buildMixin (Component) {
+export function buildMixin(Component) {
   return class Mixin extends Component {
-    constructor (props) {
+    constructor(props) {
       super(props)
       /**
        * for vue, every component should have a ref to represent node element
@@ -8,7 +8,7 @@ export function buildMixin (Component) {
       this._ref = null
     }
 
-    setRef (ref) {
+    setRef(ref) {
       if (ref) {
         if (ref._reactInternalInstance && ref.vm === undefined) {
           this._ref = ref._ref || ref
@@ -18,7 +18,7 @@ export function buildMixin (Component) {
       }
     }
 
-    buildStateProps (props) {
+    buildStateProps(props) {
       const stateProps = Object.assign({}, props)
       const originRef = stateProps.ref
       stateProps.ref = ref => {

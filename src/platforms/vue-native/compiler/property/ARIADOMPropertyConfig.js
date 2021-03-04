@@ -62,10 +62,10 @@ var ARIADOMPropertyConfig = {
     'aria-rowcount': 0,
     'aria-rowindex': 0,
     'aria-rowspan': 0,
-    'aria-setsize': 0
+    'aria-setsize': 0,
   },
   DOMAttributeNames: {},
-  DOMPropertyNames: {}
+  DOMPropertyNames: {},
 }
 
 export default ARIADOMPropertyConfig

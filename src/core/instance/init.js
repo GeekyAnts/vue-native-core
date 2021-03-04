@@ -12,8 +12,8 @@ import { extend, mergeOptions, formatComponentName } from '../util/index'
 
 let uid = 0
 
-export function initMixin (Vue: Class<Component>) {
-  Vue.prototype._init = function (options?: Object) {
+export function initMixin(Vue: Class<Component>) {
+  Vue.prototype._init = function(options?: Object) {
     const vm: Component = this
     // a uid
     vm._uid = uid++
@@ -38,7 +38,7 @@ export function initMixin (Vue: Class<Component>) {
       vm.$options = mergeOptions(
         resolveConstructorOptions(vm.constructor),
         options || {},
-        vm
+        vm,
       )
     }
     /* istanbul ignore else */
@@ -71,8 +71,11 @@ export function initMixin (Vue: Class<Component>) {
   }
 }
 
-function initInternalComponent (vm: Component, options: InternalComponentOptions) {
-  const opts = vm.$options = Object.create(vm.constructor.options)
+function initInternalComponent(
+  vm: Component,
+  options: InternalComponentOptions,
+) {
+  const opts = (vm.$options = Object.create(vm.constructor.options))
   // doing this because it's faster than dynamic enumeration.
   opts.parent = options.parent
   opts.propsData = options.propsData
@@ -88,7 +91,7 @@ function initInternalComponent (vm: Component, options: InternalComponentOptions
   }
 }
 
-export function resolveConstructorOptions (Ctor: Class<Component>) {
+export function resolveConstructorOptions(Ctor: Class<Component>) {
   let options = Ctor.options
   if (Ctor.super) {
     const superOptions = resolveConstructorOptions(Ctor.super)
@@ -112,7 +115,7 @@ export function resolveConstructorOptions (Ctor: Class<Component>) {
   return options
 }
 
-function resolveModifiedOptions (Ctor: Class<Component>): ?Object {
+function resolveModifiedOptions(Ctor: Class<Component>): ?Object {
   let modified
   const latest = Ctor.options
   const sealed = Ctor.sealedOptions
@@ -125,7 +128,7 @@ function resolveModifiedOptions (Ctor: Class<Component>): ?Object {
   return modified
 }
 
-function dedupe (latest, sealed) {
+function dedupe(latest, sealed) {
   // compare latest and sealed to ensure lifecycle hooks won't be duplicated
   // between merges
   if (Array.isArray(latest)) {

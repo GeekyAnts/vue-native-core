@@ -2,7 +2,7 @@
 
 import { isDef, isUndef, isObject } from 'shared/util'
 
-export function genClassForVnode (vnode: VNode): string {
+export function genClassForVnode(vnode: VNode): string {
   let data = vnode.data
   let parentNode = vnode
   let childNode = vnode
@@ -12,7 +12,7 @@ export function genClassForVnode (vnode: VNode): string {
       data = mergeClassData(childNode.data, data)
     }
   }
-  while (isDef(parentNode = parentNode.parent)) {
+  while (isDef((parentNode = parentNode.parent))) {
     if (parentNode.data) {
       data = mergeClassData(data, parentNode.data)
     }
@@ -20,19 +20,20 @@ export function genClassForVnode (vnode: VNode): string {
   return genClassFromData(data)
 }
 
-function mergeClassData (child: VNodeData, parent: VNodeData): {
+function mergeClassData(
+  child: VNodeData,
+  parent: VNodeData,
+): {
   staticClass: string,
-  class: any
+  class: any,
 } {
   return {
     staticClass: concat(child.staticClass, parent.staticClass),
-    class: isDef(child.class)
-      ? [child.class, parent.class]
-      : parent.class
+    class: isDef(child.class) ? [child.class, parent.class] : parent.class,
   }
 }
 
-function genClassFromData (data: Object): string {
+function genClassFromData(data: Object): string {
   const dynamicClass = data.class
   const staticClass = data.staticClass
   if (isDef(staticClass) || isDef(dynamicClass)) {
@@ -42,11 +43,11 @@ function genClassFromData (data: Object): string {
   return ''
 }
 
-export function concat (a: ?string, b: ?string): string {
-  return a ? b ? (a + ' ' + b) : a : (b || '')
+export function concat(a: ?string, b: ?string): string {
+  return a ? (b ? a + ' ' + b : a) : b || ''
 }
 
-export function stringifyClass (value: any): string {
+export function stringifyClass(value: any): string {
   if (isUndef(value)) {
     return ''
   }
@@ -58,7 +59,10 @@ export function stringifyClass (value: any): string {
     let stringified
     for (let i = 0, l = value.length; i < l; i++) {
       if (isDef(value[i])) {
-        if (isDef(stringified = stringifyClass(value[i])) && stringified !== '') {
+        if (
+          isDef((stringified = stringifyClass(value[i]))) &&
+          stringified !== ''
+        ) {
           res += stringified + ' '
         }
       }

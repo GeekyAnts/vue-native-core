@@ -2,7 +2,7 @@
 
 import { isDef } from 'shared/util'
 
-export function getFirstComponentChild (children: ?Array<VNode>): ?VNode {
+export function getFirstComponentChild(children: ?Array<VNode>): ?VNode {
   if (Array.isArray(children)) {
     for (let i = 0; i < children.length; i++) {
       const c = children[i]

@@ -5,5 +5,5 @@ import { noop } from 'shared/util'
 
 export default {
   bind,
-  cloak: noop
+  cloak: noop,
 }

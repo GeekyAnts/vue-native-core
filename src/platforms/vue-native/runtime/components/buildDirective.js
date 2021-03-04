@@ -1,24 +1,24 @@
-import { COMMON } from "vue-native/compiler/config";
+import { COMMON } from 'vue-native/compiler/config'
 
-import { handleProps } from "../render-helpers/handleProps";
+import { handleProps } from '../render-helpers/handleProps'
 
-import { buildMixin } from "./buildMixin";
+import { buildMixin } from './buildMixin'
 
 function triggerDirective(newData, oldData, vm, ref) {
-  let directive, binding, args;
+  let directive, binding, args
 
   const vnode = {
-    context: vm
-  };
+    context: vm,
+  }
 
   if (newData) {
-    directive = vm.$options.directives[newData.directiveName];
+    directive = vm.$options.directives[newData.directiveName]
   } else if (oldData) {
-    directive = vm.$options.directives[oldData.directiveName];
+    directive = vm.$options.directives[oldData.directiveName]
   }
 
   if (!directive) {
-    return;
+    return
   }
 
   if (newData && oldData) {
@@ -29,13 +29,13 @@ function triggerDirective(newData, oldData, vm, ref) {
       oldValue: oldData.value,
       expression: newData.expression,
       arg: newData.arg,
-      modifiers: newData.modifiers
-    };
-    args = [ref, binding, vnode];
-    if (typeof directive === "function") {
-      directive.apply(vm, args);
-    } else if (typeof directive.update === "function") {
-      directive.update.apply(vm, args);
+      modifiers: newData.modifiers,
+    }
+    args = [ref, binding, vnode]
+    if (typeof directive === 'function') {
+      directive.apply(vm, args)
+    } else if (typeof directive.update === 'function') {
+      directive.update.apply(vm, args)
     }
   } else if (newData && !oldData) {
     // bind
@@ -44,13 +44,13 @@ function triggerDirective(newData, oldData, vm, ref) {
       value: newData.value,
       expression: newData.expression,
       arg: newData.arg,
-      modifiers: newData.modifiers
-    };
-    args = [ref, binding, vnode];
-    if (typeof directive === "function") {
-      directive.apply(vm, args);
-    } else if (typeof directive.bind === "function") {
-      directive.bind.apply(vm, args);
+      modifiers: newData.modifiers,
+    }
+    args = [ref, binding, vnode]
+    if (typeof directive === 'function') {
+      directive.apply(vm, args)
+    } else if (typeof directive.bind === 'function') {
+      directive.bind.apply(vm, args)
     }
   } else if (!newData && oldData) {
     // unbind
@@ -59,11 +59,11 @@ function triggerDirective(newData, oldData, vm, ref) {
       value: oldData.value,
       expression: oldData.expression,
       arg: oldData.arg,
-      modifiers: oldData.modifiers
-    };
-    args = [ref, binding, vnode];
-    if (typeof directive.unbind === "function") {
-      directive.unbind.apply(vm, args);
+      modifiers: oldData.modifiers,
+    }
+    args = [ref, binding, vnode]
+    if (typeof directive.unbind === 'function') {
+      directive.unbind.apply(vm, args)
     }
   }
 }
@@ -71,97 +71,97 @@ function triggerDirective(newData, oldData, vm, ref) {
 export function buildDirective(Component, createElement) {
   return class Directive extends buildMixin.apply(this, arguments) {
     constructor(props) {
-      super(props);
+      super(props)
       // set vm from parent context that
       // this.vm = props[COMMON.directive.context].vm
       this.state = {
-        props: handleProps(props, props[COMMON.directive.tag])
-      };
+        props: handleProps(props, props[COMMON.directive.tag]),
+      }
     }
     setDirectiveLifeCycle(newProps, oldProps) {
-      let context;
-      let newDirectives = [];
-      let oldDirectives = [];
+      let context
+      let newDirectives = []
+      let oldDirectives = []
       if (oldProps) {
-        context = oldProps[COMMON.directive.context];
-        oldDirectives = oldProps[COMMON.directive.name];
+        context = oldProps[COMMON.directive.context]
+        oldDirectives = oldProps[COMMON.directive.name]
       }
       if (newProps) {
-        context = newProps[COMMON.directive.context];
-        newDirectives = newProps[COMMON.directive.name];
+        context = newProps[COMMON.directive.context]
+        newDirectives = newProps[COMMON.directive.name]
       }
-      const newDirectivesClone = newDirectives.slice();
-      const oldDirectivesClone = oldDirectives.slice();
+      const newDirectivesClone = newDirectives.slice()
+      const oldDirectivesClone = oldDirectives.slice()
       if (Array.isArray(newDirectives) && Array.isArray(oldDirectives)) {
         newDirectives.forEach((newDirective, newIndex) => {
           oldDirectives.forEach((oldDirective, oldIndex) => {
             if (newDirective.name === oldDirective.name) {
-              newDirectivesClone.splice(newIndex, 1, undefined);
-              oldDirectivesClone.splice(oldIndex, 1, undefined);
+              newDirectivesClone.splice(newIndex, 1, undefined)
+              oldDirectivesClone.splice(oldIndex, 1, undefined)
               triggerDirective(
                 newDirective,
                 oldDirective,
                 context.vm,
-                this._ref
-              ); // update
+                this._ref,
+              ) // update
             }
-          });
-        });
+          })
+        })
         newDirectivesClone.forEach(v => {
           // bind
-          v && triggerDirective(v, null, context.vm, this._ref);
-        });
+          v && triggerDirective(v, null, context.vm, this._ref)
+        })
         oldDirectivesClone.forEach(v => {
           // unbind
-          v && triggerDirective(null, v, context.vm, this._ref);
-        });
+          v && triggerDirective(null, v, context.vm, this._ref)
+        })
       }
     }
     getDirectiveName(props) {
       if (props[COMMON.directive.name]) {
-        return props[COMMON.directive.name].map(v => v.name);
+        return props[COMMON.directive.name].map(v => v.name)
       } else {
-        return [];
+        return []
       }
     }
     buildInHandle(props) {
-      const names = this.getDirectiveName(props);
-      const stateProps = this.buildStateProps(props);
-      if (names.indexOf("model") !== -1) {
+      const names = this.getDirectiveName(props)
+      const stateProps = this.buildStateProps(props)
+      if (names.indexOf('model') !== -1) {
         const onChangeFn =
-          stateProps.onChange || stateProps.onInput || function() {};
+          stateProps.onChange || stateProps.onInput || function() {}
         stateProps.onChange = event => {
           this.setState({
             props: Object.assign({}, this.state.props, {
-              value: event.target.value
-            })
-          });
-          return onChangeFn(event);
-        };
+              value: event.target.value,
+            }),
+          })
+          return onChangeFn(event)
+        }
       }
       this.setState({
-        props: handleProps(stateProps, props[COMMON.directive.tag])
-      });
+        props: handleProps(stateProps, props[COMMON.directive.tag]),
+      })
     }
     UNSAFE_componentWillMount() {
-      this.buildInHandle(this.props);
+      this.buildInHandle(this.props)
     }
     componentDidMount() {
-      this.setDirectiveLifeCycle(this.props);
+      this.setDirectiveLifeCycle(this.props)
     }
     UNSAFE_componentWillReceiveProps(nextProps) {
-      this.buildInHandle(nextProps);
-      this.setDirectiveLifeCycle(nextProps, this.props);
+      this.buildInHandle(nextProps)
+      this.setDirectiveLifeCycle(nextProps, this.props)
     }
     componentWillUnmount() {
-      this.setDirectiveLifeCycle(null, this.props);
+      this.setDirectiveLifeCycle(null, this.props)
     }
     render() {
       return createElement(
         this.props[COMMON.directive.tag],
         this.state.props,
-        this.state.props.children
-      );
+        this.state.props.children,
+      )
     }
-  };
+  }
 }

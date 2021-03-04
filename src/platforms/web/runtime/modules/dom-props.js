@@ -2,7 +2,7 @@
 
 import { isDef, isUndef, extend, toNumber } from 'shared/util'
 
-function updateDOMProps (oldVnode: VNodeWithData, vnode: VNodeWithData) {
+function updateDOMProps(oldVnode: VNodeWithData, vnode: VNodeWithData) {
   if (isUndef(oldVnode.data.domProps) && isUndef(vnode.data.domProps)) {
     return
   }
@@ -46,26 +46,27 @@ function updateDOMProps (oldVnode: VNodeWithData, vnode: VNodeWithData) {
 }
 
 // check platforms/web/util/attrs.js acceptValue
-type acceptValueElm = HTMLInputElement | HTMLSelectElement | HTMLOptionElement;
+type acceptValueElm = HTMLInputElement | HTMLSelectElement | HTMLOptionElement
 
-function shouldUpdateValue (
+function shouldUpdateValue(
   elm: acceptValueElm,
   vnode: VNodeWithData,
-  checkVal: string
+  checkVal: string,
 ): boolean {
-  return (!elm.composing && (
-    vnode.tag === 'option' ||
-    isDirty(elm, checkVal) ||
-    isInputChanged(elm, checkVal)
-  ))
+  return (
+    !elm.composing &&
+    (vnode.tag === 'option' ||
+      isDirty(elm, checkVal) ||
+      isInputChanged(elm, checkVal))
+  )
 }
 
-function isDirty (elm: acceptValueElm, checkVal: string): boolean {
+function isDirty(elm: acceptValueElm, checkVal: string): boolean {
   // return true when textbox (.number and .trim) loses focus and its value is not equal to the updated value
   return document.activeElement !== elm && elm.value !== checkVal
 }
 
-function isInputChanged (elm: any, newVal: string): boolean {
+function isInputChanged(elm: any, newVal: string): boolean {
   const value = elm.value
   const modifiers = elm._vModifiers // injected by v-model runtime
   if ((isDef(modifiers) && modifiers.number) || elm.type === 'number') {
@@ -79,5 +80,5 @@ function isInputChanged (elm: any, newVal: string): boolean {
 
 export default {
   create: updateDOMProps,
-  update: updateDOMProps
+  update: updateDOMProps,
 }

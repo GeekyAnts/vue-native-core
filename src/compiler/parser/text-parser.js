@@ -12,16 +12,16 @@ const buildRegex = cached(delimiters => {
   return new RegExp(open + '((?:.|\\n)+?)' + close, 'g')
 })
 
-export function parseText (
+export function parseText(
   text: string,
-  delimiters?: [string, string]
+  delimiters?: [string, string],
 ): string | void {
   const tagRE = delimiters ? buildRegex(delimiters) : defaultTagRE
   if (!tagRE.test(text)) {
     return
   }
   const tokens = []
-  let lastIndex = tagRE.lastIndex = 0
+  let lastIndex = (tagRE.lastIndex = 0)
   let match, index
   while ((match = tagRE.exec(text))) {
     index = match.index

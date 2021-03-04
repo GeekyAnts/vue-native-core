@@ -1,17 +1,18 @@
 import { looseEqual, looseIndexOf } from 'shared/util'
 import { warn } from 'core/util/index'
 
-function setSelected (el, binding, vm) {
+function setSelected(el, binding, vm) {
   const value = binding.value
   const isMultiple = el.multiple
   if (isMultiple && !Array.isArray(value)) {
-    process.env.NODE_ENV !== 'production' && warn(
-      `<select multiple v-model="${binding.expression}"> ` +
-      `expects an Array value for its binding, but got ${
-        Object.prototype.toString.call(value).slice(8, -1)
-      }`,
-      vm
-    )
+    process.env.NODE_ENV !== 'production' &&
+      warn(
+        `<select multiple v-model="${binding.expression}"> ` +
+          `expects an Array value for its binding, but got ${Object.prototype.toString
+            .call(value)
+            .slice(8, -1)}`,
+        vm,
+      )
     return
   }
   let selected, option
@@ -36,7 +37,7 @@ function setSelected (el, binding, vm) {
   }
 }
 
-function setCheckBox (el, binding) {
+function setCheckBox(el, binding) {
   let value = binding.value
   try {
     value = JSON.parse(value)
@@ -49,7 +50,7 @@ function setCheckBox (el, binding) {
 }
 
 export default {
-  bind (el, binding) {
+  bind(el, binding) {
     if (el.tagName) {
       const lowerTagName = el.tagName.toLowerCase()
       if (lowerTagName === 'select') {
@@ -61,7 +62,7 @@ export default {
       }
     }
   },
-  update (el, binding) {
+  update(el, binding) {
     if (el.tagName) {
       const lowerTagName = el.tagName.toLowerCase()
       if (lowerTagName === 'select') {
@@ -72,5 +73,5 @@ export default {
         }
       }
     }
-  }
+  },
 }
