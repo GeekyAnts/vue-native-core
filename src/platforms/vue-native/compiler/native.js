@@ -68,6 +68,11 @@ function traverse(ast, options, importObj, parent = null, childIndex) {
   }
   if (ast.children) {
     ast.children.forEach((child, index) => {
+      if (child.ifConditions) {
+        child.ifConditions.forEach((condition, conditionIdx) => {
+          traverse(condition.block, options, importObj, child, conditionIdx)
+        })
+      }
       traverse(child, options, importObj, ast, index)
     })
   }
