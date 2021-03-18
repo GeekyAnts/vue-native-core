@@ -13,10 +13,23 @@ if [[ -z $VERSION ]]; then
   exit 0
 fi
 
-read -p "Releasing $VERSION - are you sure? (y/n) " -n 1 -r
+# Decide the NPM tag.
+# Tag should be set to 'next' for pre-release versions
+# and will be 'latest' by default
+read -p "Is this a pre-release version? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-  echo "Releasing $VERSION ..."
+  echo "Using npm tag 'next' for this release."
+  TAG='next'
+else
+  echo "Using npm tag 'latest' for this release."
+  TAG='latest'
+fi
+
+read -p "Releasing $VERSION with npm tag $TAG - are you sure? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  echo "Releasing $VERSION (with npm tag $TAG)..."
 
   # bump package versions
   # packages:
@@ -60,19 +73,19 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   # - vue-native-template-compiler
 
   cd packages/vue-native-core
-  npm publish
+  npm publish --tag $TAG
   cd -
 
   cd packages/vue-native-helper
-  npm publish
+  npm publish --tag $TAG
   cd -
 
   cd packages/vue-native-scripts
-  npm publish
+  npm publish --tag $TAG
   cd -
 
   cd packages/vue-native-template-compiler
-  npm publish
+  npm publish --tag $TAG
   cd -
 
   # Update version in main package.json and commit
