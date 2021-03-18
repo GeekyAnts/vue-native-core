@@ -1,6 +1,6 @@
 {
   "name": "vue-native-core",
-  "version": "0.3.0-rc.1",
+  "version": "0.3.0-rc.2",
   "description": "Create mobile apps using vuejs",
   "main": "packages/vue-native-core/index.js",
   "typings": "types/index.d.ts",
