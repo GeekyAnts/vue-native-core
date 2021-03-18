@@ -102,45 +102,44 @@ export function compileVueToRn(resource, filename = 'sfc.vue') {
     mappings = generateSourceMap(originalCodeString, filename)
   }
 
-  if (mappings) {
-    // Start of the script content of the original code
-    var exportDefaultIndex = originalCodeString.indexOf('export default')
-    var exportDefaultLineNumber = originalCodeString
-      .substring(0, exportDefaultIndex)
-      .split(newLine).length
-  }
-
   // add vue options
   output += generatedScriptCode
   output += '\n\n'
 
-  var endLines = output.split(newLine).length - 1
-  let firstLineOfScript = getFirstValidLine(parsedSFC.script.content) + 1
+  if (mappings) {
+    // Start of the script content of the original code
+    let exportDefaultIndex = originalCodeString.indexOf('export default')
+    let exportDefaultLineNumber = originalCodeString
+      .substring(0, exportDefaultIndex)
+      .split(newLine).length
+    let firstLineOfScript = getFirstValidLine(script.content) + 1
+    let scriptEndLine = script.content.split(newLine).length
+    var endLines = output.split(newLine).length - 1
 
-  let generatedCodeCursor = endLines
-  let scriptEndLine = parsedSFC.script.content.split(newLine).length
+    let generatedCodeCursor = endLines
 
-  // Mapping from Bottom to Up from the endlines of script and generated code to first valid line of parsed script content
-  for (
-    let scriptCodeCursor = scriptEndLine;
-    scriptCodeCursor >= firstLineOfScript;
-    scriptCodeCursor--
-  ) {
-    //Skip export default line
-    if (scriptCodeCursor !== exportDefaultLineNumber) {
-      mappings.addMapping({
-        source: mappings._hashedFilename,
-        generated: {
-          line: generatedCodeCursor,
-          column: 0,
-        },
-        original: {
-          line: scriptCodeCursor,
-          column: 0,
-        },
-      })
+    // Mapping from Bottom to Up from the endlines of script and generated code to first valid line of parsed script content
+    for (
+      let scriptCodeCursor = scriptEndLine;
+      scriptCodeCursor >= firstLineOfScript;
+      scriptCodeCursor--
+    ) {
+      //Skip export default line
+      if (scriptCodeCursor !== exportDefaultLineNumber) {
+        mappings.addMapping({
+          source: mappings._hashedFilename,
+          generated: {
+            line: generatedCodeCursor,
+            column: 0,
+          },
+          original: {
+            line: scriptCodeCursor,
+            column: 0,
+          },
+        })
+      }
+      generatedCodeCursor--
     }
-    generatedCodeCursor--
   }
 
   // add render funtion
