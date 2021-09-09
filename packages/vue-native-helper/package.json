@@ -1,6 +1,6 @@
 {
   "name": "vue-native-helper",
-  "version": "0.3.0-rc.1",
+  "version": "0.3.1",
   "description": "Helper library with utilities for vue-native-core",
   "main": "index.js",
   "repository": {
