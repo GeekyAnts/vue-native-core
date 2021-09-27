@@ -6,6 +6,13 @@
 
 Visit our website at [vue-native.io](https://vue-native.io) or read the official documentation [here](https://vue-native.io/docs/installation.html).
 
+<div style="background: #FDDEDF; margin:20px 0; border:1px solid #22232520">
+  <p style="text-align:center; color: #F55A52; background: #FEFEFF; padding:10px;font-weight:500;margin:20px;">
+    This repository has been depreciated and is no longer maintained by author.
+  </p>
+</div>
+
+
 ## Build native mobile apps using Vue
 
 Vue Native is a framework to build cross platform native mobile apps using JavaScript. It is a wrapper around the APIs of React Native. So, with Vue Native, you can do everything that you can do with React Native. With Vue Native, you get
@@ -14,16 +21,19 @@ Vue Native is a framework to build cross platform native mobile apps using JavaS
 - **Seamless interop with React Native.** Use core React Native components with Vue.js syntax out of the box to develop mobile apps on both iOS and Android.
 
 ## Contents
-- [Documentation](#documentation)
-- [Installation](#installation)
-- [Project setup with Vue Native CLI](#project-setup-with-vue-native-cli)
-- [Using Vue Native with a pre-existing React Native or Expo project](#using-vue-native-in-a-react-native-project)
-- [Available React Native components](#available-react-native-components)
-- [Contributors](#contributors)
-- [Backers](#backers)
-- [Sponsors](#sponsors)
-- [License](#license)
-- [Special thanks](#credits-to-react-vue)
+- [Vue Native](#vue-native)
+  - [Build native mobile apps using Vue](#build-native-mobile-apps-using-vue)
+  - [Contents](#contents)
+  - [Documentation](#documentation)
+  - [Installation](#installation)
+  - [Project setup with Vue Native CLI](#project-setup-with-vue-native-cli)
+  - [Using Vue Native in a React Native project](#using-vue-native-in-a-react-native-project)
+  - [Available React Native components](#available-react-native-components)
+  - [Contributors](#contributors)
+  - [Backers](#backers)
+  - [Sponsors](#sponsors)
+  - [License](#license)
+  - [Credits to react-vue](#credits-to-react-vue)
 
 ## Documentation
 
