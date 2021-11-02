@@ -1,8 +1,8 @@
+## ⚠️ This project has been deprecated and is no longer maintained ⚠️
+
 # Vue Native
 
-[![Backers on Open Collective](https://opencollective.com/vue-native-core/backers/badge.svg)](#backers)
-[![Sponsors on Open Collective](https://opencollective.com/vue-native-core/sponsors/badge.svg)](#sponsors)
-[![Build Status](https://travis-ci.com/GeekyAnts/vue-native-core.svg?branch=master)](https://travis-ci.com/GeekyAnts/vue-native-core)
+[![No Maintenance Intended](https://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 Visit our website at [vue-native.io](https://vue-native.io) or read the official documentation [here](https://vue-native.io/docs/installation.html).
 
@@ -20,8 +20,6 @@ Vue Native is a framework to build cross platform native mobile apps using JavaS
 - [Using Vue Native with a pre-existing React Native or Expo project](#using-vue-native-in-a-react-native-project)
 - [Available React Native components](#available-react-native-components)
 - [Contributors](#contributors)
-- [Backers](#backers)
-- [Sponsors](#sponsors)
 - [License](#license)
 - [Special thanks](#credits-to-react-vue)
 
@@ -71,31 +69,6 @@ For example, to use `WebView`, use the [react-native-webview](https://github.com
 
 This project exists thanks to all the people who contribute. 
 <a href="https://github.com/GeekyAnts/vue-native-core/contributors"><img src="https://opencollective.com/vue-native-core/contributors.svg?width=890&button=false" /></a>
-
-
-## Backers
-
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/vue-native-core#backer)]
-
-<a href="https://opencollective.com/vue-native-core#backers" target="_blank"><img src="https://opencollective.com/vue-native-core/backers.svg?width=890"></a>
-
-
-## Sponsors
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/vue-native-core#sponsor)]
-
-<a href="https://opencollective.com/vue-native-core/sponsor/0/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/vue-native-core/sponsor/1/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/vue-native-core/sponsor/2/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/vue-native-core/sponsor/3/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/vue-native-core/sponsor/4/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/vue-native-core/sponsor/5/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/vue-native-core/sponsor/6/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/vue-native-core/sponsor/7/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/vue-native-core/sponsor/8/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/vue-native-core/sponsor/9/website" target="_blank"><img src="https://opencollective.com/vue-native-core/sponsor/9/avatar.svg"></a>
-
-
 
 ## License
 

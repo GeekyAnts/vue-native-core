@@ -28,7 +28,6 @@
     "types/*.d.ts"
   ],
   "scripts": {
-    "postinstall": "opencollective-postinstall",
     "lint": "eslint src scripts",
     "lint:fix": "eslint --fix src scripts",
     "flow": "flow check",
@@ -88,13 +87,5 @@
     "serialize-javascript": "^3.1.0",
     "typescript": "^2.1.6",
     "uglify-js": "^3.6.0"
-  },
-  "dependencies": {
-    "opencollective": "^1.0.3",
-    "opencollective-postinstall": "^2.0.0"
-  },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/vue-native-core"
   }
 }
