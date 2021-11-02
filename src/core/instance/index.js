@@ -18,6 +18,12 @@ function Vue(options) {
   if (process.env.NODE_ENV !== 'production' && !(this instanceof Vue)) {
     warn('Vue is a constructor and should be called with the `new` keyword')
   }
+
+  if (process.env.NODE_ENV !== 'production') {
+    warn(
+      'Vue Native has been deprecated and is no longer being maintained. Please consider migrating to React Native or use NativeScript-Vue instead',
+    )
+  }
   /**
    * react-vue change
    */
